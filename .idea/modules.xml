@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Questv-api.iml" filepath="$PROJECT_DIR$/Questv-api.iml" />
-      <module fileurl="file://$PROJECT_DIR$/questv.iml" filepath="$PROJECT_DIR$/questv.iml" />
     </modules>
   </component>
 </project>

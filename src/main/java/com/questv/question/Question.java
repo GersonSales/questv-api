@@ -2,16 +2,23 @@ package com.questv.question;
 
 import com.questv.question.difficult.*;
 
-public class Question {
+public final class Question {
+  private static int serializer;
+
   private final String description;
   private Difficult difficult;
   private DifficultPoints difficultPoints;
+  private final int id;
+
 
   public Question(final String description, final float difficultPoints) {
     this(description);
     this.difficultPoints = new DifficultPoints(difficultPoints);
     refreshDifficult();
+  }
 
+  public float getReward() {
+    return this.difficult.getPoints();
   }
 
   private void refreshDifficult() {
@@ -24,11 +31,11 @@ public class Question {
     }
   }
 
-
   public Question(final String description) {
     this.description = description;
     this.difficultPoints = new DifficultPoints();
     this.difficult = new EasyDifficult();
+    id = serializer++;
   }
 
   private void setDifficult(final Difficult difficult) {
@@ -39,11 +46,27 @@ public class Question {
     return description;
   }
 
-  public float getDifficultPoints() {
-    return difficultPoints.getPoints();
+  private float getDifficultPoints() {
+    return difficultPoints.getValue();
   }
 
-  public void evaluate(final float difficultPoints) {
+  void evaluate(final float difficultPoints) {
+    this.difficultPoints.evaluate(difficultPoints);
+    refreshDifficult();
+  }
 
+  @Override
+  public String toString() {
+    return "Question("
+        .concat(id + "")
+        .concat(")")
+        .concat("\nDescription: ")
+        .concat(this.description)
+        .concat("\nReward: ")
+        .concat(getReward() + "")
+        .concat("\nEvaluation: ")
+        .concat(getDifficultPoints() + "")
+        .concat("\nDifficult: ")
+        .concat(this.difficult.toString());
   }
 }

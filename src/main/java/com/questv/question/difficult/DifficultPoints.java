@@ -12,13 +12,13 @@ public class DifficultPoints {
   public DifficultPoints() {
   }
 
-  public void evalute(final float evaluation) {
+  public void evaluate(final float evaluation) {
       this.evaluations++;
       this.evaluationSum = this.evaluationSum + evaluation;
   }
 
-  public float getPoints() {
-    return this.evaluationSum / this.evaluations;
+  public float getValue() {
+    return this.evaluationSum / (this.evaluations == 0 ? 1 : this.evaluations);
   }
 
 
