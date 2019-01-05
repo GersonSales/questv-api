@@ -1,4 +1,3 @@
-import com.questv.question.difficult.MaxPoint;
 import org.junit.Test;
 
 public class MaxPointTest {

@@ -1,65 +1,36 @@
 package com.questv.question;
 
-import com.questv.question.difficult.*;
+import java.util.Set;
 
 public final class Question {
-  private static int serializer;
 
   private final String description;
-  private Difficult difficult;
-  private DifficultPoints difficultPoints;
-  private final int id;
+  private final Set<Answer> answerSet;
+  private final Evaluation evaluation;
 
 
-  public Question(final String description, final float difficultPoints) {
-    this(description);
-    this.difficultPoints = new DifficultPoints(difficultPoints);
-    refreshDifficult();
+  /*default*/ float getReward() {
+    return this.evaluation.getReward();
   }
 
-  public float getReward() {
-    return this.difficult.getPoints();
-  }
-
-  private void refreshDifficult() {
-    if (getDifficultPoints() < 5) {
-      setDifficult(new EasyDifficult());
-    } else if (getDifficultPoints() < 8) {
-      setDifficult(new MediumDifficult());
-    } else {
-      setDifficult(new HardDifficult());
-    }
-  }
-
-  public Question(final String description) {
+  /*default*/ Question(final String description, final Set<Answer> answerSet) {
     this.description = description;
-    this.difficultPoints = new DifficultPoints();
-    this.difficult = new EasyDifficult();
-    id = serializer++;
+    this.answerSet = answerSet;
+    evaluation = new Evaluation();
   }
 
-  private void setDifficult(final Difficult difficult) {
-    this.difficult = difficult;
-  }
 
   public String getDescription() {
     return description;
   }
 
-  private float getDifficultPoints() {
-    return difficultPoints.getValue();
-  }
-
   void evaluate(final float difficultPoints) {
-    this.difficultPoints.evaluate(difficultPoints);
-    refreshDifficult();
+    this.evaluation.evaluate(difficultPoints);
   }
 
   @Override
   public String toString() {
-    return "Question("
-        .concat(id + "")
-        .concat(")")
+    return "Question"
         .concat("\nDescription: ")
         .concat(this.description)
         .concat("\nReward: ")
@@ -67,6 +38,10 @@ public final class Question {
         .concat("\nEvaluation: ")
         .concat(getDifficultPoints() + "")
         .concat("\nDifficult: ")
-        .concat(this.difficult.toString());
+        .concat(this.evaluation.getDifficult().toString());
+  }
+
+  private float getDifficultPoints() {
+    return this.evaluation.getEvaluationAverage();
   }
 }
