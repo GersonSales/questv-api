@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <annotationProcessing>
-      <profile name="Maven default annotation processors profile" enabled="true">
-        <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
-        <outputRelativeToContentRoot value="true" />
-        <module name="Questv-api" />
-      </profile>
-    </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="questv" target="1.5" />
-      <module name="Questv-api" target="7" />
+      <module name="com.questv.api.main" target="1.8" />
+      <module name="com.questv.api.test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
