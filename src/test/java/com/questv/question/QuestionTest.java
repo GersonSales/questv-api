@@ -7,7 +7,7 @@ public class QuestionTest {
 
   @Test
   public void creationTest() {
-    final Question question = new Question("What's your name?", correctAnswer);
+    final Question question = new Question("What's your name?", null);
 
     Assert.assertEquals(2, question.getReward(), 1);
 

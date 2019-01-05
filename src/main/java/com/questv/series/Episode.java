@@ -22,6 +22,11 @@ public class Episode implements Questionable {
   }
 
   @Override
+  public void attachQuestions(Set<Question> questionSet) {
+
+  }
+
+  @Override
   public Set<Question> getQuestions() {
     return this.questionSet;
   }
