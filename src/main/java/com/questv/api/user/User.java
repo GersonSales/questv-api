@@ -1,4 +1,4 @@
-package com.questv.user;
+package com.questv.api.user;
 
 public class User {
   private String name;

@@ -1,4 +1,4 @@
-package com.questv.question.difficult;
+package com.questv.api.question.difficult;
 
 public class EasyDifficult implements Difficult {
   public float getPoints() {

@@ -1,4 +1,4 @@
-package com.questv.question;
+package com.questv.api.question;
 
 public class Answer {
   private final String value;

@@ -1,4 +1,4 @@
-package com.questv.question;
+package com.questv.api.question;
 
 import java.util.HashSet;
 import java.util.Set;

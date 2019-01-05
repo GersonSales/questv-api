@@ -1,9 +1,9 @@
-package com.questv.question;
+package com.questv.api.question;
 
-import com.questv.question.difficult.Difficult;
-import com.questv.question.difficult.EasyDifficult;
-import com.questv.question.difficult.HardDifficult;
-import com.questv.question.difficult.MediumDifficult;
+import com.questv.api.question.difficult.Difficult;
+import com.questv.api.question.difficult.EasyDifficult;
+import com.questv.api.question.difficult.HardDifficult;
+import com.questv.api.question.difficult.MediumDifficult;
 
 import java.util.ArrayList;
 import java.util.List;

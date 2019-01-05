@@ -1,4 +1,4 @@
-package com.questv.series;
+package com.questv.api.series;
 
 public class SerieFactory {
 
