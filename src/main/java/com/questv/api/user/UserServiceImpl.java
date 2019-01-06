@@ -13,5 +13,6 @@ public class UserServiceImpl implements UserService{
     @Override
     public void create(final UserModel userModel) {
         this.userRepository.save(userModel);
+        System.out.println("User successful created.");  // TODO (remove)
     }
 }
