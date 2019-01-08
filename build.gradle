@@ -35,5 +35,8 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test')
     testImplementation('org.springframework.security:spring-security-test')
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+//    ModelMapper
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '0.7.5'
+
 
 }
