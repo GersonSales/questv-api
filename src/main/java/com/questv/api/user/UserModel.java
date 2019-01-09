@@ -14,70 +14,80 @@ import javax.validation.constraints.Size;
 @Table(name = "user_table", schema = "questv_schema")
 public class UserModel implements Convertible<UserDTO> {
 
-  @Id
-  @NotNull
-  @GeneratedValue(strategy= GenerationType.AUTO)
-  @Column(name = "id")
-  private Long id;
+    @Id
+    @NotNull
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
 
-  @NotNull
-  @Embedded
-  private Name name;
+    @NotNull
+    @Embedded
+    private Name name;
 
-  @NotEmpty
-  @NotNull
-  @Email
-  @Column(name = "email", nullable = false, unique = true)
-  private String email;
+    @NotEmpty
+    @NotNull
+    @Email
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
-  @NotEmpty
-  @Size(min = 3, max = 256, message = "Password must have 3 characters at least.")
-  @Column(name = "password", nullable = false)
-  private String password;
+    @NotEmpty
+    @Size(min = 3, max = 256, message = "Password must have 3 characters at least.")
+    @Column(name = "password", nullable = false)
+    private String password;
 
-  public UserModel() { }
+    public UserModel() {
+    }
 
-  public UserModel(final Name name, final String email, final String password) {
-    this.name = name;
-    this.email = email;
-    this.password = password;
-  }
+    public UserModel(final Name name, final String email, final String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public String getName() {
-    return name.getFullName();
-  }
+    public String getFirstName() {
+        return this.name.getFirstName();
+    }
 
-  public void setName(final String name) {
-    this.name.setFirstName(name);
-  }
+    public void setFirstName(final String name) {
+        this.name.setFirstName(name);
+    }
 
-  public String getEmail() {
-    return email;
-  }
+    public String getLastName() {
+        return this.name.getLastName();
+    }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+    public void setLastName(final String lastName) {
+        this.name.setLastName(lastName);
+    }
 
-  public String getPassword() {
-    return password;
-  }
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+    public String getEmail() {
+        return email;
+    }
 
-  @Override
-  public UserDTO convert() {
-    final ModelMapper modelMapper = new ModelMapper();
-    return modelMapper.map(this, UserDTO.class);
-  }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public UserDTO convert() {
+        final ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(this, UserDTO.class);
+    }
 }
