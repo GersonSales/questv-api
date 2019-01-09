@@ -12,7 +12,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = EndPoint.USER_ROUTE)
-public class UserRoutes {
+public class UserRest {
 
     @Autowired
     UserService userService;

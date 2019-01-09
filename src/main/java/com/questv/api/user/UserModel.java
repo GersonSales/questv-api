@@ -1,5 +1,7 @@
 package com.questv.api.user;
 
+import com.questv.api.user.properties.Name;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -7,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "user_table", schema = "questvApp")
+@Table(name = "user_table", schema = "questv_schema")
 public class UserModel {
 
   @Id
@@ -16,11 +18,9 @@ public class UserModel {
   @Column(name = "id")
   private Long id;
 
-  @NotEmpty
   @NotNull
-  @Size(min = 3, max = 256, message = "Name should have 3 characters at least.")
-  @Column(name = "name", nullable = false)
-  private String name;
+  @Embedded
+  private final Name name;
 
   @NotEmpty
   @NotNull
@@ -33,7 +33,8 @@ public class UserModel {
   @Column(name = "password", nullable = false)
   private String password;
 
-  public UserModel() {
+  public UserModel(final Name name) {
+    this.name = name;
   }
 
   public Long getId() {
@@ -45,11 +46,11 @@ public class UserModel {
   }
 
   public String getName() {
-    return name;
+    return name.getFullName();
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setName(final String name) {
+    this.name.setFirstName(name);
   }
 
   public String getEmail() {
