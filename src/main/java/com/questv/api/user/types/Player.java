@@ -6,7 +6,7 @@ import com.questv.api.user.properties.Name;
 public class Player extends UserModel {
   private float score;
 
-  public Player(Name name) {
-    super(name);
+  public Player(final Name name, final String email, final String password) {
+    super(name, email, password);
   }
 }

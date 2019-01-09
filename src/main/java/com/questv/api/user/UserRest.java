@@ -1,25 +1,33 @@
 package com.questv.api.user;
 
 
-import com.questv.api.config.EndPoint;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = EndPoint.USER_ROUTE)
+@RequestMapping()
 public class UserRest {
 
     @Autowired
     UserService userService;
 
-    @PostMapping({ "/" })
-    public void postUser(@Valid @RequestBody UserModel userModel) {
-        this.userService.create(userModel);
+    @PostMapping({"/user"})
+    public void postUser(@Valid @RequestBody UserDTO userDTO) {
+        this.userService.create(userDTO.convert());
+    }
+
+    @GetMapping({"/user"})
+    public List<UserDTO> getUsers() {
+        return this.userService
+                .findAll()
+                .stream()
+                .map(UserModel::convert)
+                .collect(Collectors.toList());
     }
 
 }

@@ -22,6 +22,7 @@ public class Name {
     @Column(name = "lastName", nullable = false)
     private String lastName;
 
+    public Name() { }
 
     public Name(final String firstName, final String lastName) {
         this.firstName = firstName;

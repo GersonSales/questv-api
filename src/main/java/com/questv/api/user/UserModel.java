@@ -1,6 +1,8 @@
 package com.questv.api.user;
 
+import com.questv.api.Convertible;
 import com.questv.api.user.properties.Name;
+import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -10,7 +12,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "user_table", schema = "questv_schema")
-public class UserModel {
+public class UserModel implements Convertible<UserDTO> {
 
   @Id
   @NotNull
@@ -20,7 +22,7 @@ public class UserModel {
 
   @NotNull
   @Embedded
-  private final Name name;
+  private Name name;
 
   @NotEmpty
   @NotNull
@@ -33,8 +35,12 @@ public class UserModel {
   @Column(name = "password", nullable = false)
   private String password;
 
-  public UserModel(final Name name) {
+  public UserModel() { }
+
+  public UserModel(final Name name, final String email, final String password) {
     this.name = name;
+    this.email = email;
+    this.password = password;
   }
 
   public Long getId() {
@@ -67,5 +73,11 @@ public class UserModel {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  @Override
+  public UserDTO convert() {
+    final ModelMapper modelMapper = new ModelMapper();
+    return modelMapper.map(this, UserDTO.class);
   }
 }
