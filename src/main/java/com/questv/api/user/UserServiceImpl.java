@@ -1,6 +1,5 @@
 package com.questv.api.user;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,9 +8,12 @@ import java.util.List;
 @Service(value = "userService")
 public class UserServiceImpl implements UserService{
 
+    private final UserRepository userRepository;
 
-    @Autowired
-    UserRepository userRepository;
+    public UserServiceImpl(final UserRepository userRepository) {
+        this.userRepository = userRepository;
+        assert this.userRepository != null;
+    }
 
     @Override
     public void create(final UserModel userModel) {

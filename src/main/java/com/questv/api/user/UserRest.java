@@ -1,11 +1,10 @@
 package com.questv.api.user;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,10 +12,15 @@ import java.util.stream.Collectors;
 @RequestMapping()
 public class UserRest {
 
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+
+    public UserRest(final UserService userService) {
+        this.userService = userService;
+        assert userService != null;
+    }
 
     @PostMapping({"/user"})
+    @ResponseStatus(value = HttpStatus.CREATED)
     public void postUser(@Valid @RequestBody UserDTO userDTO) {
         this.userService.create(userDTO.convert());
     }
