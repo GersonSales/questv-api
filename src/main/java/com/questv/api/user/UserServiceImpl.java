@@ -4,9 +4,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service(value = "userService")
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
@@ -16,16 +18,24 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void create(final UserModel userModel) {
-        this.userRepository.save(userModel);
-        System.out.println("User successful created.");  // TODO (remove)
+    public void create(final UserDTO userDTO) {
+        this.userRepository.save(userDTO.convert());
     }
 
     @Override
-    public List<UserModel> findAll() {
+    public List<UserDTO> findAll() {
         final List<UserModel> result = new ArrayList<>();
         this.userRepository.findAll().forEach(result::add);
-        return result;
+        return result
+                .stream()
+                .map(UserModel::convert)
+                .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public UserDTO findById(final Long userId) {
+        Optional<UserModel> byId = this.userRepository.findById(userId);
+        return byId.map(UserModel::convert).orElse(null);
     }
 }

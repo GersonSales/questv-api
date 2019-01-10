@@ -4,7 +4,9 @@ import java.util.List;
 
 public interface UserService {
 
-    void create(final UserModel userModel);
+    void create(final UserDTO userModel);
 
-    List<UserModel> findAll();
+    List<UserDTO> findAll();
+
+    UserDTO findById(final Long userId);
 }

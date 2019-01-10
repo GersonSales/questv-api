@@ -21,17 +21,21 @@ public class UserRest {
 
     @PostMapping({"/user"})
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void postUser(@Valid @RequestBody UserDTO userDTO) {
-        this.userService.create(userDTO.convert());
+    public void postUser(@Valid @RequestBody final UserDTO userDTO) {
+        this.userService.create(userDTO);
     }
 
     @GetMapping({"/user"})
     public List<UserDTO> getUsers() {
-        return this.userService
-                .findAll()
-                .stream()
-                .map(UserModel::convert)
-                .collect(Collectors.toList());
+        return this.userService.findAll();
+
     }
+
+    @GetMapping({"/user/{userId}"})
+    public UserDTO getUserById(@PathVariable final Long userId) {
+        return this.userService.findById(userId);
+
+    }
+
 
 }
