@@ -12,5 +12,5 @@ public interface ObjectService<T> {
 
     void updateById(final Long tId, final T t);
 
-    void deleteById(final Long tid);
+    void deleteById(final Long tId);
 }
