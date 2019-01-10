@@ -11,9 +11,9 @@ import java.util.List;
 @RequestMapping()
 public class UserRest {
 
-    private final ObjectService userService;
+    private final ObjectService<UserDTO> userService;
 
-    public UserRest(final ObjectService userService) {
+    public UserRest(final ObjectService<UserDTO> userService) {
         this.userService = userService;
         assert userService != null;
     }
