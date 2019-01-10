@@ -28,7 +28,6 @@ public class UserRest {
     @GetMapping("/user")
     public List<UserDTO> getUsers() {
         return this.userService.findAll();
-
     }
 
     @GetMapping("/user/{userId}")
@@ -36,15 +35,13 @@ public class UserRest {
         return this.userService.findById(userId);
     }
 
-
     @PutMapping("/user/{userId}")
     public void putUser(@PathVariable final Long userId, @RequestBody final UserDTO userDTO) {
         this.userService.updateById(userId, userDTO);
     }
 
-
     @DeleteMapping("/user/{userId}")
-    public void deleteUser(@PathVariable Long userId){
+    public void deleteUser(@PathVariable Long userId) {
         this.userService.deleteById(userId);
     }
 
