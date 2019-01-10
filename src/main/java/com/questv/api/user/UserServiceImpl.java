@@ -40,12 +40,17 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(UserModel::convert)
                 .collect(Collectors.toList());
-
     }
 
     @Override
     public UserDTO findById(final Long userId) {
         Optional<UserModel> byId = this.userRepository.findById(userId);
         return byId.map(UserModel::convert).orElse(null);
+    }
+
+    @Override
+    public void deleteById(final Long userId) {
+        this.userRepository.deleteById(userId);
+
     }
 }

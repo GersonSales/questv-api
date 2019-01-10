@@ -19,27 +19,33 @@ public class UserRest {
         assert userService != null;
     }
 
-    @PostMapping({"/user"})
+    @PostMapping("/user")
     @ResponseStatus(value = HttpStatus.CREATED)
     public void postUser(@Valid @RequestBody final UserDTO userDTO) {
         this.userService.create(userDTO);
     }
 
-    @GetMapping({"/user"})
+    @GetMapping("/user")
     public List<UserDTO> getUsers() {
         return this.userService.findAll();
 
     }
 
-    @GetMapping({"/user/{userId}"})
+    @GetMapping("/user/{userId}")
     public UserDTO getUserById(@PathVariable final Long userId) {
         return this.userService.findById(userId);
     }
 
 
-    @PutMapping({"/user/{userId}"})
+    @PutMapping("/user/{userId}")
     public void putUser(@PathVariable final Long userId, @RequestBody final UserDTO userDTO) {
         this.userService.updateById(userId, userDTO);
+    }
+
+
+    @DeleteMapping("/user/{userId}")
+    public void deleteUser(@PathVariable Long userId){
+        this.userService.deleteById(userId);
     }
 
 
