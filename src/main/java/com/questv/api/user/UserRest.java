@@ -6,15 +6,14 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping()
 public class UserRest {
 
-    private final UserService userService;
+    private final ObjectService userService;
 
-    public UserRest(final UserService userService) {
+    public UserRest(final ObjectService userService) {
         this.userService = userService;
         assert userService != null;
     }
