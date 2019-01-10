@@ -18,6 +18,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateById(final Long userId, final UserDTO userDTO) {
+        this.userRepository
+                .findById(userId)
+                .ifPresent((userModel) -> {
+                    userModel.update(userDTO);
+                    this.userRepository.save(userModel);
+                });
+    }
+
+    @Override
     public void create(final UserDTO userDTO) {
         this.userRepository.save(userDTO.convert());
     }

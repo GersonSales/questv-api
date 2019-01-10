@@ -90,4 +90,12 @@ public class UserModel implements Convertible<UserDTO> {
         final ModelMapper modelMapper = new ModelMapper();
         return modelMapper.map(this, UserDTO.class);
     }
+
+    @Override
+    public void update(final UserDTO model) {
+        setFirstName(model.getFirstName());
+        setLastName(model.getLastName());
+        setEmail(model.getEmail());
+        setPassword(model.getPassword());
+    }
 }

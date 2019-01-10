@@ -9,4 +9,6 @@ public interface UserService {
     List<UserDTO> findAll();
 
     UserDTO findById(final Long userId);
+
+    void updateById(final Long userId, final UserDTO userDTO);
 }

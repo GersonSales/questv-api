@@ -34,7 +34,12 @@ public class UserRest {
     @GetMapping({"/user/{userId}"})
     public UserDTO getUserById(@PathVariable final Long userId) {
         return this.userService.findById(userId);
+    }
 
+
+    @PutMapping({"/user/{userId}"})
+    public void putUser(@PathVariable final Long userId, @RequestBody final UserDTO userDTO) {
+        this.userService.updateById(userId, userDTO);
     }
 
 

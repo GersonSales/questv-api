@@ -6,6 +6,9 @@ import java.util.List;
 
 public interface UserRepository extends CrudRepository<UserModel, Long> {
     List<UserModel> findByName(final String name);
+
     UserModel findByEmail(final String email);
+
     UserModel findById(final long id);
+
 }

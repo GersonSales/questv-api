@@ -28,7 +28,8 @@ public class UserDTO implements Convertible<UserModel> {
     private String password;
 
 
-    public UserDTO() { }
+    public UserDTO() {
+    }
 
     public String getFirstName() {
         return firstName;
@@ -66,5 +67,13 @@ public class UserDTO implements Convertible<UserModel> {
     public UserModel convert() {
         final Name name = new Name(getFirstName(), getLastName());
         return new UserModel(name, getEmail(), getPassword());
+    }
+
+    @Override
+    public void update(final UserModel model) {
+        setFirstName(model.getFirstName());
+        setLastName(model.getLastName());
+        setEmail(model.getEmail());
+        setPassword(model.getPassword());
     }
 }
