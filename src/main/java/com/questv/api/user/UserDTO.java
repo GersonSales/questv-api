@@ -10,7 +10,6 @@ import javax.validation.constraints.Size;
 public class UserDTO implements Convertible<UserModel> {
 
 
-    @NotEmpty
     private int id;
 
     @NotEmpty
@@ -86,5 +85,16 @@ public class UserDTO implements Convertible<UserModel> {
         setLastName(model.getLastName());
         setEmail(model.getEmail());
         setPassword(model.getPassword());
+    }
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }

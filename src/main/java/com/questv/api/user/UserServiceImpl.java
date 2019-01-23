@@ -28,8 +28,9 @@ public class UserServiceImpl implements ObjectService<UserDTO> {
     }
 
     @Override
-    public void create(final UserDTO userDTO) {
-        this.userRepository.save(userDTO.convert());
+    public UserDTO create(final UserDTO userDTO) {
+        return this.userRepository.save(userDTO.convert()).convert();
+
     }
 
     @Override

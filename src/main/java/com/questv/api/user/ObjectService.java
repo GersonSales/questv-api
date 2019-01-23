@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ObjectService<T> {
 
-    void create(final T userModel);
+    UserDTO create(final T userModel);
 
     List<T> findAll();
 

@@ -18,10 +18,12 @@ public class UserRest {
         assert userService != null;
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @PostMapping("/user")
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void postUser(@Valid @RequestBody final UserDTO userDTO) {
-        this.userService.create(userDTO);
+    @ResponseBody
+    public UserDTO postUser(@Valid @RequestBody final UserDTO userDTO) {
+        return this.userService.create(userDTO);
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
