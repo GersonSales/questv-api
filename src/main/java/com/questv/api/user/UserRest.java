@@ -32,12 +32,13 @@ public class UserRest {
         return this.userService.findAll();
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/user/{userId}")
     public UserDTO getUserById(@PathVariable final Long userId) {
         return this.userService.findById(userId);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "http://localhost:4200", methods = RequestMethod.PUT)
     @PutMapping("/user/{userId}")
     public void putUser(@PathVariable final Long userId, @RequestBody final UserDTO userDTO) {
         this.userService.updateById(userId, userDTO);
