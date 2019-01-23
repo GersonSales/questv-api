@@ -11,6 +11,9 @@ public class UserDTO implements Convertible<UserModel> {
 
 
     @NotEmpty
+    private int id;
+
+    @NotEmpty
     @Size(min = 3, max = 256, message = "First name should have 3 characters at least.")
     private String firstName;
 
@@ -61,6 +64,14 @@ public class UserDTO implements Convertible<UserModel> {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

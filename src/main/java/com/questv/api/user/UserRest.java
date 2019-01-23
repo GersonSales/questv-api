@@ -24,6 +24,7 @@ public class UserRest {
         this.userService.create(userDTO);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @GetMapping("/user")
     public List<UserDTO> getUsers() {
         return this.userService.findAll();
