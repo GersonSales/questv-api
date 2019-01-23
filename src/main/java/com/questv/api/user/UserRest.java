@@ -42,6 +42,7 @@ public class UserRest {
         this.userService.updateById(userId, userDTO);
     }
 
+    @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/user/{userId}")
     public void deleteUser(@PathVariable Long userId) {
         this.userService.deleteById(userId);
