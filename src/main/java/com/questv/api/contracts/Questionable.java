@@ -6,8 +6,8 @@ import java.util.Set;
 
 public interface Questionable {
     void attachQuestion(final QuestionModel questionModel);
-    void attachAll(Set<QuestionModel> questionModelSet);
-
+    void attachAll(final Set<QuestionModel> questionModelSet);
+    void detachQuestion(final QuestionModel questionModel);
     Set<QuestionModel> getQuestions();
 
 }
