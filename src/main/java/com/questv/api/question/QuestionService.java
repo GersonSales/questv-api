@@ -1,12 +1,17 @@
 package com.questv.api.question;
 
 import com.questv.api.contracts.ObjectService;
+import com.questv.api.contracts.Questionable;
+import com.questv.api.episode.EpisodeModel;
 import com.questv.api.episode.EpisodeRepository;
+import com.questv.api.season.SeasonModel;
 import com.questv.api.season.SeasonRepository;
+import com.questv.api.series.SeriesModel;
 import com.questv.api.series.SeriesRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -32,53 +37,38 @@ public class QuestionService implements ObjectService<QuestionDTO> {
 
   @Override
   public void createAndAttach(final QuestionDTO questionDTO) {
-    final QuestionType questionType = QuestionType.getValueOf(questionDTO.getQuestionType());
-    switch (questionType) {
-      case SERIES: {
-        attachQuestionIntoSeries(questionDTO);
-        break;
-      }
-
-      case SEASON: {
-        attachQuestionIntoSeason(questionDTO);
-        break;
-      }
-
-      case EPISODE: {
-        attachQuestionIntoEpisode(questionDTO);
-        break;
-      }
-
-      default:
-        break;
+    final Long ownerId = questionDTO.getOwnerId();
+    final Questionable questionable = getQuestionableById(ownerId);
+    if (questionable != null) {
+      questionable.attachQuestion(questionDTO.convert());
+      saveQuestionable(questionable);
     }
   }
 
-  private void attachQuestionIntoEpisode(final QuestionDTO questionDTO) {
-    this.episodeRepository.findById(questionDTO.getOwnerId())
-        .ifPresent((episodeModel) -> {
-          final QuestionModel savedModel = this.questionRepository.save(questionDTO.convert());
-          episodeModel.attachQuestion(savedModel);
-          this.episodeRepository.save(episodeModel);
-        });
+  private void saveQuestionable(final Questionable questionable) {
+    if (questionable instanceof SeriesModel) {
+      this.seriesRepository.save((SeriesModel) questionable);
+    } else if (questionable instanceof SeasonModel) {
+      this.seasonRepository.save((SeasonModel) questionable);
+    } else if (questionable instanceof EpisodeModel) {
+      this.episodeRepository.save((EpisodeModel) questionable);
+    }
   }
 
-  private void attachQuestionIntoSeason(final QuestionDTO questionDTO) {
-    this.seasonRepository.findById(questionDTO.getOwnerId())
-        .ifPresent((seasonModel) -> {
-          final QuestionModel savedModel = this.questionRepository.save(questionDTO.convert());
-          seasonModel.attachQuestion(savedModel);
-          this.seasonRepository.save(seasonModel);
-        });
-  }
+  private Questionable getQuestionableById(final Long questionableId) {
+    Optional<SeriesModel> seriesById = this.seriesRepository.findById(questionableId);
+    if (seriesById.isPresent()) {
+      return seriesById.get();
+    }
 
-  private void attachQuestionIntoSeries(final QuestionDTO questionDTO) {
-    this.seriesRepository.findById(questionDTO.getOwnerId())
-        .ifPresent((seriesModel) -> {
-          final QuestionModel savedModel = this.questionRepository.save(questionDTO.convert());
-          seriesModel.attachQuestion(savedModel);
-          this.seriesRepository.save(seriesModel);
-        });
+    Optional<SeasonModel> seasonById = this.seasonRepository.findById(questionableId);
+    if (seasonById.isPresent()) {
+      return seasonById.get();
+    }
+
+    Optional<EpisodeModel> episodeById = this.episodeRepository.findById(questionableId);
+    return episodeById.orElse(null);
+
   }
 
   @Override
@@ -114,65 +104,14 @@ public class QuestionService implements ObjectService<QuestionDTO> {
 
   @Override
   public void deleteById(final Long questionId) {
-    throw new RuntimeException("Cannot delete a question with an empty owner.");
-  }
-
-  public void deleteById(final QuestionType questionType, final Long questionId) {
-    switch (questionType) {
-      case SERIES: {
-        deleteQuestionFromSeries(questionId);
-        break;
-      }
-
-      case SEASON: {
-        deleteQuestionFromSeason(questionId);
-        break;
-      }
-
-      case EPISODE: {
-        deleteQuestionFromEpisode(questionId);
-        break;
-      }
-
-      default:
-        break;
-    }
-  }
-
-  private void deleteQuestionFromEpisode(final Long questionId) {
     this.questionRepository.findById(questionId)
-        .ifPresent((questionModel) -> {
-          this.episodeRepository.findById(questionModel.getOwnerId())
-              .ifPresent((episodeModel) -> {
-                episodeModel.detachQuestion(questionModel);
-                this.episodeRepository.save(episodeModel);
-                this.questionRepository.deleteById(questionId);
-              });
-        });
+        .ifPresent((questionModel) -> detachQuestionFromQuestionable(questionModel,
+            getQuestionableById(questionModel.getOwnerId())));
   }
 
-  private void deleteQuestionFromSeason(final Long questionId) {
-    this.questionRepository.findById(questionId)
-        .ifPresent((questionModel) -> {
-          this.seasonRepository.findById(questionModel.getOwnerId())
-              .ifPresent((seasonModel) -> {
-                seasonModel.detachQuestion(questionModel);
-                this.seasonRepository.save(seasonModel);
-                this.questionRepository.deleteById(questionId);
-              });
-        });
-  }
-
-  private void deleteQuestionFromSeries(final Long questionId) {
-    this.questionRepository.findById(questionId)
-        .ifPresent((questionModel) -> {
-          this.seriesRepository.findById(questionModel.getOwnerId())
-              .ifPresent((seriesModel) -> {
-                seriesModel.detachQuestion(questionModel);
-                this.seriesRepository.save(seriesModel);
-                this.questionRepository.deleteById(questionId);
-              });
-        });
-
+  private void detachQuestionFromQuestionable(final QuestionModel questionModel,
+                                              final Questionable questionable) {
+    questionable.detachQuestion(questionModel);
+    saveQuestionable(questionable);
   }
 }

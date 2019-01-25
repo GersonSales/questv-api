@@ -27,8 +27,6 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
   @NotEmpty
   private String description;
 
-  @NotNull
-  private QuestionType questionType;
 
   @NotNull
   @Embedded
@@ -41,11 +39,9 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
 
   /*default*/ QuestionModel(final Long ownerId,
                             final String description,
-                            final QuestionType questionType,
                             final Set<Answer> answerSet) {
     this.ownerId = ownerId;
     this.description = description;
-    this.questionType = questionType;
     this.answerSet = answerSet;
   }
 
@@ -88,9 +84,7 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
       answersMap.put(answer.getValue(), answer.isCorrect());
     }
 
-    final String questionType = this.questionType.name();
-
-    return new QuestionDTO(getId(), getOwnerId(), getDescription(), questionType,  answersMap);
+    return new QuestionDTO(getId(), getOwnerId(), getDescription(), answersMap);
   }
 
   @Override

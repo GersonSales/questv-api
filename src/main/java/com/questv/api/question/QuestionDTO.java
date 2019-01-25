@@ -18,8 +18,6 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
   @NotNull
   private String description;
 
-  @NotNull
-  private String questionType;
 
   @NotNull
   private Map<String, Boolean> answers;
@@ -30,13 +28,11 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
   /*default*/ QuestionDTO(final Long id,
                           final Long ownerId,
                           final String description,
-                          final String questionType,
                           final Map<String, Boolean> answers) {
 
     this.id = id;
     this.ownerId = ownerId;
     this.description = description;
-    this.questionType = questionType;
     this.answers = answers;
   }
 
@@ -72,13 +68,7 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
     this.answers = answers;
   }
 
-  public String getQuestionType() {
-    return questionType.toLowerCase();
-  }
 
-  public void setQuestionType(String questionType) {
-    this.questionType = questionType;
-  }
 
   @Override
   public QuestionModel convert() {
@@ -87,11 +77,7 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
       answerSet.add(new Answer(answer, this.answers.get(answer)));
     }
 
-    final QuestionType questionType = QuestionType
-        .valueOf(getQuestionType()
-            .toUpperCase());
-
-    return new QuestionModel(getOwnerId(), getDescription(), questionType,  answerSet);
+    return new QuestionModel(getOwnerId(), getDescription(), answerSet);
   }
 
   @Override
