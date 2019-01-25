@@ -27,7 +27,6 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     assert this.questionRepository != null;
   }
 
-
   public void createAndAttach(final QuestionType questionType, final Long superId, final QuestionDTO questionDTO) {
     switch (questionType) {
       case SERIES: {
