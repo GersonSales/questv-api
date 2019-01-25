@@ -35,7 +35,6 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
 
   /*default*/ SeriesModel() {
-//    questionSet = new HashSet<>();
     seasons = new HashSet<>();
 
   }
@@ -57,11 +56,13 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   @Override
   public SeriesDTO convert() {
-    return new SeriesDTO(name,
-        seasons
-            .stream()
-            .map(Season::getId)
-            .collect(Collectors.toList()));
+    return new SeriesDTO(getName(), new ArrayList<>());
+
+//    return new SeriesDTO(name,
+//        seasons
+//            .stream()
+//            .map(Season::getId)
+//            .collect(Collectors.toList()));
   }
 
   @Override

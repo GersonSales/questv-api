@@ -13,9 +13,11 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
 
   @NotEmpty
   @Size(min = 3, max = 256, message = "Series name should have 3 characters at least.")
-  private final String name;
+  private String name;
 
-  private final List<Long> seasonsIds;
+  private List<Long> seasonsIds;
+
+  SeriesDTO() { }
 
   /*default*/ SeriesDTO(final String name, final List<Long> seasonsIds) {
     this.name = name;
