@@ -18,7 +18,6 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
   @NotNull
   private String description;
 
-
   @NotNull
   private Map<String, Boolean> answers;
 

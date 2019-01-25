@@ -47,7 +47,7 @@ public class QuestionRest implements Restable<QuestionDTO> {
 
   @Override
   @PutMapping("/question")
-  public void put(final QuestionDTO questionDTO) {
+  public void put(@Valid @RequestBody final QuestionDTO questionDTO) {
     this.questionService.updateById(questionDTO.getId(), questionDTO);
   }
 }
