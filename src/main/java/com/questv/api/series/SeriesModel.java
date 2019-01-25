@@ -13,16 +13,23 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class SeriesModel implements Questionable, Convertible<SeriesDTO>, Updatable<SeriesModel> {
-  private final String name;
-  private final Set<Season> seasons;
 
-  private final Set<Question> questionSet;
+  private Long id;
+  private String name;
+  private Set<Season> seasons;
+
+  private Set<Question> questionSet;
 
 
-  /*default*/ SeriesModel(final String name) {
-    this.name = name;
+  /*default*/ SeriesModel() {
     questionSet = new HashSet<>();
     seasons = new HashSet<>();
+
+  }
+
+  /*default*/ SeriesModel(final String name) {
+    this();
+    this.name = name;
   }
 
   public void attachQuestion(final Question question) {

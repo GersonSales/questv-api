@@ -1,12 +1,10 @@
 package com.questv.api.util;
 
-import com.questv.api.user.UserDTO;
-
 import java.util.List;
 
 public interface ObjectService<T> {
 
-    UserDTO create(final T userModel);
+    T create(final T userModel);
 
     List<T> findAll();
 

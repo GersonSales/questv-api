@@ -14,7 +14,7 @@ public class SeriesService implements ObjectService<SeriesDTO> {
   }
 
   @Override
-  public UserDTO create(final SeriesDTO userModel) {
+  public SeriesDTO create(final SeriesDTO userModel) {
     return null;
   }
 

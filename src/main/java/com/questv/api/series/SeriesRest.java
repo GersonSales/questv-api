@@ -1,7 +1,10 @@
 package com.questv.api.series;
 
 import com.questv.api.util.ObjectService;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 public class SeriesRest {
@@ -11,25 +14,31 @@ public class SeriesRest {
     this.seriesService = seriesService;
   }
 
-  public void postSeries(final SeriesDTO seriesDTO) {
-    this.seriesService.create(seriesDTO);
+  @PostMapping("/series")
+  @ResponseStatus(value = HttpStatus.CREATED)
+  @ResponseBody
+  public SeriesDTO postSeries(@Valid @RequestBody final SeriesDTO seriesDTO) {
+    return this.seriesService.create(seriesDTO);
   }
 
+  @GetMapping("/series")
   public List<SeriesDTO> getSeries() {
     return this.seriesService.findAll();
   }
 
-  public SeriesDTO getSeriesById(final long id) {
-    return this.seriesService.findById(id);
+  @GetMapping("/user/{seriesId}")
+  public SeriesDTO getSeriesById(@PathVariable Long seriesId) {
+    return this.seriesService.findById(seriesId);
   }
 
-  public void putSeries(final Long seriesId, final SeriesDTO seriesDTO) {
+  @PutMapping("/series/{seriesId}")
+  public void putSeries(@PathVariable final Long seriesId, @RequestBody final SeriesDTO seriesDTO) {
     this.seriesService.updateById(seriesId, seriesDTO);
   }
 
-  public void deleteSeries(final Long seriesId) {
+  @DeleteMapping("/series/{seriesId}")
+  public void deleteSeries(@PathVariable final Long seriesId) {
     this.seriesService.deleteById(seriesId);
   }
-
 
 }
