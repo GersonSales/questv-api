@@ -1,13 +1,14 @@
 package com.questv.api.user;
 
-import com.questv.api.Convertible;
+import com.questv.api.util.Convertible;
 import com.questv.api.user.properties.Name;
+import com.questv.api.util.Updatable;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-public class UserDTO implements Convertible<UserModel> {
+public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
 
 
     private int id;

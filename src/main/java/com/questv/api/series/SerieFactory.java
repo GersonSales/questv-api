@@ -5,8 +5,8 @@ import com.questv.api.season.Season;
 
 public class SerieFactory {
 
-  public static Series createSerie(final String name) {
-    return new Series(name);
+  public static SeriesModel createSerie(final String name) {
+    return new SeriesModel(name);
   }
 
   public static Season createSeason(final String name) {

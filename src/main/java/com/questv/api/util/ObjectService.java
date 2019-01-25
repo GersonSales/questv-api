@@ -1,4 +1,6 @@
-package com.questv.api.user;
+package com.questv.api.util;
+
+import com.questv.api.user.UserDTO;
 
 import java.util.List;
 

@@ -33,4 +33,8 @@ public class Season implements Questionable {
   public Set<Question> getQuestions() {
     return this.questionSet;
   }
+
+  public Long getId() {
+    return null;
+  }
 }

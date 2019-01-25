@@ -1,6 +1,6 @@
 package com.questv.api.series;
 
-import com.questv.api.user.ObjectService;
+import com.questv.api.util.ObjectService;
 
 import java.util.List;
 

@@ -1,11 +1,18 @@
 package com.questv.api.series;
 
-import com.questv.api.user.ObjectService;
+import com.questv.api.util.ObjectService;
 import com.questv.api.user.UserDTO;
 
 import java.util.List;
 
 public class SeriesService implements ObjectService<SeriesDTO> {
+
+  private final SeriesRepository seriesRepository;
+
+  public SeriesService(final SeriesRepository seriesRepository) {
+    this.seriesRepository = seriesRepository;
+  }
+
   @Override
   public UserDTO create(final SeriesDTO userModel) {
     return null;

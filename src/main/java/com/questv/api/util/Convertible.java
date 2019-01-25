@@ -1,7 +1,5 @@
-package com.questv.api;
+package com.questv.api.util;
 
 public interface Convertible <T>{
     T convert();
-
-    void update(T model);
 }
