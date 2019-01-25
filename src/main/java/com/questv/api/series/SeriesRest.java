@@ -27,7 +27,7 @@ public class SeriesRest {
     return this.seriesService.findAll();
   }
 
-  @GetMapping("/user/{seriesId}")
+  @GetMapping("/series/{seriesId}")
   public SeriesDTO getSeriesById(@PathVariable Long seriesId) {
     return this.seriesService.findById(seriesId);
   }
