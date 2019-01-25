@@ -67,6 +67,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   @Override
   public void update(final SeriesModel update) {
+    this.name = update.name;
 
   }
 

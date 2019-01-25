@@ -42,9 +42,12 @@ public class SeriesService implements ObjectService<SeriesDTO> {
 
   @Override
   public void updateById(final Long seriesId, final SeriesDTO seriesDTO) {
-    final SeriesDTO foundSeries = this.findById(seriesId);
-    foundSeries.update(seriesDTO);
-    this.seriesRepository.save(foundSeries.convert());
+    this.seriesRepository
+        .findById(seriesId)
+        .ifPresent((seriesModel) -> {
+          seriesModel.update(seriesDTO.convert());
+          this.seriesRepository.save(seriesModel);
+        });
   }
 
   @Override

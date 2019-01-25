@@ -8,4 +8,6 @@ public interface SeriesRepository extends CrudRepository<SeriesModel, Long> {
   List<SeriesModel> findByName(final String name);
 
   SeriesModel findById(final long id);
+
+
 }
