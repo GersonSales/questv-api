@@ -4,10 +4,13 @@ import com.questv.api.contracts.ObjectService;
 import com.questv.api.episode.EpisodeRepository;
 import com.questv.api.season.SeasonRepository;
 import com.questv.api.series.SeriesRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Service(value = "questionService")
 public class QuestionService implements ObjectService<QuestionDTO> {
 
   private final QuestionRepository questionRepository;
@@ -134,7 +137,8 @@ public class QuestionService implements ObjectService<QuestionDTO> {
         break;
       }
 
-      default: break;
+      default:
+        break;
     }
   }
 
@@ -142,11 +146,11 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     this.questionRepository.findById(questionId)
         .ifPresent((questionModel) -> {
           this.episodeRepository.findById(questionModel.getOwnerId())
-          .ifPresent((episodeModel) -> {
-            episodeModel.detachQuestion(questionModel);
-            this.episodeRepository.save(episodeModel);
-            this.questionRepository.deleteById(questionId);
-          });
+              .ifPresent((episodeModel) -> {
+                episodeModel.detachQuestion(questionModel);
+                this.episodeRepository.save(episodeModel);
+                this.questionRepository.deleteById(questionId);
+              });
         });
   }
 
