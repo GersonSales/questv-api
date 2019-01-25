@@ -107,6 +107,7 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     this.questionRepository.findById(questionId)
         .ifPresent((questionModel) -> detachQuestionFromQuestionable(questionModel,
             getQuestionableById(questionModel.getOwnerId())));
+    this.questionRepository.deleteById(questionId);
   }
 
   private void detachQuestionFromQuestionable(final QuestionModel questionModel,
