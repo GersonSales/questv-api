@@ -20,19 +20,63 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   private String abbreviation;
 
   private Set<Long> seasons;
-
+  private Set<Long> questions;
 
   /*default*/ SeriesDTO() {
   }
 
-  /*default*/ SeriesDTO(final Long id, final String name, final String abbreviation, final Set<Long> seasons) {
+  /*default*/ SeriesDTO(final Long id,
+                        final String name,
+                        final String abbreviation,
+                        final Set<Long> seasons,
+                        final Set<Long> questions) {
     this();
     this.id = id;
     this.name = name;
     this.abbreviation = abbreviation;
     this.seasons = seasons;
+    this.questions = questions;
   }
 
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getAbbreviation() {
+    return abbreviation;
+  }
+
+  public void setAbbreviation(String abbreviation) {
+    this.abbreviation = abbreviation;
+  }
+
+  public Set<Long> getSeasons() {
+    return seasons;
+  }
+
+  public void setSeasons(Set<Long> seasons) {
+    this.seasons = seasons;
+  }
+
+  public Set<Long> getQuestions() {
+    return questions;
+  }
+
+  public void setQuestions(Set<Long> questions) {
+    this.questions = questions;
+  }
 
   @Override
   public SeriesModel convert() {
@@ -43,33 +87,5 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   public void update(final SeriesDTO update) {
     this.name = update.name;
 
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setId(final Long id) {
-    this.id = id;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public Set<Long> getSeasons() {
-    return seasons;
-  }
-
-  public String getAbbreviation() {
-    return abbreviation;
-  }
-
-  public void setAbbreviation(String abbreviation) {
-    this.abbreviation = abbreviation;
   }
 }
