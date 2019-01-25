@@ -1,8 +1,10 @@
 package com.questv.api.season;
 
+import com.questv.api.contracts.Questionable;
 import com.questv.api.episode.EpisodeModel;
 import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Updatable;
+import com.questv.api.question.QuestionModel;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -13,7 +15,7 @@ import java.util.stream.Collectors;
 @Entity
 @Embeddable
 @Table(name = "season_table", schema = "questv_schema")
-public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonModel> {
+public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonModel>, Questionable {
 
 
   @Id
@@ -32,8 +34,14 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
   @OneToMany(cascade = CascadeType.ALL)
   private Set<EpisodeModel> episodes;
 
+  @Embedded
+  @ElementCollection
+  @OneToMany(cascade = CascadeType.ALL)
+  private Set<QuestionModel> questions;
+
   /*default*/ SeasonModel() {
     this.episodes = new HashSet<>();
+    this.questions = new HashSet<>();
   }
 
   /*default*/ SeasonModel(final Long seriesId, final String name) {
@@ -61,12 +69,17 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
 
   @Override
   public SeasonDTO convert() {
-    final Set<Long> collect = episodes
+    final Set<Long> episodesIds = episodes
         .stream()
         .map(EpisodeModel::getId)
         .collect(Collectors.toSet());
 
-    return new SeasonDTO(getId(), getSeriesId(), getName(), collect);
+    final Set<Long> questionsIds = this.questions
+        .stream()
+        .map(QuestionModel::getId)
+        .collect(Collectors.toSet());
+
+    return new SeasonDTO(getId(), getSeriesId(), getName(), episodesIds, questionsIds);
   }
 
   @Override
@@ -100,5 +113,25 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
         this.episodes.remove(episodeModel);
       }
     }
+  }
+
+  @Override
+  public void attachQuestion(final QuestionModel questionModel) {
+    this.questions.add(questionModel);
+  }
+
+  @Override
+  public void attachAll(final Set<QuestionModel> questionModelSet) {
+    this.questions.addAll(questionModelSet);
+  }
+
+  @Override
+  public void detachQuestion(final QuestionModel questionModel) {
+    this.questions.remove(questionModel);
+  }
+
+  @Override
+  public Set<QuestionModel> getQuestions() {
+    return this.questions;
   }
 }

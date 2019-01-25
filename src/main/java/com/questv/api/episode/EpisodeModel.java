@@ -45,7 +45,7 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
                            final String name) {
     this.seasonId = seasonId;
     this.name = name;
-  }
+}
 
   public Long getId() {
     return id;
