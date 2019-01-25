@@ -10,6 +10,6 @@ public class QuestionFactory {
     for (final String wrong : wrongAnswers) {
       answers.add(new Answer(wrong, false));
     }
-    return new QuestionModel(description, answers);
+    return null;
   }
 }
