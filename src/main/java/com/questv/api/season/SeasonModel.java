@@ -87,4 +87,12 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
   public void attachEpisode(final EpisodeModel episodeModel) {
     this.episodeModels.add(episodeModel);
   }
+
+  public void removeEpisodeById(final Long episodeId) {
+    for(final EpisodeModel episodeModel : this.episodeModels) {
+      if(episodeModel.getId().equals(episodeId)) {
+        this.episodeModels.remove(episodeModel);
+      }
+    }
+  }
 }

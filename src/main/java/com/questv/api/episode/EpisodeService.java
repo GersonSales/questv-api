@@ -1,10 +1,11 @@
 package com.questv.api.episode;
 
 import com.questv.api.season.SeasonRepository;
-import com.questv.api.season.SeasonService;
 import com.questv.api.util.ObjectService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EpisodeService implements ObjectService<EpisodeDTO> {
 
@@ -28,31 +29,49 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
           seasonModel.attachEpisode(episodeModel);
           this.seasonRepository.save(seasonModel);
         });
-
   }
 
   @Override
-  public EpisodeDTO create(EpisodeDTO model) {
-    return null;
+  public EpisodeDTO create(final EpisodeDTO episodeDTO) {
+    return this.episodeRepository.save(episodeDTO.convert()).convert();
   }
 
   @Override
   public List<EpisodeDTO> findAll() {
-    return null;
+    final List<EpisodeModel> result = new ArrayList<>();
+    this.episodeRepository.findAll().forEach(result::add);
+    return result
+        .stream()
+        .map(EpisodeModel::convert)
+        .collect(Collectors.toList());
   }
 
   @Override
-  public EpisodeDTO findById(Long tId) {
-    return null;
+  public EpisodeDTO findById(Long episodeId) {
+    return this.episodeRepository.findById(episodeId)
+        .map(EpisodeModel::convert)
+        .orElse(new NullEpisodeDTO());
   }
 
   @Override
-  public void updateById(Long tId, EpisodeDTO episodeDTO) {
-
+  public void updateById(final Long episodeId, final EpisodeDTO episodeDTO) {
+    this.episodeRepository.findById(episodeId)
+        .ifPresent((episodeModel) -> {
+          episodeModel.update(episodeDTO.convert());
+          this.episodeRepository.save(episodeModel);
+        });
   }
 
   @Override
-  public void deleteById(Long tId) {
-
+  public void deleteById(final Long episodeId) {
+    this.episodeRepository.findById(episodeId)
+        .ifPresent((episodeModel) -> {
+          this.seasonRepository.findById(episodeModel.getSeasonId())
+              .ifPresent((seasonModel) -> {
+                seasonModel.removeEpisodeById(episodeId);
+                this.seasonRepository.save(seasonModel);
+                this.episodeRepository.deleteById(episodeId);
+              });
+        });
   }
 }

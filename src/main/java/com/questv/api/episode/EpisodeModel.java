@@ -3,6 +3,7 @@ package com.questv.api.episode;
 import com.questv.api.question.Question;
 import com.questv.api.question.Questionable;
 import com.questv.api.util.Convertible;
+import com.questv.api.util.Updatable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Entity
 @Embeddable
 @Table(name = "episode_table", schema = "questv_schema")
-public class EpisodeModel implements Convertible<EpisodeDTO> {
+public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeModel> {
 
 
   @Id
@@ -62,5 +63,10 @@ public class EpisodeModel implements Convertible<EpisodeDTO> {
   @Override
   public EpisodeDTO convert() {
     return new EpisodeDTO();
+  }
+
+  @Override
+  public void update(final EpisodeModel update) {
+    setName(update.getName());
   }
 }
