@@ -5,6 +5,7 @@ import com.questv.api.question.Question;
 import com.questv.api.question.Questionable;
 import com.questv.api.season.Season;
 import com.questv.api.util.Updatable;
+import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -28,15 +29,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   @NotNull
   private String name;
 
-  @Embedded
-  private Set<Season> seasons;
-//
-//  private Set<Question> questionSet;
-
-
   /*default*/ SeriesModel() {
-    seasons = new HashSet<>();
-
   }
 
   /*default*/ SeriesModel(final String name) {
@@ -44,25 +37,13 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     this.name = name;
   }
 
-//  public void attachQuestion(final Question question) {
-//    this.questionSet.add(question);
-//  }
-
-//  @Override
-//  public void attachAll(final Set<Question> questionSet) {
-//    this.questionSet.addAll(questionSet);
-//  }
-
-
   @Override
   public SeriesDTO convert() {
-    return new SeriesDTO(getName(), new ArrayList<>());
+    return new ModelMapper().map(this, SeriesDTO.class);
 
-//    return new SeriesDTO(name,
-//        seasons
-//            .stream()
-//            .map(Season::getId)
-//            .collect(Collectors.toList()));
+//    SeriesDTO seriesDTO = new SeriesDTO(getName());
+//    seriesDTO.setId(getId());
+//    return seriesDTO;
   }
 
   @Override
@@ -85,14 +66,6 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public Set<Season> getSeasons() {
-    return seasons;
-  }
-
-  public void setSeasons(Set<Season> seasons) {
-    this.seasons = seasons;
   }
 
 }
