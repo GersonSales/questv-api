@@ -4,7 +4,9 @@ import java.util.List;
 
 public interface ObjectService<T> {
 
-    T create(final T userModel);
+    void createAndAttach(final Long superId, T model);
+
+    T create(final T model);
 
     List<T> findAll();
 

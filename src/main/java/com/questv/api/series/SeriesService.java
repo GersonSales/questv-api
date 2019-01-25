@@ -18,8 +18,8 @@ public class SeriesService implements ObjectService<SeriesDTO> {
   }
 
   @Override
-  public SeriesDTO create(final SeriesDTO seriesDTO) {
-    return this.seriesRepository.save(seriesDTO.convert()).convert();
+  public SeriesDTO create(final SeriesDTO model) {
+    return this.seriesRepository.save(model.convert()).convert();
   }
 
   @Override
@@ -53,5 +53,10 @@ public class SeriesService implements ObjectService<SeriesDTO> {
   @Override
   public void deleteById(final Long seriesId) {
     this.seriesRepository.deleteById(seriesId);
+  }
+
+  @Override
+  public void createAndAttach(Long superId, SeriesDTO model) {
+
   }
 }

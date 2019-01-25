@@ -29,8 +29,8 @@ public class UserServiceImpl implements ObjectService<UserDTO> {
     }
 
     @Override
-    public UserDTO create(final UserDTO userDTO) {
-        return this.userRepository.save(userDTO.convert()).convert();
+    public UserDTO create(final UserDTO model) {
+        return this.userRepository.save(model.convert()).convert();
 
     }
 
@@ -53,6 +53,11 @@ public class UserServiceImpl implements ObjectService<UserDTO> {
     @Override
     public void deleteById(final Long userId) {
         this.userRepository.deleteById(userId);
+
+    }
+
+    @Override
+    public void createAndAttach(Long superId, UserDTO model) {
 
     }
 }

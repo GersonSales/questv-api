@@ -1,23 +1,42 @@
 package com.questv.api.season;
 
+import com.questv.api.series.SeriesRepository;
 import com.questv.api.util.ObjectService;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service(value = "seasonService")
 public class SeasonService implements ObjectService<SeasonDTO> {
 
   private final SeasonRepository seasonRepository;
+  private final SeriesRepository seriesRepository;
 
-  public SeasonService(final SeasonRepository seasonRepository) {
+  public SeasonService(final SeasonRepository seasonRepository,
+                       final SeriesRepository seriesRepository) {
     this.seasonRepository = seasonRepository;
+    this.seriesRepository = seriesRepository;
     assert this.seasonRepository != null;
+    assert this.seriesRepository != null;
   }
 
   @Override
-  public SeasonDTO create(final SeasonDTO userModel) {
-    return this.seasonRepository.save(userModel.convert()).convert();
+  public void createAndAttach(final Long seriesId, final SeasonDTO seasonDTO) {
+    this.seriesRepository.findById(seriesId)
+        .ifPresent(seriesModel -> {
+          final SeasonModel seasonModel = this.seasonRepository.save(seasonDTO.convert());
+          seriesModel.attachSeason(seasonModel);
+          this.seriesRepository.save(seriesModel);
+        });
+  }
+
+
+
+  @Override
+  public SeasonDTO create(final SeasonDTO model) {
+    return this.seasonRepository.save(model.convert()).convert();
   }
 
   @Override

@@ -22,11 +22,9 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
 
 
   /*default*/ SeasonModel() {
-    this.id = 1L;
   }
 
-  public SeasonModel(final String name) {
-    this.id = 1L;
+  /*default*/ SeasonModel(final String name) {
     this.name = name;
   }
 

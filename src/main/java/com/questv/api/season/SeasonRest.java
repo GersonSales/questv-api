@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@RestController
 public class SeasonRest implements Restable<SeasonDTO> {
   private final ObjectService<SeasonDTO> seasonService;
 
@@ -24,6 +25,13 @@ public class SeasonRest implements Restable<SeasonDTO> {
   public SeasonDTO post(@Valid @RequestBody final SeasonDTO seasonDTO) {
     return this.seasonService.create(seasonDTO);
   }
+
+  @PostMapping("/season/{seriesId}")
+  @ResponseStatus(value = HttpStatus.CREATED)
+  public void post(@PathVariable Long seriesId, @Valid @RequestBody final SeasonDTO seasonDTO) {
+    this.seasonService.createAndAttach(seriesId, seasonDTO);
+  }
+
 
   @Override
   @GetMapping("/season")

@@ -89,4 +89,8 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   public void setAbbreviation(String abbreviation) {
     this.abbreviation = abbreviation;
   }
+
+  public void attachSeason(final SeasonModel seasonModel) {
+    this.seasonModels.add(seasonModel);
+  }
 }
