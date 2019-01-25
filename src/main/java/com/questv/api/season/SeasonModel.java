@@ -1,11 +1,13 @@
 package com.questv.api.season;
 
+import com.questv.api.episode.EpisodeModel;
 import com.questv.api.util.Convertible;
 import com.questv.api.util.Updatable;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Embeddable
@@ -24,10 +26,17 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
   @NotNull
   private String name;
 
+  @Embedded
+  @ElementCollection
+  @OneToMany(cascade = CascadeType.ALL)
+  private Set<EpisodeModel> episodeModels;
+
   /*default*/ SeasonModel() {
+    this.episodeModels = new HashSet<>();
   }
 
   /*default*/ SeasonModel(final Long seriesId, final String name) {
+    this();
     this.seriesId = seriesId;
     this.name = name;
   }
@@ -65,5 +74,17 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
 
   public void setSeriesId(Long seriesId) {
     this.seriesId = seriesId;
+  }
+
+  public Set<EpisodeModel> getEpisodeModels() {
+    return episodeModels;
+  }
+
+  public void setEpisodeModels(Set<EpisodeModel> episodeModels) {
+    this.episodeModels = episodeModels;
+  }
+
+  public void attachEpisode(final EpisodeModel episodeModel) {
+    this.episodeModels.add(episodeModel);
   }
 }
