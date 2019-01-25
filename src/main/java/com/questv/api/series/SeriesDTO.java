@@ -39,7 +39,8 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   }
 
   @Override
-  public void update(SeriesDTO update) {
+  public void update(final SeriesDTO update) {
+    this.name = update.name;
 
   }
 
