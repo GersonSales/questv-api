@@ -1,11 +1,13 @@
 package com.questv.api.series;
 
 import com.questv.api.util.ObjectService;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service(value = "seriesService")
 public class SeriesService implements ObjectService<SeriesDTO> {
 
   private final SeriesRepository seriesRepository;
