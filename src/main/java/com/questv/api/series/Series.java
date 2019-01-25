@@ -8,11 +8,12 @@ import java.util.Set;
 
 public class Series implements Questionable {
   private final String name;
-  private final Set<Question> questionSet;
   private final Set<Season> seasons;
 
+  private final Set<Question> questionSet;
 
-  public Series(final String name) {
+
+  /*default*/ Series(final String name) {
     this.name = name;
     questionSet = new HashSet<>();
     seasons = new HashSet<>();
@@ -27,7 +28,7 @@ public class Series implements Questionable {
   }
 
   @Override
-  public void attachQuestions(final Set<Question> questionSet) {
+  public void attachAll(final Set<Question> questionSet) {
     this.questionSet.addAll(questionSet);
   }
 

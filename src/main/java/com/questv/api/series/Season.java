@@ -24,7 +24,7 @@ public class Season implements Questionable {
   }
 
   @Override
-  public void attachQuestions(Set<Question> questionSet) {
+  public void attachAll(Set<Question> questionSet) {
 
   }
 

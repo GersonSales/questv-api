@@ -42,7 +42,7 @@ public class UserRest {
     }
 
     @DeleteMapping("/user/{userId}")
-    public void deleteUser(@PathVariable Long userId) {
+    public void deleteUser(@PathVariable final Long userId) {
         this.userService.deleteById(userId);
     }
 

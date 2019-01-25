@@ -98,4 +98,5 @@ public class UserModel implements Convertible<UserDTO> {
         setEmail(model.getEmail());
         setPassword(model.getPassword());
     }
+
 }
