@@ -29,11 +29,11 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   @Embedded
   @ElementCollection
   @OneToMany(cascade = CascadeType.ALL)
-  private Set<SeasonModel> seasonModels;
+  private Set<SeasonModel> seasons;
 
 
   /*default*/ SeriesModel() {
-    this.seasonModels = new HashSet<>();
+    this.seasons = new HashSet<>();
   }
 
   /*default*/ SeriesModel(final String name, final String abbreviation) {
@@ -44,7 +44,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   @Override
   public SeriesDTO convert() {
-    Set<Long> collect = seasonModels
+    Set<Long> collect = seasons
         .stream()
         .map(SeasonModel::getId)
         .collect(Collectors.toSet());
@@ -74,12 +74,12 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     this.name = name;
   }
 
-  public Set<SeasonModel> getSeasonModels() {
-    return seasonModels;
+  public Set<SeasonModel> getSeasons() {
+    return seasons;
   }
 
-  public void setSeasonModels(Set<SeasonModel> seasonModels) {
-    this.seasonModels = seasonModels;
+  public void setSeasons(Set<SeasonModel> seasons) {
+    this.seasons = seasons;
   }
 
   public String getAbbreviation() {
@@ -91,13 +91,13 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   }
 
   public void attachSeason(final SeasonModel seasonModel) {
-    this.seasonModels.add(seasonModel);
+    this.seasons.add(seasonModel);
   }
 
   public void removeSeasonById(final Long seasonId) {
-    for (final SeasonModel seasonModel : this.seasonModels) {
+    for (final SeasonModel seasonModel : this.seasons) {
       if (seasonModel.getId().equals(seasonId)) {
-        this.seasonModels.remove(seasonModel);
+        this.seasons.remove(seasonModel);
       }
     }
   }

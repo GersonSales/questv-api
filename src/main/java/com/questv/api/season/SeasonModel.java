@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Embeddable
@@ -29,10 +30,10 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
   @Embedded
   @ElementCollection
   @OneToMany(cascade = CascadeType.ALL)
-  private Set<EpisodeModel> episodeModels;
+  private Set<EpisodeModel> episodes;
 
   /*default*/ SeasonModel() {
-    this.episodeModels = new HashSet<>();
+    this.episodes = new HashSet<>();
   }
 
   /*default*/ SeasonModel(final Long seriesId, final String name) {
@@ -60,7 +61,12 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
 
   @Override
   public SeasonDTO convert() {
-    return new SeasonDTO(getId(), getSeriesId(), getName());
+    final Set<Long> collect = episodes
+        .stream()
+        .map(EpisodeModel::getId)
+        .collect(Collectors.toSet());
+
+    return new SeasonDTO(getId(), getSeriesId(), getName(), collect);
   }
 
   @Override
@@ -76,22 +82,22 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
     this.seriesId = seriesId;
   }
 
-  public Set<EpisodeModel> getEpisodeModels() {
-    return episodeModels;
+  public Set<EpisodeModel> getEpisodes() {
+    return episodes;
   }
 
-  public void setEpisodeModels(Set<EpisodeModel> episodeModels) {
-    this.episodeModels = episodeModels;
+  public void setEpisodes(Set<EpisodeModel> episodes) {
+    this.episodes = episodes;
   }
 
   public void attachEpisode(final EpisodeModel episodeModel) {
-    this.episodeModels.add(episodeModel);
+    this.episodes.add(episodeModel);
   }
 
   public void removeEpisodeById(final Long episodeId) {
-    for(final EpisodeModel episodeModel : this.episodeModels) {
-      if(episodeModel.getId().equals(episodeId)) {
-        this.episodeModels.remove(episodeModel);
+    for (final EpisodeModel episodeModel : this.episodes) {
+      if (episodeModel.getId().equals(episodeId)) {
+        this.episodes.remove(episodeModel);
       }
     }
   }

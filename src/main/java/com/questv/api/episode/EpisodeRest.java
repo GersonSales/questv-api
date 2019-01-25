@@ -22,7 +22,8 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
   @PostMapping("/episode")
   @ResponseStatus(HttpStatus.CREATED)
   public EpisodeDTO post(@Valid @RequestBody EpisodeDTO episodeDTO) {
-    return this.episodeService.create(episodeDTO);
+    this.episodeService.createAndAttach(episodeDTO.getSeasonId(), episodeDTO);
+    return episodeDTO; //TODO
   }
 
   @Override

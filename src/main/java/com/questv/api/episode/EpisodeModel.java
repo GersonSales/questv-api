@@ -28,7 +28,8 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
 
   /*default*/ EpisodeModel() { }
 
-  /*default*/ EpisodeModel(String name) {
+  /*default*/ EpisodeModel(final Long seasonId, final String name) {
+    this.seasonId = seasonId;
     this.name = name;
   }
 
@@ -58,7 +59,7 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
 
   @Override
   public EpisodeDTO convert() {
-    return new EpisodeDTO();
+    return new EpisodeDTO(getId(), getSeasonId(), getName());
   }
 
   @Override
