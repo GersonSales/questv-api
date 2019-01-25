@@ -1,5 +1,8 @@
 package com.questv.api.series;
 
+import com.questv.api.episode.Episode;
+import com.questv.api.season.Season;
+
 public class SerieFactory {
 
   public static Series createSerie(final String name) {

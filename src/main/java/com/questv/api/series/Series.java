@@ -2,6 +2,7 @@ package com.questv.api.series;
 
 import com.questv.api.question.Question;
 import com.questv.api.question.Questionable;
+import com.questv.api.season.Season;
 
 import java.util.HashSet;
 import java.util.Set;
