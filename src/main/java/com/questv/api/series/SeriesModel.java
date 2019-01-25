@@ -1,14 +1,12 @@
 package com.questv.api.series;
 
 import com.questv.api.util.Convertible;
-import com.questv.api.season.Season;
+import com.questv.api.season.SeasonModel;
 import com.questv.api.util.Updatable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,11 +29,11 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   @Embedded
   @ElementCollection
   @OneToMany(cascade = CascadeType.ALL)
-  private Set<Season> seasons;
+  private Set<SeasonModel> seasonModels;
 
 
   /*default*/ SeriesModel() {
-    this.seasons = new HashSet<>();
+    this.seasonModels = new HashSet<>();
   }
 
   /*default*/ SeriesModel(final String name, final String abbreviation) {
@@ -46,9 +44,9 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   @Override
   public SeriesDTO convert() {
-    Set<Long> collect = seasons
+    Set<Long> collect = seasonModels
         .stream()
-        .map(Season::getId)
+        .map(SeasonModel::getId)
         .collect(Collectors.toSet());
 
     return new SeriesDTO(getId(), getName(), getAbbreviation(), collect);
@@ -76,12 +74,12 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     this.name = name;
   }
 
-  public Set<Season> getSeasons() {
-    return seasons;
+  public Set<SeasonModel> getSeasonModels() {
+    return seasonModels;
   }
 
-  public void setSeasons(Set<Season> seasons) {
-    this.seasons = seasons;
+  public void setSeasonModels(Set<SeasonModel> seasonModels) {
+    this.seasonModels = seasonModels;
   }
 
   public String getAbbreviation() {

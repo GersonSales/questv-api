@@ -1,12 +1,15 @@
 package com.questv.api.season;
 
+import com.questv.api.util.Convertible;
+import com.questv.api.util.Updatable;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Embeddable
 @Table(name = "season_table", schema = "questv_schema")
-public class Season {
+public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonModel> {
 
 
   @Id
@@ -18,11 +21,11 @@ public class Season {
   private String name;
 
 
-  /*default*/  Season() {
+  /*default*/ SeasonModel() {
     this.id = 1L;
   }
 
-  public Season(final String name) {
+  public SeasonModel(final String name) {
     this.id = 1L;
     this.name = name;
   }
@@ -42,5 +45,15 @@ public class Season {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  @Override
+  public SeasonDTO convert() {
+    return new SeasonDTO(getId(), getName());
+  }
+
+  @Override
+  public void update(final SeasonModel update) {
+    setName(update.getName());
   }
 }

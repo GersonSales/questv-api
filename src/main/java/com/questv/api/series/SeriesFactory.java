@@ -1,7 +1,7 @@
 package com.questv.api.series;
 
 import com.questv.api.episode.Episode;
-import com.questv.api.season.Season;
+import com.questv.api.season.SeasonModel;
 
 public class SeriesFactory {
 
@@ -9,7 +9,7 @@ public class SeriesFactory {
     return new SeriesModel(name, "");
   }
 
-  public static Season createSeason(final String name) {
+  public static SeasonModel createSeason(final String name) {
     return null;
   }
 
