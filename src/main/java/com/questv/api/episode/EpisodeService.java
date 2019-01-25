@@ -2,11 +2,14 @@ package com.questv.api.episode;
 
 import com.questv.api.season.SeasonRepository;
 import com.questv.api.contracts.ObjectService;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Service(value = "episodeService")
 public class EpisodeService implements ObjectService<EpisodeDTO> {
 
   private final EpisodeRepository episodeRepository;
