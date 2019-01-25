@@ -50,4 +50,11 @@ public class SeasonRest implements Restable<SeasonDTO> {
   public void deleteById(@PathVariable final Long seasonId) {
     this.seasonService.deleteById(seasonId);
   }
+
+  @Override
+  @PutMapping("/season")
+  public void put(@Valid @RequestBody final SeasonDTO seasonDTO) {
+    this.seasonService.updateById(seasonDTO.getId(), seasonDTO);
+
+  }
 }

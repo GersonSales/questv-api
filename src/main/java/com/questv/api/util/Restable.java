@@ -8,6 +8,7 @@ public interface Restable<T> {
   List<T> getAll();
   T getById(final Long tId);
   void deleteById(final Long tId);
+  void put(final T t);
 
 
 }

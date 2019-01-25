@@ -33,7 +33,6 @@ public class SeasonService implements ObjectService<SeasonDTO> {
   }
 
 
-
   @Override
   public SeasonDTO create(final SeasonDTO model) {
     return this.seasonRepository.save(model.convert()).convert();
