@@ -1,7 +1,7 @@
 package com.questv.api.episode;
 
 import com.questv.api.season.SeasonRepository;
-import com.questv.api.util.ObjectService;
+import com.questv.api.contracts.ObjectService;
 
 import java.util.ArrayList;
 import java.util.List;

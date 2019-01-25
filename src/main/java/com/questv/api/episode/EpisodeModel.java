@@ -1,15 +1,11 @@
 package com.questv.api.episode;
 
-import com.questv.api.question.Question;
-import com.questv.api.question.Questionable;
-import com.questv.api.util.Convertible;
-import com.questv.api.util.Updatable;
+import com.questv.api.contracts.Convertible;
+import com.questv.api.contracts.Updatable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.Set;
 
 
 @Entity

@@ -1,7 +1,7 @@
 package com.questv.api.season;
 
-import com.questv.api.util.ObjectService;
-import com.questv.api.util.Restable;
+import com.questv.api.contracts.ObjectService;
+import com.questv.api.contracts.Restable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

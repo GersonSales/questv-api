@@ -1,6 +1,6 @@
 package com.questv.api.user;
 
-import com.questv.api.util.ObjectService;
+import com.questv.api.contracts.ObjectService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

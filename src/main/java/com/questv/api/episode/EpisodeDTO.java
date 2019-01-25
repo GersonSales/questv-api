@@ -1,6 +1,6 @@
 package com.questv.api.episode;
 
-import com.questv.api.util.Convertible;
+import com.questv.api.contracts.Convertible;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

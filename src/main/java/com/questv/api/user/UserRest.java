@@ -1,7 +1,7 @@
 package com.questv.api.user;
 
 
-import com.questv.api.util.ObjectService;
+import com.questv.api.contracts.ObjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

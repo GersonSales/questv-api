@@ -1,4 +1,4 @@
-package com.questv.api.util;
+package com.questv.api.contracts;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.questv.api.util;
+package com.questv.api.contracts;
 
 public interface Convertible <T extends Convertible>{
     T convert();

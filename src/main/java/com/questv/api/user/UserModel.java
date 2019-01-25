@@ -1,8 +1,8 @@
 package com.questv.api.user;
 
-import com.questv.api.util.Convertible;
+import com.questv.api.contracts.Convertible;
 import com.questv.api.user.properties.Name;
-import com.questv.api.util.Updatable;
+import com.questv.api.contracts.Updatable;
 import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;

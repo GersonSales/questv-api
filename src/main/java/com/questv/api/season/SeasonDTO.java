@@ -1,7 +1,7 @@
 package com.questv.api.season;
 
-import com.questv.api.util.Convertible;
-import com.questv.api.util.Updatable;
+import com.questv.api.contracts.Convertible;
+import com.questv.api.contracts.Updatable;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
