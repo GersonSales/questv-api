@@ -3,7 +3,7 @@ package com.questv.api.series;
 import com.questv.api.episode.Episode;
 import com.questv.api.season.Season;
 
-public class SerieFactory {
+public class SeriesFactory {
 
   public static SeriesModel createSerie(final String name) {
     return new SeriesModel(name, "");

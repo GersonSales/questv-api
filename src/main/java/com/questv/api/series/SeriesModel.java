@@ -36,8 +36,6 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   /*default*/ SeriesModel() {
     this.seasons = new HashSet<>();
-    seasons.add(new Season("Name"));
-    seasons.add(new Season("Name2"));
   }
 
   /*default*/ SeriesModel(final String name, final String abbreviation) {
