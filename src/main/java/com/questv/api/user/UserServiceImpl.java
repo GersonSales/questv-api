@@ -57,7 +57,7 @@ public class UserServiceImpl implements ObjectService<UserDTO> {
     }
 
     @Override
-    public void createAndAttach(Long superId, UserDTO model) {
+    public void createAndAttach(UserDTO model) {
 
     }
 }

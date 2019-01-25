@@ -27,7 +27,7 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
   @NotEmpty
   private String description;
 
-  @NotEmpty
+  @NotNull
   private QuestionType questionType;
 
   @NotNull

@@ -23,8 +23,8 @@ public class SeasonService implements ObjectService<SeasonDTO> {
   }
 
   @Override
-  public void createAndAttach(final Long seriesId, final SeasonDTO seasonDTO) {
-    this.seriesRepository.findById(seriesId)
+  public void createAndAttach(final SeasonDTO seasonDTO) {
+    this.seriesRepository.findById(seasonDTO.getSeriesId())
         .ifPresent(seriesModel -> {
           final SeasonModel seasonModel = this.seasonRepository.save(seasonDTO.convert());
           seriesModel.attachSeason(seasonModel);

@@ -15,10 +15,12 @@ public class Answer {
   private Long id;
 
   @NotNull
-  private final String value;
+  private String value;
 
   @NotNull
-  private final boolean isCorrect;
+  private boolean isCorrect;
+
+  /*default*/ Answer() { }
 
 
   /*default*/ Answer(final String value, final boolean isCorrect) {

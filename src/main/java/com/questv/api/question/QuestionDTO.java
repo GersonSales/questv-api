@@ -18,7 +18,8 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
   @NotNull
   private String description;
 
-  @NotNull String questionType;
+  @NotNull
+  private String questionType;
 
   @NotNull
   private Map<String, Boolean> answers;
@@ -72,7 +73,7 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
   }
 
   public String getQuestionType() {
-    return questionType;
+    return questionType.toLowerCase();
   }
 
   public void setQuestionType(String questionType) {

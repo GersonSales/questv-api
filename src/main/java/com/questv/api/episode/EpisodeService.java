@@ -25,8 +25,8 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
 
 
   @Override
-  public void createAndAttach(final Long superId, final EpisodeDTO episodeDTO) {
-    this.seasonRepository.findById(superId)
+  public void createAndAttach(final EpisodeDTO episodeDTO) {
+    this.seasonRepository.findById(episodeDTO.getSeasonId())
         .ifPresent((seasonModel) -> {
           final EpisodeModel episodeModel = this.episodeRepository.save(episodeDTO.convert());
           seasonModel.attachEpisode(episodeModel);

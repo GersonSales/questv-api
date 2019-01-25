@@ -56,7 +56,7 @@ public class SeriesService implements ObjectService<SeriesDTO> {
   }
 
   @Override
-  public void createAndAttach(Long superId, SeriesDTO model) {
+  public void createAndAttach(SeriesDTO model) {
 
   }
 }

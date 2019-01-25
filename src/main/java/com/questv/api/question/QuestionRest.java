@@ -4,6 +4,7 @@ import com.questv.api.contracts.Restable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,8 +21,9 @@ public class QuestionRest implements Restable<QuestionDTO> {
   @PostMapping("/question")
   @ResponseStatus(value = HttpStatus.CREATED)
   @ResponseBody
-  public QuestionDTO post(final QuestionDTO questionDTO) {
-    return this.questionService.create(questionDTO);
+  public QuestionDTO post(@Valid @RequestBody final QuestionDTO questionDTO) {
+    this.questionService.createAndAttach(questionDTO);
+    return questionDTO;//TODO
   }
 
   @Override

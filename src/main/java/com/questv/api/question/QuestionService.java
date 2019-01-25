@@ -30,20 +30,22 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     assert this.questionRepository != null;
   }
 
-  public void createAndAttach(final QuestionType questionType, final Long superId, final QuestionDTO questionDTO) {
+  @Override
+  public void createAndAttach(final QuestionDTO questionDTO) {
+    final QuestionType questionType = QuestionType.getValueOf(questionDTO.getQuestionType());
     switch (questionType) {
       case SERIES: {
-        attachQuestionIntoSeries(superId, questionDTO);
+        attachQuestionIntoSeries(questionDTO);
         break;
       }
 
       case SEASON: {
-        attachQuestionIntoSeason(superId, questionDTO);
+        attachQuestionIntoSeason(questionDTO);
         break;
       }
 
       case EPISODE: {
-        attachQuestionIntoEpisode(superId, questionDTO);
+        attachQuestionIntoEpisode(questionDTO);
         break;
       }
 
@@ -52,8 +54,8 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     }
   }
 
-  private void attachQuestionIntoEpisode(Long superId, QuestionDTO questionDTO) {
-    this.episodeRepository.findById(superId)
+  private void attachQuestionIntoEpisode(final QuestionDTO questionDTO) {
+    this.episodeRepository.findById(questionDTO.getOwnerId())
         .ifPresent((episodeModel) -> {
           final QuestionModel savedModel = this.questionRepository.save(questionDTO.convert());
           episodeModel.attachQuestion(savedModel);
@@ -61,8 +63,8 @@ public class QuestionService implements ObjectService<QuestionDTO> {
         });
   }
 
-  private void attachQuestionIntoSeason(Long superId, QuestionDTO questionDTO) {
-    this.seasonRepository.findById(superId)
+  private void attachQuestionIntoSeason(final QuestionDTO questionDTO) {
+    this.seasonRepository.findById(questionDTO.getOwnerId())
         .ifPresent((seasonModel) -> {
           final QuestionModel savedModel = this.questionRepository.save(questionDTO.convert());
           seasonModel.attachQuestion(savedModel);
@@ -70,18 +72,13 @@ public class QuestionService implements ObjectService<QuestionDTO> {
         });
   }
 
-  private void attachQuestionIntoSeries(final Long seriesId, final QuestionDTO questionDTO) {
-    this.seriesRepository.findById(seriesId)
+  private void attachQuestionIntoSeries(final QuestionDTO questionDTO) {
+    this.seriesRepository.findById(questionDTO.getOwnerId())
         .ifPresent((seriesModel) -> {
           final QuestionModel savedModel = this.questionRepository.save(questionDTO.convert());
           seriesModel.attachQuestion(savedModel);
           this.seriesRepository.save(seriesModel);
         });
-  }
-
-  @Override
-  public void createAndAttach(Long superId, QuestionDTO model) {
-    throw new RuntimeException("Cannot attach a question into an empty owner.");
   }
 
   @Override
