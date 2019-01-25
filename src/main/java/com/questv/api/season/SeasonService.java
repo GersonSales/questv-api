@@ -67,6 +67,15 @@ public class SeasonService implements ObjectService<SeasonDTO> {
 
   @Override
   public void deleteById(final Long seasonId) {
-    this.seasonRepository.deleteById(seasonId);
+    this.seasonRepository.findById(seasonId)
+        .ifPresent((seasonModel) -> {
+          this.seriesRepository.findById(seasonModel.getSeriesId())
+              .ifPresent((seriesModel) -> {
+                seriesModel.removeSeasonById(seasonId);
+                this.seriesRepository.save(seriesModel);
+                this.seasonRepository.deleteById(seasonId);
+              });
+        });
+
   }
 }

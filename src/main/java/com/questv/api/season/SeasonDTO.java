@@ -4,11 +4,15 @@ import com.questv.api.util.Convertible;
 import com.questv.api.util.Updatable;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO> {
 
   private Long id;
+
+  @NotNull
+  private Long seriesId;
 
   @NotEmpty
   @Size(min = 3, max = 256, message = "Season name should have 3 characters at least.")
@@ -16,15 +20,16 @@ public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO>
 
   /*default*/ SeasonDTO() { }
 
-  /*default*/ SeasonDTO(final Long id, final String name) {
+  /*default*/ SeasonDTO(final Long id, final Long seriesId, final String name) {
     this.id = id;
+    this.seriesId = seriesId;
     this.name = name;
 
   }
 
   @Override
   public SeasonModel convert() {
-    return new SeasonModel(getName());
+    return new SeasonModel(getSeriesId(), getName());
   }
 
   @Override
@@ -46,5 +51,13 @@ public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO>
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public Long getSeriesId() {
+    return seriesId;
+  }
+
+  public void setSeriesId(Long seriesId) {
+    this.seriesId = seriesId;
   }
 }

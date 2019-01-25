@@ -23,15 +23,9 @@ public class SeasonRest implements Restable<SeasonDTO> {
   @ResponseStatus(value = HttpStatus.CREATED)
   @ResponseBody
   public SeasonDTO post(@Valid @RequestBody final SeasonDTO seasonDTO) {
-    return this.seasonService.create(seasonDTO);
+    this.seasonService.createAndAttach(seasonDTO.getSeriesId(), seasonDTO);
+    return seasonDTO;//TODO
   }
-
-  @PostMapping("/season/{seriesId}")
-  @ResponseStatus(value = HttpStatus.CREATED)
-  public void post(@PathVariable Long seriesId, @Valid @RequestBody final SeasonDTO seasonDTO) {
-    this.seasonService.createAndAttach(seriesId, seasonDTO);
-  }
-
 
   @Override
   @GetMapping("/season")
