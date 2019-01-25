@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+
 public class SeriesRest {
   private final ObjectService<SeriesDTO> seriesService;
 

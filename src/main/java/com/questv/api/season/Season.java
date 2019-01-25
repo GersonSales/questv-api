@@ -4,9 +4,11 @@ import com.questv.api.episode.Episode;
 import com.questv.api.question.Question;
 import com.questv.api.question.Questionable;
 
+import javax.persistence.Embeddable;
 import java.util.HashSet;
 import java.util.Set;
 
+@Embeddable
 public class Season implements Questionable {
 
   private final Set<Episode> episodeSet;

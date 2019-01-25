@@ -10,11 +10,11 @@ public class SerieFactory {
   }
 
   public static Season createSeason(final String name) {
-    return new Season(name);
+    return null;
   }
 
   public static Episode creataEpisode(final String name) {
-    return new Episode(name);
+    return null;
   }
 
 }
