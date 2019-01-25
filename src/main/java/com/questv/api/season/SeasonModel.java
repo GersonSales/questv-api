@@ -7,6 +7,7 @@ import com.questv.api.contracts.Updatable;
 import com.questv.api.question.QuestionModel;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,6 +28,7 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
   private Long seriesId;
 
   @NotNull
+  @NotEmpty
   private String name;
 
   @Embedded

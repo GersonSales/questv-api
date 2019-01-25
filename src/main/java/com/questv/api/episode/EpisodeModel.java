@@ -31,7 +31,6 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
   @NotEmpty
   private String name;
 
-  @NotNull
   @Embedded
   @ElementCollection
   @OneToMany(cascade = CascadeType.ALL)

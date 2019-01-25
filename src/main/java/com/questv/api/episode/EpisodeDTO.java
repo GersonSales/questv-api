@@ -20,8 +20,7 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
   @Size(min = 3, max = 256, message = "Episode name should have 3 characters at least.")
   private String name;
 
-  @NotNull
-      private Set<Long> questions;
+  private Set<Long> questions;
 
   /*default*/ EpisodeDTO() {
     this.questions = new HashSet<>();
@@ -65,5 +64,13 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public Set<Long> getQuestions() {
+    return questions;
+  }
+
+  public void setQuestions(Set<Long> questions) {
+    this.questions = questions;
   }
 }
