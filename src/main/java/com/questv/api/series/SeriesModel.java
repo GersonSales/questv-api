@@ -1,14 +1,10 @@
 package com.questv.api.series;
 
 import com.questv.api.util.Convertible;
-import com.questv.api.question.Question;
-import com.questv.api.question.Questionable;
 import com.questv.api.season.Season;
 import com.questv.api.util.Updatable;
-import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -29,21 +25,33 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   @NotNull
   private String name;
 
+  @NotNull
+  private String abbreviation;
+
+  @Embedded
+  @ElementCollection
+  private Set<Season> seasons;
+
+
   /*default*/ SeriesModel() {
+    this.seasons = new HashSet<>();
+    seasons.add(new Season("Name"));
   }
 
-  /*default*/ SeriesModel(final String name) {
+  /*default*/ SeriesModel(final String name, final String abbreviation) {
     this();
     this.name = name;
+    this.abbreviation = abbreviation;
   }
 
   @Override
   public SeriesDTO convert() {
-    return new ModelMapper().map(this, SeriesDTO.class);
+    Set<Long> collect = seasons
+        .stream()
+        .map(Season::getId)
+        .collect(Collectors.toSet());
 
-//    SeriesDTO seriesDTO = new SeriesDTO(getName());
-//    seriesDTO.setId(getId());
-//    return seriesDTO;
+    return new SeriesDTO(getId(), getName(), collect);
   }
 
   @Override
@@ -68,4 +76,19 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     this.name = name;
   }
 
+  public Set<Season> getSeasons() {
+    return seasons;
+  }
+
+  public void setSeasons(Set<Season> seasons) {
+    this.seasons = seasons;
+  }
+
+  public String getAbbreviation() {
+    return abbreviation;
+  }
+
+  public void setAbbreviation(String abbreviation) {
+    this.abbreviation = abbreviation;
+  }
 }

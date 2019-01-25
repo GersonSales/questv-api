@@ -5,7 +5,6 @@ import com.questv.api.util.Updatable;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.Set;
 
 public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO> {
@@ -16,22 +15,23 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   @Size(min = 3, max = 256, message = "Series name should have 3 characters at least.")
   private String name;
 
-  private Set<Long> seasonsIds;
+  private Set<Long> seasons;
 
 
   /*default*/ SeriesDTO() {
-    this.seasonsIds = new HashSet<>();
   }
 
-  /*default*/ SeriesDTO(final String name) {
+  /*default*/ SeriesDTO(final Long id, final String name, final Set<Long> seasons) {
     this();
+    this.id = id;
     this.name = name;
+    this.seasons = seasons;
   }
 
 
   @Override
   public SeriesModel convert() {
-    return new SeriesModel(getName());
+    return new SeriesModel(getName(), "abbreviation");
   }
 
   @Override
@@ -56,7 +56,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     this.name = name;
   }
 
-  public Set<Long> getSeasonsIds() {
-    return seasonsIds;
+  public Set<Long> getSeasons() {
+    return seasons;
   }
 }
