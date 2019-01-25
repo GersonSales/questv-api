@@ -30,12 +30,14 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   @Embedded
   @ElementCollection
+  @OneToMany(cascade = CascadeType.ALL)
   private Set<Season> seasons;
 
 
   /*default*/ SeriesModel() {
     this.seasons = new HashSet<>();
     seasons.add(new Season("Name"));
+    seasons.add(new Season("Name2"));
   }
 
   /*default*/ SeriesModel(final String name, final String abbreviation) {
@@ -51,7 +53,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
         .map(Season::getId)
         .collect(Collectors.toSet());
 
-    return new SeriesDTO(getId(), getName(), collect);
+    return new SeriesDTO(getId(), getName(), getAbbreviation(), collect);
   }
 
   @Override

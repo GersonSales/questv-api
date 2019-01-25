@@ -1,31 +1,46 @@
 package com.questv.api.season;
 
-import com.questv.api.episode.Episode;
-import com.questv.api.question.Question;
-import com.questv.api.question.Questionable;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
-
+@Entity
 @Embeddable
 @Table(name = "season_table", schema = "questv_schema")
 public class Season {
 
 
+  @Id
+  @NotNull
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private  Long id;
+
+  @NotNull
   private String name;
 
 
-  /*default*/  Season() { }
-
-  public Season(final String name) {
-    this.name = name;
-    id = 1L;
+  /*default*/  Season() {
+    this.id = 1L;
   }
 
+  public Season(final String name) {
+    this.id = 1L;
+    this.name = name;
+  }
+
+
   public Long getId() {
-    return null;
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
   }
 }
