@@ -5,6 +5,7 @@ import com.questv.api.contracts.Questionable;
 import com.questv.api.question.QuestionModel;
 import com.questv.api.season.SeasonModel;
 import com.questv.api.contracts.Updatable;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
