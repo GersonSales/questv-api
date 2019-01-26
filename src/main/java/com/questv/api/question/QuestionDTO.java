@@ -2,6 +2,7 @@ package com.questv.api.question;
 
 import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Updatable;
+import com.questv.api.question.difficult.Difficult;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
@@ -19,19 +20,25 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
   private String description;
 
   @NotNull
+  private Integer difficult;
+
+  @NotNull
   private Map<String, Boolean> answers;
 
 
-  /*default*/ QuestionDTO() { }
+  /*default*/ QuestionDTO() {
+  }
 
   /*default*/ QuestionDTO(final Long id,
                           final Long ownerId,
                           final String description,
+                          final Integer difficult,
                           final Map<String, Boolean> answers) {
 
     this.id = id;
     this.ownerId = ownerId;
     this.description = description;
+    this.difficult = difficult;
     this.answers = answers;
   }
 
@@ -67,16 +74,23 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
     this.answers = answers;
   }
 
+  public Integer getDifficult() {
+    return difficult;
+  }
 
+  public void setDifficult(final Integer difficult) {
+    this.difficult = difficult;
+  }
 
   @Override
   public QuestionModel convert() {
     final Set<Answer> answerSet = new HashSet<>();
-    for(final String answer : this.answers.keySet()) {
+    for (final String answer : this.answers.keySet()) {
       answerSet.add(new Answer(answer, this.answers.get(answer)));
     }
 
-    return new QuestionModel(getOwnerId(), getDescription(), answerSet);
+    final Difficult difficult = new Difficult(getDifficult());
+    return new QuestionModel(getOwnerId(), getDescription(), difficult, answerSet);
   }
 
   @Override
