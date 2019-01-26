@@ -98,5 +98,6 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
     setDescription(update.getDescription());
     setAnswers(update.getAnswers());
     setOwnerId(update.getOwnerId());
+    setDifficult(update.getDifficult());
   }
 }

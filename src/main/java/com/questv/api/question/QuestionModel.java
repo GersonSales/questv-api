@@ -106,5 +106,6 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
     setDescription(update.getDescription());
     setOwnerId(update.getOwnerId());
     setAnswerSet(update.getAnswerSet());
+    difficult.evaluate(update.getDifficult());
   }
 }
