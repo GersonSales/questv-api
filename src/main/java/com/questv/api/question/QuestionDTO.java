@@ -23,6 +23,9 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
   private Integer difficult;
 
   @NotNull
+  private Integer reward;
+
+  @NotNull
   private Map<String, Boolean> answers;
 
 
@@ -33,12 +36,14 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
                           final Long ownerId,
                           final String description,
                           final Integer difficult,
+                          final Integer reward,
                           final Map<String, Boolean> answers) {
 
     this.id = id;
     this.ownerId = ownerId;
     this.description = description;
     this.difficult = difficult;
+    this.reward = reward;
     this.answers = answers;
   }
 
@@ -82,6 +87,14 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
     this.difficult = difficult;
   }
 
+  public Integer getReward() {
+    return reward;
+  }
+
+  public void setReward(Integer reward) {
+    this.reward = reward;
+  }
+
   @Override
   public QuestionModel convert() {
     final Set<Answer> answerSet = new HashSet<>();
@@ -89,7 +102,8 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
       answerSet.add(new Answer(answer, this.answers.get(answer)));
     }
 
-    final Difficult difficult = new Difficult(getDifficult());
+
+    final Difficult difficult =  new Difficult(getDifficult());
     return new QuestionModel(getOwnerId(), getDescription(), difficult, answerSet);
   }
 

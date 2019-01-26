@@ -32,6 +32,7 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
   @OneToOne(cascade = CascadeType.ALL)
   private Difficult difficult;
 
+
   @NotNull
   @Embedded
   @ElementCollection
@@ -83,8 +84,8 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
     this.answerSet = answerSet;
   }
 
-  public Integer getDifficult() {
-    return difficult.getDifficult();
+  public Difficult getDifficult() {
+    return difficult;
   }
 
   public void setDifficult(final Difficult difficult) {
@@ -98,7 +99,10 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
       answersMap.put(answer.getValue(), answer.isCorrect());
     }
 
-    return new QuestionDTO(getId(), getOwnerId(), getDescription(), getDifficult(), answersMap);
+    final Integer difficult = getDifficult().getDifficult();
+    final Integer reward = getDifficult().getReward();
+
+    return new QuestionDTO(getId(), getOwnerId(), getDescription(), difficult, reward, answersMap);
   }
 
   @Override
@@ -106,6 +110,6 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
     setDescription(update.getDescription());
     setOwnerId(update.getOwnerId());
     setAnswerSet(update.getAnswerSet());
-    difficult.evaluate(update.getDifficult());
+    difficult.evaluate(update.getDifficult().getDifficult());
   }
 }

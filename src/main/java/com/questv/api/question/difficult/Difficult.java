@@ -27,14 +27,12 @@ public final class Difficult {
   public Difficult(final int rating) {
     this();
     this.evaluations[rating]++;
-    updateRanking();
   }
 
 
   public void evaluate(final int rating) {
     if (rating < 0 || rating > 6) return;
     this.evaluations[rating]++;
-    updateRanking();
   }
 
   private void updateRanking() {
@@ -62,6 +60,7 @@ public final class Difficult {
   }
 
   public Integer getReward() {
+    updateRanking();
     return reward.getPoints();
   }
 
