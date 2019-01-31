@@ -1,7 +1,11 @@
 package com.questv.api.series;
 
 import com.questv.api.contracts.ObjectService;
+import com.questv.api.file.FileStorageServiceImpl;
+import com.questv.api.file.UploadedFileResponse;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +15,11 @@ import java.util.stream.Collectors;
 public class SeriesService implements ObjectService<SeriesDTO> {
 
   private final SeriesRepository seriesRepository;
+  private final FileStorageServiceImpl fileStorageService;
 
-  public SeriesService(final SeriesRepository seriesRepository) {
+  public SeriesService(final SeriesRepository seriesRepository, final FileStorageServiceImpl fileStorageService) {
     this.seriesRepository = seriesRepository;
+    this.fileStorageService = fileStorageService;
     assert this.seriesRepository != null;
   }
 
@@ -58,5 +64,22 @@ public class SeriesService implements ObjectService<SeriesDTO> {
   @Override
   public void createAndAttach(SeriesDTO model) {
 
+  }
+
+  /*default*/ UploadedFileResponse attachSeriesCover(final Long seriesId, final MultipartFile file) {
+
+    final String fileName = fileStorageService.store(file);
+
+    final String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+        .path("/downloadFile/")
+        .path(fileName)
+        .toUriString();
+
+    final SeriesDTO byId = findById(seriesId);
+    byId.setCoverImage(fileDownloadUri);
+    this.updateById(seriesId, byId);
+
+    return new UploadedFileResponse(fileName, fileDownloadUri,
+        file.getContentType(), file.getSize());
   }
 }

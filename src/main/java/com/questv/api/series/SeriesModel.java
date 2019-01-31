@@ -29,6 +29,8 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   @NotNull
   private String abbreviation;
 
+  private String coverImage;
+
   @Embedded
   @ElementCollection
   @OneToMany(cascade = CascadeType.ALL)
@@ -45,10 +47,11 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     this.questions = new HashSet<>();
   }
 
-  /*default*/ SeriesModel(final String name, final String abbreviation) {
+  /*default*/ SeriesModel(final String name, final String abbreviation, final String coverImage) {
     this();
     this.name = name;
     this.abbreviation = abbreviation;
+    this.coverImage = coverImage;
   }
 
   @Override
@@ -63,12 +66,14 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
         .map(QuestionModel::getId)
         .collect(Collectors.toSet());
 
-    return new SeriesDTO(getId(), getName(), getAbbreviation(), seasonsIds, questionsIds);
+    return new SeriesDTO(getId(), getName(), getAbbreviation(), getCoverImage(), seasonsIds, questionsIds);
   }
 
   @Override
   public void update(final SeriesModel update) {
-    this.name = update.name;
+    setName(update.getName());
+    setAbbreviation(update.getAbbreviation());
+    setCoverImage(update.getCoverImage());
 
   }
 
@@ -102,6 +107,14 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   public void setAbbreviation(String abbreviation) {
     this.abbreviation = abbreviation;
+  }
+
+  public String getCoverImage() {
+    return coverImage;
+  }
+
+  public void setCoverImage(String coverImage) {
+    this.coverImage = coverImage;
   }
 
   public void attachSeason(final SeasonModel seasonModel) {
