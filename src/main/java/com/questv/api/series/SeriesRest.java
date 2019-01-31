@@ -19,11 +19,9 @@ import java.util.List;
 @RestController
 public class SeriesRest {
   private final ObjectService<SeriesDTO> seriesService;
-  private final FileStorageService fileStorageService;
 
-  public SeriesRest(final ObjectService<SeriesDTO> seriesService, final FileStorageService fileStorageService) {
+  public SeriesRest(final ObjectService<SeriesDTO> seriesService) {
     this.seriesService = seriesService;
-    this.fileStorageService = fileStorageService;
   }
 
   @PostMapping("/series")
