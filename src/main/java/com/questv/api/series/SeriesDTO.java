@@ -6,6 +6,7 @@ import com.questv.api.contracts.Updatable;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.Set;
 
 public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>, DTO {
@@ -22,16 +23,25 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
 
   private String coverImage;
 
+  private String promoImage;
+
   private Set<Long> seasons;
   private Set<Long> questions;
 
   /*default*/ SeriesDTO() {
+    setName("");
+    setAbbreviation("");
+    setCoverImage("");
+    setPromoImage("");
+    setSeasons(new HashSet<>());
+    setQuestions(new HashSet<>());
   }
 
   /*default*/ SeriesDTO(final Long id,
                         final String name,
                         final String abbreviation,
                         final String coverImage,
+                        final String promoImage,
                         final Set<Long> seasons,
                         final Set<Long> questions) {
     this();
@@ -39,6 +49,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     this.name = name;
     this.abbreviation = abbreviation;
     this.coverImage = coverImage;
+    this.promoImage = promoImage;
     this.seasons = seasons;
     this.questions = questions;
   }
@@ -75,6 +86,14 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     this.coverImage = coverImage;
   }
 
+  public String getPromoImage() {
+    return promoImage;
+  }
+
+  public void setPromoImage(String promoImage) {
+    this.promoImage = promoImage;
+  }
+
   public Set<Long> getSeasons() {
     return seasons;
   }
@@ -93,7 +112,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
 
   @Override
   public SeriesModel convert() {
-    return new SeriesModel(getName(), getAbbreviation(), getCoverImage());
+    return new SeriesModel(getName(), getAbbreviation(), getCoverImage(), getPromoImage());
   }
 
   @Override
@@ -101,6 +120,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     setName(update.getName());
     setAbbreviation(update.getAbbreviation());
     setCoverImage(update.getCoverImage());
+    setPromoImage(update.getPromoImage());
 
   }
 }

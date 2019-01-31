@@ -31,6 +31,8 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   private String coverImage;
 
+  private String promoImage;
+
   @Embedded
   @ElementCollection
   @OneToMany(cascade = CascadeType.ALL)
@@ -43,15 +45,23 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
 
   /*default*/ SeriesModel() {
-    this.seasons = new HashSet<>();
-    this.questions = new HashSet<>();
+    setName("");
+    setAbbreviation("");
+    setCoverImage("");
+    setPromoImage("");
+    setSeasons(new HashSet<>());
+    setQuestions(new HashSet<>());
   }
 
-  /*default*/ SeriesModel(final String name, final String abbreviation, final String coverImage) {
+  /*default*/ SeriesModel(final String name,
+                          final String abbreviation,
+                          final String coverImage,
+                          final String promoImage) {
     this();
     this.name = name;
     this.abbreviation = abbreviation;
     this.coverImage = coverImage;
+    this.promoImage = promoImage;
   }
 
   @Override
@@ -66,7 +76,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
         .map(QuestionModel::getId)
         .collect(Collectors.toSet());
 
-    return new SeriesDTO(getId(), getName(), getAbbreviation(), getCoverImage(), seasonsIds, questionsIds);
+    return new SeriesDTO(getId(), getName(), getAbbreviation(), getCoverImage(), getPromoImage(), seasonsIds, questionsIds);
   }
 
   @Override
@@ -74,6 +84,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     setName(update.getName());
     setAbbreviation(update.getAbbreviation());
     setCoverImage(update.getCoverImage());
+    setPromoImage(update.getPromoImage());
 
   }
 
@@ -117,6 +128,14 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     this.coverImage = coverImage;
   }
 
+  public String getPromoImage() {
+    return promoImage;
+  }
+
+  public void setPromoImage(String promoImage) {
+    this.promoImage = promoImage;
+  }
+
   public void attachSeason(final SeasonModel seasonModel) {
     this.seasons.add(seasonModel);
   }
@@ -127,6 +146,10 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
         this.seasons.remove(seasonModel);
       }
     }
+  }
+
+  public void setQuestions(Set<QuestionModel> questions) {
+    this.questions = questions;
   }
 
   @Override

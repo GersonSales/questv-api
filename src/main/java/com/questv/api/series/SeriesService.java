@@ -72,11 +72,7 @@ public class SeriesService implements ObjectService<SeriesDTO> {
     final SeriesDTO byId = findById(seriesId);
     final String fileName = fileStorageService.store(file, byId);
 
-    final String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-        .path("/series/")
-        .path(String.valueOf(seriesId))
-        .path("/cover")
-        .toUriString();
+    final String fileDownloadUri = getFileUri(seriesId, "cover");
 
     byId.setCoverImage(fileName);
     this.updateById(seriesId, byId);
@@ -85,7 +81,33 @@ public class SeriesService implements ObjectService<SeriesDTO> {
         file.getContentType(), file.getSize());
   }
 
+  /*default*/ UploadedFileResponse attachSeriesPromoImage(final Long seriesId, final MultipartFile file) {
+
+    final SeriesDTO byId = findById(seriesId);
+    final String fileName = fileStorageService.store(file, byId);
+
+    final String fileDownloadUri = getFileUri(seriesId, "promoImage");
+
+    byId.setPromoImage(fileName);
+    this.updateById(seriesId, byId);
+
+    return new UploadedFileResponse(fileName, fileDownloadUri,
+        file.getContentType(), file.getSize());
+  }
+
   /*default*/ Resource findSeriesCover(final Long seriesId) {
     return this.fileStorageService.loadAsResource(findById(seriesId).getCoverImage());
+  }
+
+  /*default*/ Resource findSeriesPromoImage(final Long seriesId) {
+    return this.fileStorageService.loadAsResource(findById(seriesId).getPromoImage());
+  }
+
+  private String getFileUri(final Long seriesId, final String type) {
+    return ServletUriComponentsBuilder.fromCurrentContextPath()
+        .path("/series/")
+        .path(String.valueOf(seriesId))
+        .path("/".concat(type))
+        .toUriString();
   }
 }

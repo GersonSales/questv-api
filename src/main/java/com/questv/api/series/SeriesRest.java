@@ -44,21 +44,20 @@ public class SeriesRest {
   public ResponseEntity<Resource> getSeriesCover(@PathVariable("seriesId") final Long seriesId,
                                                  HttpServletRequest request) {
     final Resource resource = ((SeriesService)this.seriesService).findSeriesCover(seriesId);
-    String contentType;
-    try {
-      contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-    } catch (IOException ex) {
-      throw new RuntimeException(ex);
-    }
+    return getPreparedResponseEntity(request, resource);
+  }
 
-    if(contentType == null) {
-      contentType = "application/octet-stream";
-    }
+  @PostMapping("/series/{seriesId}/promoImage")
+  public UploadedFileResponse postSeriesPromoImage(@PathVariable("seriesId") final Long seriesId,
+                                              @RequestParam("file") final MultipartFile file) {
+    return ((SeriesService)this.seriesService).attachSeriesPromoImage(seriesId, file);
+  }
 
-    return ResponseEntity.ok()
-        .contentType(MediaType.parseMediaType(contentType))
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-        .body(resource);
+  @GetMapping("/series/{seriesId}/promoImage")
+  public ResponseEntity<Resource> getSeriesPromoImage(@PathVariable("seriesId") final Long seriesId,
+                                                 HttpServletRequest request) {
+    final Resource resource = ((SeriesService)this.seriesService).findSeriesPromoImage(seriesId);
+    return getPreparedResponseEntity(request, resource);
   }
 
   @GetMapping("/series")
@@ -79,6 +78,27 @@ public class SeriesRest {
   @DeleteMapping("/series/{seriesId}")
   public void deleteSeries(@PathVariable final Long seriesId) {
     this.seriesService.deleteById(seriesId);
+  }
+
+  private ResponseEntity<Resource> getPreparedResponseEntity(final HttpServletRequest request, final Resource resource) {
+    return ResponseEntity.ok()
+        .contentType(MediaType.parseMediaType(getFileContent(request, resource)))
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+        .body(resource);
+  }
+
+  private String getFileContent(final HttpServletRequest request, final Resource resource) {
+    String contentType;
+    try {
+      contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+    } catch (IOException ex) {
+      throw new RuntimeException(ex);
+    }
+
+    if (contentType == null) {
+      contentType = "application/octet-stream";
+    }
+    return contentType;
   }
 
 }
