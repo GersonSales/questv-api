@@ -1,13 +1,14 @@
 package com.questv.api.series;
 
 import com.questv.api.contracts.Convertible;
+import com.questv.api.contracts.DTO;
 import com.questv.api.contracts.Updatable;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
-public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO> {
+public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>, DTO {
 
   private Long id;
 

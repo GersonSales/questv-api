@@ -3,12 +3,17 @@ package com.questv.api.series;
 import com.questv.api.contracts.ObjectService;
 import com.questv.api.file.FileStorageService;
 import com.questv.api.file.UploadedFileResponse;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -32,7 +37,28 @@ public class SeriesRest {
   public UploadedFileResponse postSeriesCover(@PathVariable("seriesId") final Long seriesId,
                                               @RequestParam("file") final MultipartFile file) {
     return ((SeriesService)this.seriesService).attachSeriesCover(seriesId, file);
+  }
 
+
+  @GetMapping("/series/{seriesId}/cover")
+  public ResponseEntity<Resource> getSeriesCover(@PathVariable("seriesId") final Long seriesId,
+                                                 HttpServletRequest request) {
+    final Resource resource = ((SeriesService)this.seriesService).findSeriesCover(seriesId);
+    String contentType;
+    try {
+      contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+    } catch (IOException ex) {
+      throw new RuntimeException(ex);
+    }
+
+    if(contentType == null) {
+      contentType = "application/octet-stream";
+    }
+
+    return ResponseEntity.ok()
+        .contentType(MediaType.parseMediaType(contentType))
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+        .body(resource);
   }
 
   @GetMapping("/series")
