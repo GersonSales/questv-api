@@ -29,6 +29,9 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   @NotNull
   private String abbreviation;
 
+  @NotNull
+  private String category;
+
   private String coverImage;
 
   private String promoImage;
@@ -47,6 +50,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   /*default*/ SeriesModel() {
     setName("");
     setAbbreviation("");
+    setCategory("");
     setCoverImage("");
     setPromoImage("");
     setSeasons(new HashSet<>());
@@ -55,11 +59,13 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   /*default*/ SeriesModel(final String name,
                           final String abbreviation,
+                          final String category,
                           final String coverImage,
                           final String promoImage) {
     this();
     this.name = name;
     this.abbreviation = abbreviation;
+    this.category = category;
     this.coverImage = coverImage;
     this.promoImage = promoImage;
   }
@@ -76,13 +82,14 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
         .map(QuestionModel::getId)
         .collect(Collectors.toSet());
 
-    return new SeriesDTO(getId(), getName(), getAbbreviation(), getCoverImage(), getPromoImage(), seasonsIds, questionsIds);
+    return new SeriesDTO(getId(), getName(), getAbbreviation(), getCategory(), getCoverImage(), getPromoImage(), seasonsIds, questionsIds);
   }
 
   @Override
   public void update(final SeriesModel update) {
     setName(update.getName());
     setAbbreviation(update.getAbbreviation());
+    setCategory(update.getCategory());
     setCoverImage(update.getCoverImage());
     setPromoImage(update.getPromoImage());
 
@@ -134,6 +141,14 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   public void setPromoImage(String promoImage) {
     this.promoImage = promoImage;
+  }
+
+  public String getCategory() {
+    return category;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
   }
 
   public void attachSeason(final SeasonModel seasonModel) {

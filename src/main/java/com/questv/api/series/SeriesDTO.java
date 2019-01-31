@@ -21,6 +21,10 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   @Size(min = 3, max = 256, message = "Series abbreviation should have 3 characters at least.")
   private String abbreviation;
 
+  @NotEmpty
+  @Size(min = 3, max = 256, message = "Series category name should have 3 characters at least.")
+  private String category;
+
   private String coverImage;
 
   private String promoImage;
@@ -30,6 +34,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
 
   /*default*/ SeriesDTO() {
     setName("");
+    setCategory("");
     setAbbreviation("");
     setCoverImage("");
     setPromoImage("");
@@ -40,6 +45,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   /*default*/ SeriesDTO(final Long id,
                         final String name,
                         final String abbreviation,
+                        final String category,
                         final String coverImage,
                         final String promoImage,
                         final Set<Long> seasons,
@@ -48,6 +54,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     this.id = id;
     this.name = name;
     this.abbreviation = abbreviation;
+    this.category = category;
     this.coverImage = coverImage;
     this.promoImage = promoImage;
     this.seasons = seasons;
@@ -68,6 +75,14 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getCategory() {
+    return category;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
   }
 
   public String getAbbreviation() {
@@ -112,12 +127,13 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
 
   @Override
   public SeriesModel convert() {
-    return new SeriesModel(getName(), getAbbreviation(), getCoverImage(), getPromoImage());
+    return new SeriesModel(getName(), getAbbreviation(), getCategory(), getCoverImage(), getPromoImage());
   }
 
   @Override
   public void update(final SeriesDTO update) {
     setName(update.getName());
+    setCategory(update.getCategory());
     setAbbreviation(update.getAbbreviation());
     setCoverImage(update.getCoverImage());
     setPromoImage(update.getPromoImage());
