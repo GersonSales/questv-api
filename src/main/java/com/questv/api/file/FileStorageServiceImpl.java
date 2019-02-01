@@ -30,7 +30,9 @@ public class FileStorageServiceImpl implements FileStorageService {
 
   private void createDirectory() {
     try {
-      Files.createDirectory(this.path);
+      if (!Files.exists(this.path)) {
+        Files.createDirectory(this.path);
+      }
     } catch (final Exception exception) {
       throw new RuntimeException(exception);
     }
@@ -42,7 +44,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     String fileName = StringUtils
         .cleanPath(file.getOriginalFilename());
 
-    fileName = "cover_image_of_id_".concat(String.valueOf(dto.getId())).concat("_").concat(fileName);
+    fileName = String.valueOf(dto.getId()).concat("_").concat(fileName);
 
 
     try {

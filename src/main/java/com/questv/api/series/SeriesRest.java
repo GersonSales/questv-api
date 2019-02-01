@@ -34,27 +34,27 @@ public class SeriesRest {
   @PostMapping("/series/{seriesId}/cover")
   public UploadedFileResponse postSeriesCover(@PathVariable("seriesId") final Long seriesId,
                                               @RequestParam("file") final MultipartFile file) {
-    return ((SeriesService)this.seriesService).attachSeriesCover(seriesId, file);
+    return ((SeriesService) this.seriesService).attachSeriesCover(seriesId, file);
   }
 
 
   @GetMapping("/series/{seriesId}/cover")
   public ResponseEntity<Resource> getSeriesCover(@PathVariable("seriesId") final Long seriesId,
                                                  HttpServletRequest request) {
-    final Resource resource = ((SeriesService)this.seriesService).findSeriesCover(seriesId);
+    final Resource resource = ((SeriesService) this.seriesService).findSeriesCover(seriesId);
     return getPreparedResponseEntity(request, resource);
   }
 
   @PostMapping("/series/{seriesId}/promoImage")
   public UploadedFileResponse postSeriesPromoImage(@PathVariable("seriesId") final Long seriesId,
-                                              @RequestParam("file") final MultipartFile file) {
-    return ((SeriesService)this.seriesService).attachSeriesPromoImage(seriesId, file);
+                                                   @RequestParam("file") final MultipartFile file) {
+    return ((SeriesService) this.seriesService).attachSeriesPromoImage(seriesId, file);
   }
 
   @GetMapping("/series/{seriesId}/promoImage")
   public ResponseEntity<Resource> getSeriesPromoImage(@PathVariable("seriesId") final Long seriesId,
-                                                 HttpServletRequest request) {
-    final Resource resource = ((SeriesService)this.seriesService).findSeriesPromoImage(seriesId);
+                                                      HttpServletRequest request) {
+    final Resource resource = ((SeriesService) this.seriesService).findSeriesPromoImage(seriesId);
     return getPreparedResponseEntity(request, resource);
   }
 
@@ -78,10 +78,12 @@ public class SeriesRest {
     this.seriesService.deleteById(seriesId);
   }
 
-  private ResponseEntity<Resource> getPreparedResponseEntity(final HttpServletRequest request, final Resource resource) {
+  private ResponseEntity<Resource> getPreparedResponseEntity(final HttpServletRequest request,
+                                                             final Resource resource) {
+    String filename = resource.getFilename();
     return ResponseEntity.ok()
         .contentType(MediaType.parseMediaType(getFileContent(request, resource)))
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+        .header("Content-Name", filename)
         .body(resource);
   }
 
