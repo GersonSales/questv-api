@@ -75,6 +75,7 @@ public class SeriesService implements ObjectService<SeriesDTO> {
     final String fileDownloadUri = getFileUri(seriesId, "cover");
 
     byId.setCoverImage(fileName);
+    byId.setCoverImageUrl(fileDownloadUri);
     this.updateById(seriesId, byId);
 
     return new UploadedFileResponse(fileName, fileDownloadUri,

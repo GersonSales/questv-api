@@ -26,6 +26,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   private String category;
 
   private String coverImage;
+  private  String coverImageUrl;
 
   private String promoImage;
 
@@ -47,6 +48,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
                         final String abbreviation,
                         final String category,
                         final String coverImage,
+                        final String coverImageUrl,
                         final String promoImage,
                         final Set<Long> seasons,
                         final Set<Long> questions) {
@@ -56,6 +58,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     this.abbreviation = abbreviation;
     this.category = category;
     this.coverImage = coverImage;
+    this.coverImageUrl = coverImageUrl;
     this.promoImage = promoImage;
     this.seasons = seasons;
     this.questions = questions;
@@ -117,6 +120,14 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     this.seasons = seasons;
   }
 
+  public String getCoverImageUrl() {
+    return coverImageUrl;
+  }
+
+  public void setCoverImageUrl(String coverImageUrl) {
+    this.coverImageUrl = coverImageUrl;
+  }
+
   public Set<Long> getQuestions() {
     return questions;
   }
@@ -127,7 +138,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
 
   @Override
   public SeriesModel convert() {
-    return new SeriesModel(getName(), getAbbreviation(), getCategory(), getCoverImage(), getPromoImage());
+    return new SeriesModel(getName(), getAbbreviation(), getCategory(), getCoverImage(), getCoverImageUrl(), getPromoImage());
   }
 
   @Override
@@ -136,6 +147,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     setCategory(update.getCategory());
     setAbbreviation(update.getAbbreviation());
     setCoverImage(update.getCoverImage());
+    setCoverImageUrl(update.getCoverImageUrl());
     setPromoImage(update.getPromoImage());
 
   }

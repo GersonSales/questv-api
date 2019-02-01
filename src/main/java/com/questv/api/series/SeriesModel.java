@@ -33,6 +33,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   private String category;
 
   private String coverImage;
+  private String coverImageUrl;
 
   private String promoImage;
 
@@ -61,12 +62,14 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
                           final String abbreviation,
                           final String category,
                           final String coverImage,
+                          final String coverImageUrl,
                           final String promoImage) {
     this();
     this.name = name;
     this.abbreviation = abbreviation;
     this.category = category;
     this.coverImage = coverImage;
+    this.coverImageUrl = coverImageUrl;
     this.promoImage = promoImage;
   }
 
@@ -82,7 +85,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
         .map(QuestionModel::getId)
         .collect(Collectors.toSet());
 
-    return new SeriesDTO(getId(), getName(), getAbbreviation(), getCategory(), getCoverImage(), getPromoImage(), seasonsIds, questionsIds);
+    return new SeriesDTO(getId(), getName(), getAbbreviation(), getCategory(), getCoverImage(), getCoverImageUrl(), getPromoImage(), seasonsIds, questionsIds);
   }
 
   @Override
@@ -91,6 +94,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     setAbbreviation(update.getAbbreviation());
     setCategory(update.getCategory());
     setCoverImage(update.getCoverImage());
+    setCoverImageUrl(update.getCoverImageUrl());
     setPromoImage(update.getPromoImage());
 
   }
@@ -149,6 +153,14 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   public void setCategory(String category) {
     this.category = category;
+  }
+
+  public String getCoverImageUrl() {
+    return coverImageUrl;
+  }
+
+  public void setCoverImageUrl(String coverImageUrl) {
+    this.coverImageUrl = coverImageUrl;
   }
 
   public void attachSeason(final SeasonModel seasonModel) {
