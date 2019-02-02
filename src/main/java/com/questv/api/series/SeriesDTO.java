@@ -5,6 +5,7 @@ import com.questv.api.contracts.DTO;
 import com.questv.api.contracts.Updatable;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,10 +26,14 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   @Size(min = 3, max = 256, message = "Series category name should have 3 characters at least.")
   private String category;
 
+  @NotNull
+  private Boolean isRelease;
+
   private String coverImage;
   private  String coverImageUrl;
 
   private String promoImage;
+  private String promoImageUrl;
 
   private Set<Long> seasons;
   private Set<Long> questions;
@@ -36,9 +41,12 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   /*default*/ SeriesDTO() {
     setName("");
     setCategory("");
+    setIsRelease(false);
     setAbbreviation("");
     setCoverImage("");
+    setCoverImageUrl("");
     setPromoImage("");
+    setPromoImageUrl("");
     setSeasons(new HashSet<>());
     setQuestions(new HashSet<>());
   }
@@ -47,9 +55,11 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
                         final String name,
                         final String abbreviation,
                         final String category,
+                        final Boolean isRelease,
                         final String coverImage,
                         final String coverImageUrl,
                         final String promoImage,
+                        final String promoImageUrl,
                         final Set<Long> seasons,
                         final Set<Long> questions) {
     this();
@@ -57,9 +67,11 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     this.name = name;
     this.abbreviation = abbreviation;
     this.category = category;
+    this.isRelease = isRelease;
     this.coverImage = coverImage;
     this.coverImageUrl = coverImageUrl;
     this.promoImage = promoImage;
+    this.promoImageUrl = promoImageUrl;
     this.seasons = seasons;
     this.questions = questions;
   }
@@ -86,6 +98,14 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
 
   public void setCategory(String category) {
     this.category = category;
+  }
+
+  public Boolean getIsRelease() {
+    return isRelease;
+  }
+
+  public void setIsRelease(Boolean isRelease) {
+    this.isRelease = isRelease;
   }
 
   public String getAbbreviation() {
@@ -138,17 +158,27 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
 
   @Override
   public SeriesModel convert() {
-    return new SeriesModel(getName(), getAbbreviation(), getCategory(), getCoverImage(), getCoverImageUrl(), getPromoImage());
+    return new SeriesModel(getName(), getAbbreviation(), getCategory(), getIsRelease(), getCoverImage(), getCoverImageUrl(), getPromoImage(), getPromoImageUrl());
   }
 
   @Override
   public void update(final SeriesDTO update) {
     setName(update.getName());
     setCategory(update.getCategory());
+    setIsRelease(update.getIsRelease());
     setAbbreviation(update.getAbbreviation());
     setCoverImage(update.getCoverImage());
     setCoverImageUrl(update.getCoverImageUrl());
     setPromoImage(update.getPromoImage());
+    setPromoImageUrl(update.getPromoImageUrl());
 
+  }
+
+  public String getPromoImageUrl() {
+    return promoImageUrl;
+  }
+
+  public void setPromoImageUrl(String promoImageUrl) {
+    this.promoImageUrl = promoImageUrl;
   }
 }

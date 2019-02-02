@@ -90,6 +90,7 @@ public class SeriesService implements ObjectService<SeriesDTO> {
     final String fileDownloadUri = getFileUri(seriesId, "promoImage");
 
     byId.setPromoImage(fileName);
+    byId.setPromoImageUrl(fileDownloadUri);
     this.updateById(seriesId, byId);
 
     return new UploadedFileResponse(fileName, fileDownloadUri,

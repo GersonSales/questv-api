@@ -32,10 +32,14 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   @NotNull
   private String category;
 
+  @NotNull
+  private Boolean isRelease;
+
   private String coverImage;
   private String coverImageUrl;
 
   private String promoImage;
+  private String promoImageUrl;
 
   @Embedded
   @ElementCollection
@@ -52,8 +56,11 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     setName("");
     setAbbreviation("");
     setCategory("");
+    setIsRelease(false);
     setCoverImage("");
+    setCoverImageUrl("");
     setPromoImage("");
+    setPromoImageUrl("");
     setSeasons(new HashSet<>());
     setQuestions(new HashSet<>());
   }
@@ -61,16 +68,20 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   /*default*/ SeriesModel(final String name,
                           final String abbreviation,
                           final String category,
+                          final Boolean isRelease,
                           final String coverImage,
                           final String coverImageUrl,
-                          final String promoImage) {
+                          final String promoImage,
+                          final String promoImageUrl) {
     this();
     this.name = name;
     this.abbreviation = abbreviation;
     this.category = category;
+    this.isRelease = isRelease;
     this.coverImage = coverImage;
     this.coverImageUrl = coverImageUrl;
     this.promoImage = promoImage;
+    this.promoImageUrl = promoImageUrl;
   }
 
   @Override
@@ -85,7 +96,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
         .map(QuestionModel::getId)
         .collect(Collectors.toSet());
 
-    return new SeriesDTO(getId(), getName(), getAbbreviation(), getCategory(), getCoverImage(), getCoverImageUrl(), getPromoImage(), seasonsIds, questionsIds);
+    return new SeriesDTO(getId(), getName(), getAbbreviation(), getCategory(), getIsRelease(), getCoverImage(), getCoverImageUrl(), getPromoImage(), getPromoImageUrl(), seasonsIds, questionsIds);
   }
 
   @Override
@@ -93,10 +104,11 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     setName(update.getName());
     setAbbreviation(update.getAbbreviation());
     setCategory(update.getCategory());
+    setIsRelease(update.getIsRelease());
     setCoverImage(update.getCoverImage());
     setCoverImageUrl(update.getCoverImageUrl());
     setPromoImage(update.getPromoImage());
-
+    setPromoImageUrl(update.getPromoImageUrl());
   }
 
   public Long getId() {
@@ -155,6 +167,14 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     this.category = category;
   }
 
+  public Boolean getIsRelease() {
+    return isRelease;
+  }
+
+  public void setIsRelease(Boolean isRelease) {
+    this.isRelease = isRelease;
+  }
+
   public String getCoverImageUrl() {
     return coverImageUrl;
   }
@@ -197,5 +217,13 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   @Override
   public Set<QuestionModel> getQuestions() {
     return this.questions;
+  }
+
+  public String getPromoImageUrl() {
+    return promoImageUrl;
+  }
+
+  public void setPromoImageUrl(String promoImageUrl) {
+    this.promoImageUrl = promoImageUrl;
   }
 }
