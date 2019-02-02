@@ -115,4 +115,9 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     questionable.detachQuestion(questionModel);
     saveQuestionable(questionable);
   }
+
+  @Override
+  public List<QuestionDTO> findAllByParent(Long seriesId) {
+    return null;
+  }
 }

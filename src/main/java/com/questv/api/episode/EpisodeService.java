@@ -77,4 +77,9 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
               });
         });
   }
+
+  @Override
+  public List<EpisodeDTO> findAllByParent(Long seriesId) {
+    return null;
+  }
 }

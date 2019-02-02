@@ -27,6 +27,12 @@ public class SeasonRest implements Restable<SeasonDTO> {
     return seasonDTO;//TODO
   }
 
+  @GetMapping("/series/{seriesId}/season")
+  public List<SeasonDTO> getAllBySeries(@PathVariable final Long seriesId) {
+    return this.seasonService.findAllByParent(seriesId);
+  }
+
+
   @Override
   @GetMapping("/season")
   public List<SeasonDTO> getAll() {
@@ -49,6 +55,8 @@ public class SeasonRest implements Restable<SeasonDTO> {
   @PutMapping("/season")
   public void put(@Valid @RequestBody final SeasonDTO seasonDTO) {
     this.seasonService.updateById(seasonDTO.getId(), seasonDTO);
-
   }
+
+
+
 }

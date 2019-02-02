@@ -60,4 +60,9 @@ public class UserServiceImpl implements ObjectService<UserDTO> {
     public void createAndAttach(UserDTO model) {
 
     }
+
+    @Override
+    public List<UserDTO> findAllByParent(Long seriesId) {
+        return null;
+    }
 }

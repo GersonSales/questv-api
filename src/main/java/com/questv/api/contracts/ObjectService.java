@@ -15,4 +15,6 @@ public interface ObjectService<T> {
     void updateById(final Long tId, final T t);
 
     void deleteById(final Long tId);
+
+    List<T> findAllByParent(final Long seriesId);
 }

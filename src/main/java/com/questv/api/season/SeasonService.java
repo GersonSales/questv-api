@@ -76,6 +76,20 @@ public class SeasonService implements ObjectService<SeasonDTO> {
                 this.seasonRepository.deleteById(seasonId);
               });
         });
+  }
 
+  @Override
+  public List<SeasonDTO> findAllByParent(final Long seriesId) {
+    final List<SeasonDTO> result = new ArrayList<>();
+
+    this.seriesRepository.findById(seriesId).
+        ifPresent((seriesModel) -> result.addAll(
+            seriesModel
+                .getSeasons()
+                .stream()
+                .map(SeasonModel::convert)
+                .collect(Collectors.toList())
+        ));
+    return result;
   }
 }

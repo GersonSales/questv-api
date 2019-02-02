@@ -13,6 +13,9 @@ public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO>
   private Long id;
 
   @NotNull
+  private Integer number;
+
+  @NotNull
   private Long seriesId;
 
   @NotEmpty
@@ -27,11 +30,13 @@ public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO>
 
   /*default*/ SeasonDTO(final Long id,
                         final Long seriesId,
+                        final Integer number,
                         final String name,
                         final Set<Long> episodes,
                         final Set<Long> questions) {
     this.id = id;
     this.seriesId = seriesId;
+    this.number = number;
     this.name = name;
     this.episodes = episodes;
     this.questions = questions;
@@ -40,7 +45,7 @@ public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO>
 
   @Override
   public SeasonModel convert() {
-    return new SeasonModel(getSeriesId(), getName());
+    return new SeasonModel(getSeriesId(), getNumber(), getName());
   }
 
   @Override
@@ -54,6 +59,14 @@ public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO>
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public Integer getNumber() {
+    return number;
+  }
+
+  public void setNumber(Integer number) {
+    this.number = number;
   }
 
   public String getName() {

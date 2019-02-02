@@ -112,4 +112,9 @@ public class SeriesService implements ObjectService<SeriesDTO> {
         .path("/".concat(type))
         .toUriString();
   }
+
+  @Override
+  public List<SeriesDTO> findAllByParent(Long seriesId) {
+    return null;
+  }
 }
