@@ -10,6 +10,7 @@ import com.questv.api.series.SeriesModel;
 import com.questv.api.series.SeriesRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -121,7 +122,13 @@ public class QuestionService implements ObjectService<QuestionDTO> {
   }
 
   @Override
-  public List<QuestionDTO> findAllByParent(Long seriesId) {
-    return null;
+  public List<QuestionDTO> findAllByParent(Long parentId) {
+    final List<QuestionDTO> result = new ArrayList<>();
+    for (final QuestionDTO questionDTO : this.findAll()) {
+      if (questionDTO.getOwnerId().equals(parentId)) {
+        result.add(questionDTO);
+      }
+    }
+    return result;
   }
 }

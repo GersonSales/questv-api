@@ -25,6 +25,12 @@ public class QuestionRest implements Restable<QuestionDTO> {
     return this.questionService.createAndAttach(questionDTO);
   }
 
+  @GetMapping("/questionable/{parentId}/question")
+  @ResponseBody
+  public List<QuestionDTO> getAll(@PathVariable final Long parentId) {
+    return this.questionService.findAllByParent(parentId);
+  }
+
   @Override
   @GetMapping("/question")
   @ResponseBody
