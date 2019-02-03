@@ -5,6 +5,6 @@ import java.util.HashSet;
 public final class NullEpisodeDTO extends EpisodeDTO {
 
   /*default*/ NullEpisodeDTO() {
-    super(0L, 0L, "", new HashSet<>());
+    super(0L, 0L, "", 0,  new HashSet<>());
   }
 }
