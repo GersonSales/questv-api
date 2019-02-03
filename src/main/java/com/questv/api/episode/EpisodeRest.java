@@ -26,6 +26,11 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
     return episodeDTO; //TODO
   }
 
+  @GetMapping("/season/{seasonId}/episode")
+  public List<EpisodeDTO> getAllBySeason(@PathVariable final Long seasonId) {
+    return this.episodeService.findAllByParent(seasonId);
+  }
+
   @Override
   @GetMapping("/episode")
   public List<EpisodeDTO> getAll() {

@@ -79,7 +79,18 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
   }
 
   @Override
-  public List<EpisodeDTO> findAllByParent(Long seriesId) {
-    return null;
+  public List<EpisodeDTO> findAllByParent(final Long seasonId) {
+    final List<EpisodeDTO> result = new ArrayList<>();
+
+    this.seasonRepository.findById(seasonId)
+        .ifPresent((seasonModel) -> result.addAll(
+            seasonModel
+                .getEpisodes()
+                .stream()
+                .map(EpisodeModel::convert)
+                .collect(Collectors.toList())
+            )
+        );
+    return result;
   }
 }
