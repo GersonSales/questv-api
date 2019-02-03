@@ -36,13 +36,17 @@ public class QuestionService implements ObjectService<QuestionDTO> {
   }
 
   @Override
-  public void createAndAttach(final QuestionDTO questionDTO) {
+  public QuestionDTO createAndAttach(final QuestionDTO questionDTO) {
+    QuestionDTO result = null;
     final Long ownerId = questionDTO.getOwnerId();
     final Questionable questionable = getQuestionableById(ownerId);
     if (questionable != null) {
-      questionable.attachQuestion(questionDTO.convert());
+      QuestionModel questionModel = this.questionRepository.save(questionDTO.convert());
+      questionable.attachQuestion(questionModel);
+      result = questionModel.convert();
       saveQuestionable(questionable);
     }
+    return result;
   }
 
   private void saveQuestionable(final Questionable questionable) {

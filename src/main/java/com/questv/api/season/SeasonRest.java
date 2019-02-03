@@ -23,8 +23,7 @@ public class SeasonRest implements Restable<SeasonDTO> {
   @ResponseStatus(value = HttpStatus.CREATED)
   @ResponseBody
   public SeasonDTO post(@Valid @RequestBody final SeasonDTO seasonDTO) {
-    this.seasonService.createAndAttach(seasonDTO);
-    return seasonDTO;//TODO
+    return this.seasonService.createAndAttach(seasonDTO);
   }
 
   @GetMapping("/series/{seriesId}/season")

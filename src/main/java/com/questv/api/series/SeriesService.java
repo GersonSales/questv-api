@@ -63,8 +63,8 @@ public class SeriesService implements ObjectService<SeriesDTO> {
   }
 
   @Override
-  public void createAndAttach(SeriesDTO model) {
-
+  public SeriesDTO createAndAttach(SeriesDTO model) {
+    return  model;
   }
 
   /*default*/ UploadedFileResponse attachSeriesCover(final Long seriesId, final MultipartFile file) {

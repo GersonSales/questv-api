@@ -22,8 +22,7 @@ public class QuestionRest implements Restable<QuestionDTO> {
   @ResponseStatus(value = HttpStatus.CREATED)
   @ResponseBody
   public QuestionDTO post(@Valid @RequestBody final QuestionDTO questionDTO) {
-    this.questionService.createAndAttach(questionDTO);
-    return questionDTO;//TODO
+    return this.questionService.createAndAttach(questionDTO);
   }
 
   @Override

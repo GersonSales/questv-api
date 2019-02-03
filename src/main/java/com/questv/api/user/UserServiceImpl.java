@@ -57,8 +57,8 @@ public class UserServiceImpl implements ObjectService<UserDTO> {
     }
 
     @Override
-    public void createAndAttach(UserDTO model) {
-
+    public UserDTO createAndAttach(UserDTO model) {
+        return model;
     }
 
     @Override

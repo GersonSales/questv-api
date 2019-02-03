@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ObjectService<T> {
 
-    void createAndAttach(T model);
+    T createAndAttach(T model);
 
     T create(final T model);
 

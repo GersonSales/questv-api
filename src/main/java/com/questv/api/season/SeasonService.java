@@ -1,5 +1,6 @@
 package com.questv.api.season;
 
+import com.questv.api.series.SeriesDTO;
 import com.questv.api.series.SeriesRepository;
 import com.questv.api.contracts.ObjectService;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,16 @@ public class SeasonService implements ObjectService<SeasonDTO> {
   }
 
   @Override
-  public void createAndAttach(final SeasonDTO seasonDTO) {
+  public SeasonDTO createAndAttach(final SeasonDTO seasonDTO) {
+    final SeasonDTO[] result = new SeasonDTO[1];
     this.seriesRepository.findById(seasonDTO.getSeriesId())
         .ifPresent(seriesModel -> {
           final SeasonModel seasonModel = this.seasonRepository.save(seasonDTO.convert());
           seriesModel.attachSeason(seasonModel);
+          result[0] = seasonModel.convert();
           this.seriesRepository.save(seriesModel);
         });
+    return result[0];
   }
 
 

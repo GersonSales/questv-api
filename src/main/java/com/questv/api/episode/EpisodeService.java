@@ -25,13 +25,16 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
 
 
   @Override
-  public void createAndAttach(final EpisodeDTO episodeDTO) {
+  public EpisodeDTO createAndAttach(final EpisodeDTO episodeDTO) {
+    final EpisodeDTO[] result = new EpisodeDTO[1];
     this.seasonRepository.findById(episodeDTO.getSeasonId())
         .ifPresent((seasonModel) -> {
           final EpisodeModel episodeModel = this.episodeRepository.save(episodeDTO.convert());
+          result[0] = episodeModel.convert();
           seasonModel.attachEpisode(episodeModel);
           this.seasonRepository.save(seasonModel);
         });
+    return result[0];
   }
 
   @Override

@@ -85,7 +85,7 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
 
   @Override
   public EpisodeDTO convert() {
-    final Set<Long> questionsIds = questions
+    final Set<Long> questionsIds = questions == null ? new HashSet<>() : questions//TODO
         .stream()
         .map(QuestionModel::getId)
         .collect(Collectors.toSet());
