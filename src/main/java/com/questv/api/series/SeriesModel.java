@@ -226,4 +226,13 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   public void setPromoImageUrl(String promoImageUrl) {
     this.promoImageUrl = promoImageUrl;
   }
+
+  @Override
+  public Set<QuestionModel> getQuestionsRecursively() {
+    final Set<QuestionModel> result = new HashSet<>(this.questions);
+    for (final Questionable questionable : this.seasons) {
+      result.addAll(questionable.getQuestionsRecursively());
+    }
+    return result;
+  }
 }

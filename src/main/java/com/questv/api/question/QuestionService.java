@@ -10,9 +10,7 @@ import com.questv.api.series.SeriesModel;
 import com.questv.api.series.SeriesRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -130,5 +128,12 @@ public class QuestionService implements ObjectService<QuestionDTO> {
       }
     }
     return result;
+  }
+
+  /*default*/ List<QuestionDTO> findAllByParentRecursively(final Long parentId) {
+    return getQuestionableById(parentId)
+        .getQuestionsRecursively()
+        .stream()
+        .map(QuestionModel::convert).distinct().collect(Collectors.toList());
   }
 }

@@ -49,7 +49,7 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
     this.seasonId = seasonId;
     this.name = name;
     this.number = number;
-}
+  }
 
   public Long getId() {
     return id;
@@ -118,5 +118,10 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
   @Override
   public Set<QuestionModel> getQuestions() {
     return this.questions;
+  }
+
+  @Override
+  public Set<QuestionModel> getQuestionsRecursively() {
+    return getQuestions();
   }
 }

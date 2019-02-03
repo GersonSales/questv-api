@@ -1,6 +1,7 @@
 package com.questv.api.question;
 
 import com.questv.api.contracts.Restable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,13 @@ public class QuestionRest implements Restable<QuestionDTO> {
 
   @GetMapping("/questionable/{parentId}/question")
   @ResponseBody
-  public List<QuestionDTO> getAll(@PathVariable final Long parentId) {
+  public List<QuestionDTO> getAllByParent(@PathVariable final Long parentId,
+                                          @RequestParam(required = false) final Boolean recursive) {
+
+    if (recursive != null && recursive) {
+      return this.questionService.findAllByParentRecursively(parentId);
+    }
+
     return this.questionService.findAllByParent(parentId);
   }
 

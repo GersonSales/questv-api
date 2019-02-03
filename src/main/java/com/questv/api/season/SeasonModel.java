@@ -148,4 +148,13 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
   public Set<QuestionModel> getQuestions() {
     return this.questions;
   }
+
+  @Override
+  public Set<QuestionModel> getQuestionsRecursively() {
+    final Set<QuestionModel> result = new HashSet<>(this.questions);
+    for (final Questionable questionable : this.episodes) {
+      result.addAll(questionable.getQuestionsRecursively());
+    }
+    return result;
+  }
 }
