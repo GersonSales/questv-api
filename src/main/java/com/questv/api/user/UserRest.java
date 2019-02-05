@@ -45,6 +45,4 @@ public class UserRest {
     public void deleteUser(@PathVariable final Long userId) {
         this.userService.delete(userId);
     }
-
-
 }
