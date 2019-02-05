@@ -10,7 +10,7 @@ public interface Restable<T> {
   ResponseEntity<List<T>> get();
   ResponseEntity<T> get(final Long tId);
   void delete(final Long tId);
-  void put(final T t);
+  void put(final Long id, final T t);
 
 
 }

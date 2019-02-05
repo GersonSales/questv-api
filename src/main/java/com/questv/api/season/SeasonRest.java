@@ -62,8 +62,9 @@ public class SeasonRest implements Restable<SeasonDTO> {
   }
 
   @Override
-  @PutMapping("/season")
-  public void put(@Valid @RequestBody final SeasonDTO seasonDTO) {
+  @PutMapping("/season/{seasonId}")
+  public void put(@PathVariable("seasonId") final Long seasonId, @Valid @RequestBody final SeasonDTO seasonDTO) {
+    seasonDTO.setId(seasonId);
     this.seasonService.update(seasonDTO);
   }
 

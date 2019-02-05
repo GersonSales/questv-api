@@ -65,7 +65,8 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     setQuestions(new HashSet<>());
   }
 
-  /*default*/ SeriesModel(final String name,
+  /*default*/ SeriesModel(final Long id,
+                          final String name,
                           final String abbreviation,
                           final String category,
                           final Boolean isRelease,
@@ -74,6 +75,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
                           final String promoImage,
                           final String promoImageUrl) {
     this();
+    this.id = id;
     this.name = name;
     this.abbreviation = abbreviation;
     this.category = category;

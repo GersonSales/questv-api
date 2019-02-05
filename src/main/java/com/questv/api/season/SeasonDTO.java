@@ -45,7 +45,7 @@ public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO>
 
   @Override
   public SeasonModel convert() {
-    return new SeasonModel(getSeriesId(), getNumber(), getName());
+    return new SeasonModel(getId(), getSeriesId(), getNumber(), getName());
   }
 
   @Override

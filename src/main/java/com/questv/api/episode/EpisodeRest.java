@@ -63,8 +63,9 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
   }
 
   @Override
-  @PutMapping("/episode")
-  public void put(final EpisodeDTO episodeDTO) {
+  @PutMapping("/episode/{episodeId}")
+  public void put(@PathVariable("episodeId") final Long episodeId, final EpisodeDTO episodeDTO) {
+    episodeDTO.setId(episodeId);
     this.episodeService.update(episodeDTO);
   }
 }

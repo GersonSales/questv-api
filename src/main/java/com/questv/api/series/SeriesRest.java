@@ -69,8 +69,10 @@ public class SeriesRest implements Restable<SeriesDTO> {
     }
   }
 
-  @PutMapping("/series")
-  public void put(@RequestBody final SeriesDTO seriesDTO) {
+  @Override
+  @PutMapping("/series/{seriesId}")
+  public void put(@PathVariable Long seriesId, @RequestBody final SeriesDTO seriesDTO) {
+    seriesDTO.setId(seriesId);
     this.seriesService.update(seriesDTO);
   }
 

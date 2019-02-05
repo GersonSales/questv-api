@@ -43,9 +43,11 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
     this.questions = new HashSet<>();
   }
 
-  /*default*/ EpisodeModel(final Long seasonId,
+  /*default*/ EpisodeModel(final Long id,
+                           final Long seasonId,
                            final String name,
                            final Integer number) {
+    this.id = id;
     this.seasonId = seasonId;
     this.name = name;
     this.number = number;

@@ -44,7 +44,7 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
 
   @Override
   public EpisodeModel convert() {
-    return new EpisodeModel(getSeasonId(), getName(), getNumber());
+    return new EpisodeModel(getId(), getSeasonId(), getName(), getNumber());
   }
 
   public Long getId() {

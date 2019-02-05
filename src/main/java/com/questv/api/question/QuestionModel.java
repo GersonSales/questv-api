@@ -42,10 +42,12 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
   /*default*/ QuestionModel() {
   }
 
-  /*default*/ QuestionModel(final Long ownerId,
+  /*default*/ QuestionModel(final Long id,
+                            final Long ownerId,
                             final String description,
                             final Difficult difficult,
                             final Set<Answer> answerSet) {
+    this.id = id;
     this.ownerId = ownerId;
     this.description = description;
     this.difficult = difficult;

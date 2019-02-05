@@ -158,7 +158,16 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
 
   @Override
   public SeriesModel convert() {
-    return new SeriesModel(getName(), getAbbreviation(), getCategory(), getIsRelease(), getCoverImage(), getCoverImageUrl(), getPromoImage(), getPromoImageUrl());
+    return new SeriesModel(
+        getId(),
+        getName(),
+        getAbbreviation(),
+        getCategory(),
+        getIsRelease(),
+        getCoverImage(),
+        getCoverImageUrl(),
+        getPromoImage(),
+        getPromoImageUrl());
   }
 
   @Override

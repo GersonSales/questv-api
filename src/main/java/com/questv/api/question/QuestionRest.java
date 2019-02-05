@@ -74,8 +74,9 @@ public class QuestionRest implements Restable<QuestionDTO> {
   }
 
   @Override
-  @PutMapping("/question")
-  public void put(@Valid @RequestBody final QuestionDTO questionDTO) {
+  @PutMapping("/question/{questionId}")
+  public void put(@PathVariable("questionId") final Long questionId, @Valid @RequestBody final QuestionDTO questionDTO) {
+    questionDTO.setId(questionId);
     this.questionService.update(questionDTO);
   }
 }

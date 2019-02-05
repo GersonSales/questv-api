@@ -49,8 +49,10 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
     this.questions = new HashSet<>();
   }
 
-  /*default*/ SeasonModel(final Long seriesId, final Integer number, final String name) {
+  /*default*/ SeasonModel(final Long id, final Long seriesId, final Integer number, final String name) {
+
     this();
+    this.id = id;
     this.seriesId = seriesId;
     this.number = number;
     this.name = name;

@@ -104,7 +104,7 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
 
 
     final Difficult difficult =  new Difficult(getDifficult());
-    return new QuestionModel(getOwnerId(), getDescription(), difficult, answerSet);
+    return new QuestionModel(getId(), getOwnerId(), getDescription(), difficult, answerSet);
   }
 
   @Override
