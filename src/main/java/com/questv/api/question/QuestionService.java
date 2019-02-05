@@ -4,13 +4,17 @@ import com.questv.api.contracts.ObjectService;
 import com.questv.api.contracts.Questionable;
 import com.questv.api.episode.EpisodeModel;
 import com.questv.api.episode.EpisodeRepository;
+import com.questv.api.exception.IdNotFoundException;
 import com.questv.api.season.SeasonModel;
 import com.questv.api.season.SeasonRepository;
 import com.questv.api.series.SeriesModel;
 import com.questv.api.series.SeriesRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -36,16 +40,11 @@ public class QuestionService implements ObjectService<QuestionDTO> {
 
   @Override
   public QuestionDTO createAndAttach(final QuestionDTO questionDTO) {
-    QuestionDTO result = null;
-    final Long ownerId = questionDTO.getOwnerId();
-    final Questionable questionable = getQuestionableById(ownerId);
-    if (questionable != null) {
-      QuestionModel questionModel = this.questionRepository.save(questionDTO.convert());
-      questionable.attachQuestion(questionModel);
-      result = questionModel.convert();
-      saveQuestionable(questionable);
-    }
-    return result;
+    final Questionable questionable = findQuestionableById(questionDTO.getOwnerId());
+    final QuestionModel questionModel = save(questionDTO.convert());
+    questionable.attachQuestion(questionModel);
+    saveQuestionable(questionable);
+    return questionModel.convert();
   }
 
   private void saveQuestionable(final Questionable questionable) {
@@ -58,7 +57,8 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     }
   }
 
-  private Questionable getQuestionableById(final Long questionableId) {
+  @NotNull
+  private Questionable findQuestionableById(final Long questionableId) {
     Optional<SeriesModel> seriesById = this.seriesRepository.findById(questionableId);
     if (seriesById.isPresent()) {
       return seriesById.get();
@@ -70,8 +70,11 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     }
 
     Optional<EpisodeModel> episodeById = this.episodeRepository.findById(questionableId);
-    return episodeById.orElse(null);
+    if (episodeById.isPresent()) {
+      return episodeById.get();
+    }
 
+    throw new IdNotFoundException("Cannot find the question owner with this given id");
   }
 
   @Override
@@ -90,31 +93,41 @@ public class QuestionService implements ObjectService<QuestionDTO> {
 
   @Override
   public QuestionDTO findById(final Long questionId) {
-    return this.questionRepository.findById(questionId)
-        .map(QuestionModel::convert)
-        .orElse(new NullQuestionDTO());
+    return findModelById(questionId).convert();
+  }
+
+  @NotNull
+  private QuestionModel findModelById(final Long questionId) {
+    final Optional<QuestionModel> foundQuestion = this.questionRepository.findById(questionId);
+    if (foundQuestion.isPresent()) {
+      return foundQuestion.get();
+    } else {
+      throw new IdNotFoundException("Cannot find a question with given id.");
+    }
   }
 
   @Override
-  public void updateById(final Long questionId, QuestionDTO questionDTO) {
-    this.questionRepository
-        .findById(questionId)
-        .ifPresent((questionModel) -> {
-          questionModel.update(questionDTO.convert());
-          this.questionRepository.save(questionModel);
-        });
+  public void update(QuestionDTO questionDTO) {
+    final QuestionModel questionModel = findModelById(questionDTO.getId());
+    questionModel.update(questionDTO.convert());
+    save(questionModel);
   }
 
+  private QuestionModel save(final QuestionModel questionModel) {
+    return this.questionRepository.save(questionModel);
+  }
+
+
   @Override
-  public void deleteById(final Long questionId) {
-    this.questionRepository.findById(questionId)
-        .ifPresent((questionModel) -> detachQuestionFromQuestionable(questionModel,
-            getQuestionableById(questionModel.getOwnerId())));
+  public void delete(final Long questionId) {
+    final QuestionModel questionModel = findModelById(questionId);
+    final Questionable questionable = findQuestionableById(questionModel.getOwnerId());
+    detachQuestionFromQuestionable(questionModel, questionable);
     this.questionRepository.deleteById(questionId);
   }
 
   private void detachQuestionFromQuestionable(final QuestionModel questionModel,
-                                              final Questionable questionable) {
+                                              @NotNull final Questionable questionable) {
     questionable.detachQuestion(questionModel);
     saveQuestionable(questionable);
   }
@@ -130,8 +143,8 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     return result;
   }
 
-  /*default*/ List<QuestionDTO> findAllByParentRecursively(final Long parentId) {
-    return getQuestionableById(parentId)
+  /*default*/ List<QuestionDTO> findAllByParentRecursive(final Long parentId) {
+    return findQuestionableById(parentId)
         .getQuestionsRecursively()
         .stream()
         .map(QuestionModel::convert).distinct().collect(Collectors.toList());

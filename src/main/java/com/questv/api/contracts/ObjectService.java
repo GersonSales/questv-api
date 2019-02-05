@@ -12,9 +12,9 @@ public interface ObjectService<T> {
 
     T findById(final Long tId);
 
-    void updateById(final Long tId, final T t);
+    void update(final T t);
 
-    void deleteById(final Long tId);
+    void delete(final Long tId);
 
     List<T> findAllByParent(final Long seriesId);
 }

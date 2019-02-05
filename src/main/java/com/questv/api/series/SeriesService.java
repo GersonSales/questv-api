@@ -1,8 +1,10 @@
 package com.questv.api.series;
 
 import com.questv.api.contracts.ObjectService;
+import com.questv.api.exception.IdNotFoundException;
 import com.questv.api.file.FileStorageServiceImpl;
 import com.questv.api.file.UploadedFileResponse;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -10,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service(value = "seriesService")
@@ -25,8 +28,8 @@ public class SeriesService implements ObjectService<SeriesDTO> {
   }
 
   @Override
-  public SeriesDTO create(final SeriesDTO model) {
-    return this.seriesRepository.save(model.convert()).convert();
+  public SeriesDTO create(final SeriesDTO seriesDTO) {
+    return save(seriesDTO.convert()).convert();
   }
 
   @Override
@@ -41,42 +44,53 @@ public class SeriesService implements ObjectService<SeriesDTO> {
 
   @Override
   public SeriesDTO findById(final Long seriesId) {
-    return this.seriesRepository
-        .findById(seriesId)
-        .map(SeriesModel::convert)
-        .orElse(new NullSeriesDTO());
+    return findModelById(seriesId).convert();
+  }
+
+  @NotNull
+  private SeriesModel findModelById(final Long seriesId) {
+    final Optional<SeriesModel> seriesModel = this.seriesRepository.findById(seriesId);
+    if (seriesModel.isPresent()) {
+      return seriesModel.get();
+    }
+    throw new IdNotFoundException();
   }
 
   @Override
-  public void updateById(final Long seriesId, final SeriesDTO seriesDTO) {
-    this.seriesRepository
-        .findById(seriesId)
-        .ifPresent((seriesModel) -> {
-          seriesModel.update(seriesDTO.convert());
-          this.seriesRepository.save(seriesModel);
-        });
+  public void update(final SeriesDTO seriesDTO) {
+    update(seriesDTO.convert());
+  }
+
+  public void update(final SeriesModel seriesModel) {
+    final SeriesModel foundSeries = findModelById(seriesModel.getId());
+    foundSeries.update(seriesModel);
+    save(foundSeries);
+  }
+
+  private SeriesModel save(final SeriesModel seriesModel) {
+    return this.seriesRepository.save(seriesModel);
   }
 
   @Override
-  public void deleteById(final Long seriesId) {
+  public void delete(final Long seriesId) {
     this.seriesRepository.deleteById(seriesId);
   }
 
   @Override
-  public SeriesDTO createAndAttach(SeriesDTO model) {
-    return  model;
+  public SeriesDTO createAndAttach(final SeriesDTO seriesDTO) {
+    return  seriesDTO;
   }
 
   /*default*/ UploadedFileResponse attachSeriesCover(final Long seriesId, final MultipartFile file) {
 
-    final SeriesDTO byId = findById(seriesId);
-    final String fileName = fileStorageService.store(file, byId);
+    final SeriesModel seriesModel = findModelById(seriesId);
+    final String fileName = fileStorageService.store(file, seriesModel);
 
     final String fileDownloadUri = getFileUri(seriesId, "cover");
 
-    byId.setCoverImage(fileName);
-    byId.setCoverImageUrl(fileDownloadUri);
-    this.updateById(seriesId, byId);
+    seriesModel.setCoverImage(fileName);
+    seriesModel.setCoverImageUrl(fileDownloadUri);
+    this.update(seriesModel);
 
     return new UploadedFileResponse(fileName, fileDownloadUri,
         file.getContentType(), file.getSize());
@@ -84,14 +98,14 @@ public class SeriesService implements ObjectService<SeriesDTO> {
 
   /*default*/ UploadedFileResponse attachSeriesPromoImage(final Long seriesId, final MultipartFile file) {
 
-    final SeriesDTO byId = findById(seriesId);
-    final String fileName = fileStorageService.store(file, byId);
+    final SeriesModel seriesModel = findModelById(seriesId);
+    final String fileName = fileStorageService.store(file, seriesModel);
 
     final String fileDownloadUri = getFileUri(seriesId, "promoImage");
 
-    byId.setPromoImage(fileName);
-    byId.setPromoImageUrl(fileDownloadUri);
-    this.updateById(seriesId, byId);
+    seriesModel.setPromoImage(fileName);
+    seriesModel.setPromoImageUrl(fileDownloadUri);
+    this.update(seriesModel);
 
     return new UploadedFileResponse(fileName, fileDownloadUri,
         file.getContentType(), file.getSize());
@@ -114,7 +128,7 @@ public class SeriesService implements ObjectService<SeriesDTO> {
   }
 
   @Override
-  public List<SeriesDTO> findAllByParent(Long seriesId) {
-    return null;
+  public List<SeriesDTO> findAllByParent(final Long seriesId) {
+    return new ArrayList<>();
   }
 }

@@ -1,6 +1,6 @@
 package com.questv.api.file;
 
-import com.questv.api.contracts.DTO;
+import com.questv.api.contracts.Modelable;
 import com.questv.api.file.exception.FileStorageException;
 import com.questv.api.file.exception.QtvFileNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +40,11 @@ public class FileStorageServiceImpl implements FileStorageService {
   }
 
   @Override
-  public String store(final MultipartFile file, final DTO dto) {
+  public String store(final MultipartFile file, final Modelable modelable) {
     String fileName = StringUtils
         .cleanPath(file.getOriginalFilename());
 
-    fileName = String.valueOf(dto.getId()).concat("_").concat(fileName);
+    fileName = String.valueOf(modelable.getId()).concat("_").concat(fileName);
 
 
     try {

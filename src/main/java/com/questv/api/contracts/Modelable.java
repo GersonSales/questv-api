@@ -1,5 +1,5 @@
 package com.questv.api.contracts;
 
-public interface DTO {
+public interface Modelable {
   Long getId();
 }

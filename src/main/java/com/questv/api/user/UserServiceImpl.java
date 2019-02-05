@@ -19,9 +19,9 @@ public class UserServiceImpl implements ObjectService<UserDTO> {
     }
 
     @Override
-    public void updateById(final Long userId, final UserDTO userDTO) {
+    public void update(final UserDTO userDTO) {
         this.userRepository
-                .findById(userId)
+                .findById(userDTO.getId())
                 .ifPresent((userModel) -> {
                     userModel.update(userDTO);
                     this.userRepository.save(userModel);
@@ -51,7 +51,7 @@ public class UserServiceImpl implements ObjectService<UserDTO> {
     }
 
     @Override
-    public void deleteById(final Long userId) {
+    public void delete(final Long userId) {
         this.userRepository.deleteById(userId);
 
     }

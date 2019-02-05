@@ -2,6 +2,7 @@ package com.questv.api.episode;
 
 import com.questv.api.contracts.Restable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,37 +22,49 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
   @Override
   @PostMapping("/episode")
   @ResponseStatus(HttpStatus.CREATED)
-  public EpisodeDTO post(@Valid @RequestBody EpisodeDTO episodeDTO) {
-    return this.episodeService.createAndAttach(episodeDTO);
+  public ResponseEntity<EpisodeDTO> post(@Valid @RequestBody EpisodeDTO episodeDTO) {
+    try {
+      return ResponseEntity.status(HttpStatus.CREATED).body(this.episodeService.createAndAttach(episodeDTO));
+    } catch (final Exception exception) {
+      return ResponseEntity.badRequest().build();
+    }
   }
 
   @GetMapping("/season/{seasonId}/episode")
-  public List<EpisodeDTO> getAllBySeason(@PathVariable final Long seasonId) {
-    return this.episodeService.findAllByParent(seasonId);
+  public ResponseEntity<List<EpisodeDTO>> getAllBySeason(@PathVariable final Long seasonId) {
+    try {
+      return ResponseEntity.ok().body(this.episodeService.findAllByParent(seasonId));
+    } catch (final Exception exception) {
+      return ResponseEntity.badRequest().build();
+    }
   }
 
   @Override
   @GetMapping("/episode")
-  public List<EpisodeDTO> getAll() {
-    return this.episodeService.findAll();
+  public ResponseEntity<List<EpisodeDTO>> get() {
+    return ResponseEntity.ok().body(this.episodeService.findAll());
   }
 
   @Override
   @GetMapping("/episode/{episodeId}")
-  public EpisodeDTO getById(@PathVariable Long episodeId) {
-    return this.episodeService.findById(episodeId);
+  public ResponseEntity<EpisodeDTO> get(@PathVariable final Long episodeId) {
+    try {
+      return ResponseEntity.ok().body(this.episodeService.findById(episodeId));
+    } catch (final Exception exception) {
+      return ResponseEntity.badRequest().build();
+    }
   }
 
   @Override
   @DeleteMapping("/episode/{episodeId}")
-  public void deleteById(@PathVariable Long episodeId) {
-    this.episodeService.deleteById(episodeId);
+  public void delete(@PathVariable Long episodeId) {
+    this.episodeService.delete(episodeId);
 
   }
 
   @Override
   @PutMapping("/episode")
   public void put(final EpisodeDTO episodeDTO) {
-    this.episodeService.updateById(episodeDTO.getId(), episodeDTO);
+    this.episodeService.update(episodeDTO);
   }
 }

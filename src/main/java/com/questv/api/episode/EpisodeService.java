@@ -1,11 +1,14 @@
 package com.questv.api.episode;
 
-import com.questv.api.season.SeasonRepository;
 import com.questv.api.contracts.ObjectService;
+import com.questv.api.exception.IdNotFoundException;
+import com.questv.api.season.SeasonModel;
+import com.questv.api.season.SeasonRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -26,15 +29,11 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
 
   @Override
   public EpisodeDTO createAndAttach(final EpisodeDTO episodeDTO) {
-    final EpisodeDTO[] result = new EpisodeDTO[1];
-    this.seasonRepository.findById(episodeDTO.getSeasonId())
-        .ifPresent((seasonModel) -> {
-          final EpisodeModel episodeModel = this.episodeRepository.save(episodeDTO.convert());
-          result[0] = episodeModel.convert();
-          seasonModel.attachEpisode(episodeModel);
-          this.seasonRepository.save(seasonModel);
-        });
-    return result[0];
+    final SeasonModel seasonModel = findSeasonById(episodeDTO.getSeasonId());
+    final EpisodeModel episodeModel = save(episodeDTO.convert());
+    seasonModel.attachEpisode(episodeModel);
+    this.seasonRepository.save(seasonModel);
+    return episodeModel.convert();
   }
 
   @Override
@@ -54,46 +53,54 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
 
   @Override
   public EpisodeDTO findById(Long episodeId) {
-    return this.episodeRepository.findById(episodeId)
-        .map(EpisodeModel::convert)
-        .orElse(new NullEpisodeDTO());
+    return findModelById(episodeId).convert();
+  }
+
+  private EpisodeModel findModelById(Long episodeId) {
+    Optional<EpisodeModel> episodeModel = this.episodeRepository.findById(episodeId);
+    if (episodeModel.isPresent()) {
+      return episodeModel.get();
+    }
+    throw new IdNotFoundException();
   }
 
   @Override
-  public void updateById(final Long episodeId, final EpisodeDTO episodeDTO) {
-    this.episodeRepository.findById(episodeId)
-        .ifPresent((episodeModel) -> {
-          episodeModel.update(episodeDTO.convert());
-          this.episodeRepository.save(episodeModel);
-        });
+  public void update(final EpisodeDTO episodeDTO) {
+    final EpisodeModel episodeModel = findModelById(episodeDTO.getId());
+    episodeModel.update(episodeDTO.convert());
+    save(episodeModel);
+  }
+
+  private EpisodeModel save(final EpisodeModel episodeModel) {
+    return this.episodeRepository.save(episodeModel);
+  }
+
+
+  private SeasonModel findSeasonById(final Long seasonId) {
+    final Optional<SeasonModel> seasonModel = this.seasonRepository.findById(seasonId);
+    if (seasonModel.isPresent()) {
+      return seasonModel.get();
+    }
+    throw new IdNotFoundException();
   }
 
   @Override
-  public void deleteById(final Long episodeId) {
-    this.episodeRepository.findById(episodeId)
-        .ifPresent((episodeModel) -> {
-          this.seasonRepository.findById(episodeModel.getSeasonId())
-              .ifPresent((seasonModel) -> {
-                seasonModel.removeEpisodeById(episodeId);
-                this.seasonRepository.save(seasonModel);
-                this.episodeRepository.deleteById(episodeId);
-              });
-        });
+  public void delete(final Long episodeId) {
+    final EpisodeModel episodeModel = findModelById(episodeId);
+    final SeasonModel seasonModel = findSeasonById(episodeModel.getSeasonId());
+    seasonModel.removeEpisodeById(episodeId);
+    this.seasonRepository.save(seasonModel);
+    this.episodeRepository.deleteById(episodeId);
   }
 
   @Override
   public List<EpisodeDTO> findAllByParent(final Long seasonId) {
-    final List<EpisodeDTO> result = new ArrayList<>();
-
-    this.seasonRepository.findById(seasonId)
-        .ifPresent((seasonModel) -> result.addAll(
-            seasonModel
-                .getEpisodes()
-                .stream()
-                .map(EpisodeModel::convert)
-                .collect(Collectors.toList())
-            )
-        );
-    return result;
+    final SeasonModel seasonModel = findSeasonById(seasonId);
+    return seasonModel
+        .getEpisodes()
+        .stream()
+        .map(EpisodeModel::convert)
+        .distinct()
+        .collect(Collectors.toList());
   }
 }

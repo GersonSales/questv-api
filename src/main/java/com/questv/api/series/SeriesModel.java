@@ -1,11 +1,11 @@
 package com.questv.api.series;
 
 import com.questv.api.contracts.Convertible;
+import com.questv.api.contracts.Modelable;
 import com.questv.api.contracts.Questionable;
 import com.questv.api.question.QuestionModel;
 import com.questv.api.season.SeasonModel;
 import com.questv.api.contracts.Updatable;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "series_table", schema = "questv_schema")
-public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesModel>, Questionable {
+public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesModel>, Questionable, Modelable {
 
   @Id
   @NotNull

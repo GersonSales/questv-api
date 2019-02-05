@@ -3,6 +3,7 @@ package com.questv.api.season;
 import com.questv.api.contracts.ObjectService;
 import com.questv.api.contracts.Restable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,45 +18,54 @@ public class SeasonRest implements Restable<SeasonDTO> {
     assert this.seasonService != null;
   }
 
-
   @Override
   @PostMapping("/season")
-  @ResponseStatus(value = HttpStatus.CREATED)
-  @ResponseBody
-  public SeasonDTO post(@Valid @RequestBody final SeasonDTO seasonDTO) {
-    return this.seasonService.createAndAttach(seasonDTO);
+  public ResponseEntity<SeasonDTO> post(@Valid @RequestBody final SeasonDTO seasonDTO) {
+    try {
+      SeasonDTO attachedSeason = this.seasonService.createAndAttach(seasonDTO);
+      return ResponseEntity.status(HttpStatus.CREATED).body(attachedSeason);
+    } catch (final Exception exception) {
+      return ResponseEntity.badRequest().body(null);
+    }
   }
 
   @GetMapping("/series/{seriesId}/season")
-  public List<SeasonDTO> getAllBySeries(@PathVariable final Long seriesId) {
-    return this.seasonService.findAllByParent(seriesId);
+  public ResponseEntity<List<SeasonDTO>> getAllBySeries(@PathVariable final Long seriesId) {
+    try {
+      final List<SeasonDTO> allByParent = this.seasonService.findAllByParent(seriesId);
+      return ResponseEntity.ok(allByParent);
+    } catch (final Exception exception) {
+      return ResponseEntity.badRequest().body(null);
+    }
   }
-
 
   @Override
   @GetMapping("/season")
-  public List<SeasonDTO> getAll() {
-    return this.seasonService.findAll();
+  public ResponseEntity<List<SeasonDTO>> get() {
+    return ResponseEntity.ok(this.seasonService.findAll());
   }
 
   @Override
   @GetMapping("/season/{seasonId}")
-  public SeasonDTO getById(@PathVariable final Long seasonId) {
-    return this.seasonService.findById(seasonId);
+  public ResponseEntity<SeasonDTO> get(@PathVariable final Long seasonId) {
+    try {
+      return ResponseEntity.ok(this.seasonService.findById(seasonId));
+    } catch (final Exception exception) {
+      return ResponseEntity.badRequest().body(null);
+    }
   }
 
   @Override
   @DeleteMapping("/season/{seasonId}")
-  public void deleteById(@PathVariable final Long seasonId) {
-    this.seasonService.deleteById(seasonId);
+  public void delete(@PathVariable final Long seasonId) {
+    this.seasonService.delete(seasonId);
   }
 
   @Override
   @PutMapping("/season")
   public void put(@Valid @RequestBody final SeasonDTO seasonDTO) {
-    this.seasonService.updateById(seasonDTO.getId(), seasonDTO);
+    this.seasonService.update(seasonDTO);
   }
-
 
 
 }

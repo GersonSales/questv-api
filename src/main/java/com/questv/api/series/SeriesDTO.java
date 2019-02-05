@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SeriesModelable implements Convertible<SeriesModel>, Updatable<SeriesModelable>, Modelable {
+public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>, Modelable {
 
   private Long id;
 
@@ -38,7 +38,7 @@ public class SeriesModelable implements Convertible<SeriesModel>, Updatable<Seri
   private Set<Long> seasons;
   private Set<Long> questions;
 
-  /*default*/ SeriesModelable() {
+  /*default*/ SeriesDTO() {
     setName("");
     setCategory("");
     setIsRelease(false);
@@ -51,17 +51,17 @@ public class SeriesModelable implements Convertible<SeriesModel>, Updatable<Seri
     setQuestions(new HashSet<>());
   }
 
-  /*default*/ SeriesModelable(final Long id,
-                              final String name,
-                              final String abbreviation,
-                              final String category,
-                              final Boolean isRelease,
-                              final String coverImage,
-                              final String coverImageUrl,
-                              final String promoImage,
-                              final String promoImageUrl,
-                              final Set<Long> seasons,
-                              final Set<Long> questions) {
+  /*default*/ SeriesDTO(final Long id,
+                        final String name,
+                        final String abbreviation,
+                        final String category,
+                        final Boolean isRelease,
+                        final String coverImage,
+                        final String coverImageUrl,
+                        final String promoImage,
+                        final String promoImageUrl,
+                        final Set<Long> seasons,
+                        final Set<Long> questions) {
     this();
     this.id = id;
     this.name = name;
@@ -162,7 +162,7 @@ public class SeriesModelable implements Convertible<SeriesModel>, Updatable<Seri
   }
 
   @Override
-  public void update(final SeriesModelable update) {
+  public void update(final SeriesDTO update) {
     setName(update.getName());
     setCategory(update.getCategory());
     setIsRelease(update.getIsRelease());

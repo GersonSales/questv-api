@@ -1,11 +1,10 @@
 package com.questv.api.series;
 
 import com.questv.api.contracts.ObjectService;
-import com.questv.api.file.FileStorageService;
+import com.questv.api.contracts.Restable;
+import com.questv.api.exception.IdNotFoundException;
 import com.questv.api.file.UploadedFileResponse;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-public class SeriesRest {
+public class SeriesRest implements Restable<SeriesDTO> {
   private final ObjectService<SeriesDTO> seriesService;
 
   public SeriesRest(final ObjectService<SeriesDTO> seriesService) {
@@ -25,10 +24,8 @@ public class SeriesRest {
   }
 
   @PostMapping("/series")
-  @ResponseStatus(value = HttpStatus.CREATED)
-  @ResponseBody
-  public SeriesDTO postSeries(@Valid @RequestBody final SeriesDTO seriesDTO) {
-    return this.seriesService.create(seriesDTO);
+  public ResponseEntity<SeriesDTO> post(@Valid @RequestBody final SeriesDTO seriesDTO) {
+    return ResponseEntity.ok(this.seriesService.create(seriesDTO));
   }
 
   @PostMapping("/series/{seriesId}/cover")
@@ -59,23 +56,27 @@ public class SeriesRest {
   }
 
   @GetMapping("/series")
-  public List<SeriesDTO> getSeries() {
-    return this.seriesService.findAll();
+  public ResponseEntity<List<SeriesDTO>> get() {
+    return ResponseEntity.ok(this.seriesService.findAll());
   }
 
   @GetMapping("/series/{seriesId}")
-  public SeriesDTO getSeriesById(@PathVariable Long seriesId) {
-    return this.seriesService.findById(seriesId);
+  public ResponseEntity<SeriesDTO> get(@PathVariable Long seriesId) {
+    try {
+      return ResponseEntity.ok(this.seriesService.findById(seriesId));
+    } catch (final IdNotFoundException exception) {
+      return ResponseEntity.badRequest().build();
+    }
   }
 
-  @PutMapping("/series/{seriesId}")
-  public void putSeries(@PathVariable final Long seriesId, @RequestBody final SeriesDTO seriesDTO) {
-    this.seriesService.updateById(seriesId, seriesDTO);
+  @PutMapping("/series")
+  public void put(@RequestBody final SeriesDTO seriesDTO) {
+    this.seriesService.update(seriesDTO);
   }
 
   @DeleteMapping("/series/{seriesId}")
-  public void deleteSeries(@PathVariable final Long seriesId) {
-    this.seriesService.deleteById(seriesId);
+  public void delete(@PathVariable final Long seriesId) {
+    this.seriesService.delete(seriesId);
   }
 
   private ResponseEntity<Resource> getPreparedResponseEntity(final HttpServletRequest request,
@@ -100,5 +101,7 @@ public class SeriesRest {
     }
     return contentType;
   }
+
+
 
 }

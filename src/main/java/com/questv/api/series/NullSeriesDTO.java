@@ -2,8 +2,8 @@ package com.questv.api.series;
 
 import java.util.HashSet;
 
-public final class NullSeriesModelable extends SeriesModelable {
-  public NullSeriesModelable() {
+public final class NullSeriesDTO extends SeriesDTO {
+  public NullSeriesDTO() {
     super(0L, "NotASeries", "NaS", "", false, "", "", "", "", new HashSet<>(), new HashSet<>());
 
   }

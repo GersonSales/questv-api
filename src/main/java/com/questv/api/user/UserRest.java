@@ -38,12 +38,12 @@ public class UserRest {
 
     @PutMapping("/user/{userId}")
     public void putUser(@PathVariable final Long userId, @RequestBody final UserDTO userDTO) {
-        this.userService.updateById(userId, userDTO);
+        this.userService.update(userDTO);
     }
 
     @DeleteMapping("/user/{userId}")
     public void deleteUser(@PathVariable final Long userId) {
-        this.userService.deleteById(userId);
+        this.userService.delete(userId);
     }
 
 

@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
 
 
-    private int id;
+    private Long id;
 
     @NotEmpty
     @Size(min = 3, max = 256, message = "First name should have 3 characters at least.")
@@ -66,11 +66,11 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
         this.email = email;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

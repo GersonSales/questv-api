@@ -1,12 +1,15 @@
 package com.questv.api.season;
 
-import com.questv.api.series.SeriesDTO;
-import com.questv.api.series.SeriesRepository;
 import com.questv.api.contracts.ObjectService;
+import com.questv.api.exception.IdNotFoundException;
+import com.questv.api.series.SeriesModel;
+import com.questv.api.series.SeriesRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service(value = "seasonService")
@@ -23,23 +26,34 @@ public class SeasonService implements ObjectService<SeasonDTO> {
     assert this.seriesRepository != null;
   }
 
+
   @Override
   public SeasonDTO createAndAttach(final SeasonDTO seasonDTO) {
-    final SeasonDTO[] result = new SeasonDTO[1];
-    this.seriesRepository.findById(seasonDTO.getSeriesId())
-        .ifPresent(seriesModel -> {
-          final SeasonModel seasonModel = this.seasonRepository.save(seasonDTO.convert());
-          seriesModel.attachSeason(seasonModel);
-          result[0] = seasonModel.convert();
-          this.seriesRepository.save(seriesModel);
-        });
-    return result[0];
+    final Long seriesId = seasonDTO.getSeriesId();
+    final SeriesModel seriesModel = findSeriesById(seriesId);
+    final SeasonModel seasonModel = save(seasonDTO.convert());
+    seriesModel.attachSeason(seasonModel);
+    saveSeries(seriesModel);
+    return seasonModel.convert();
+  }
+
+  private SeriesModel findSeriesById(final Long seriesId) {
+    Optional<SeriesModel> foundSeries = this.seriesRepository.findById(seriesId);
+    if (foundSeries.isPresent()) {
+      return foundSeries.get();
+    }
+
+    throw new IdNotFoundException();
+  }
+
+  private SeriesModel saveSeries(SeriesModel seriesModel) {
+    return this.seriesRepository.save(seriesModel);
   }
 
 
   @Override
   public SeasonDTO create(final SeasonDTO model) {
-    return this.seasonRepository.save(model.convert()).convert();
+    return save(model.convert()).convert();
   }
 
   @Override
@@ -54,46 +68,46 @@ public class SeasonService implements ObjectService<SeasonDTO> {
 
   @Override
   public SeasonDTO findById(final Long seasonId) {
-    return this.seasonRepository
-        .findById(seasonId)
-        .map(SeasonModel::convert)
-        .orElse(new NullSeasonDTO());
+    return findModelById(seasonId).convert();
+  }
+
+  @NotNull
+  private SeasonModel findModelById(final Long seasonId) {
+    final Optional<SeasonModel> foundSeason = this.seasonRepository.findById(seasonId);
+    if (foundSeason.isPresent()) {
+      return foundSeason.get();
+    }
+    throw new IdNotFoundException();
   }
 
   @Override
-  public void updateById(final Long seasonId, final SeasonDTO seasonDTO) {
-    this.seasonRepository.findById(seasonId).ifPresent((seasonModel) -> {
-      seasonModel.update(seasonDTO.convert());
-      this.seasonRepository.save(seasonModel);
-    });
+  public void update(final SeasonDTO seasonDTO) {
+    final SeasonModel seasonModel = findModelById(seasonDTO.getId());
+    seasonModel.update(seasonDTO.convert());
+    save(seasonModel);
+  }
 
+  private SeasonModel save(final SeasonModel seasonModel) {
+    return this.seasonRepository.save(seasonModel);
   }
 
   @Override
-  public void deleteById(final Long seasonId) {
-    this.seasonRepository.findById(seasonId)
-        .ifPresent((seasonModel) -> {
-          this.seriesRepository.findById(seasonModel.getSeriesId())
-              .ifPresent((seriesModel) -> {
-                seriesModel.removeSeasonById(seasonId);
-                this.seriesRepository.save(seriesModel);
-                this.seasonRepository.deleteById(seasonId);
-              });
-        });
+  public void delete(final Long seasonId) {
+    final SeasonModel seasonModel = findModelById(seasonId);
+    final SeriesModel seriesModel = findSeriesById(seasonModel.getSeriesId());
+
+    seriesModel.removeSeasonById(seasonId);
+    saveSeries(seriesModel);
+    this.seasonRepository.deleteById(seasonId);
   }
 
   @Override
   public List<SeasonDTO> findAllByParent(final Long seriesId) {
-    final List<SeasonDTO> result = new ArrayList<>();
-
-    this.seriesRepository.findById(seriesId).
-        ifPresent((seriesModel) -> result.addAll(
-            seriesModel
-                .getSeasons()
-                .stream()
-                .map(SeasonModel::convert)
-                .collect(Collectors.toList())
-        ));
-    return result;
+    final SeriesModel seriesModel = findSeriesById(seriesId);
+    return seriesModel
+        .getSeasons()
+        .stream()
+        .map(SeasonModel::convert)
+        .collect(Collectors.toList());
   }
 }
