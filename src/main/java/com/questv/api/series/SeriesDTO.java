@@ -1,7 +1,7 @@
 package com.questv.api.series;
 
 import com.questv.api.contracts.Convertible;
-import com.questv.api.contracts.DTO;
+import com.questv.api.contracts.Modelable;
 import com.questv.api.contracts.Updatable;
 
 import javax.validation.constraints.NotEmpty;
@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>, DTO {
+public class SeriesModelable implements Convertible<SeriesModel>, Updatable<SeriesModelable>, Modelable {
 
   private Long id;
 
@@ -38,7 +38,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   private Set<Long> seasons;
   private Set<Long> questions;
 
-  /*default*/ SeriesDTO() {
+  /*default*/ SeriesModelable() {
     setName("");
     setCategory("");
     setIsRelease(false);
@@ -51,17 +51,17 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     setQuestions(new HashSet<>());
   }
 
-  /*default*/ SeriesDTO(final Long id,
-                        final String name,
-                        final String abbreviation,
-                        final String category,
-                        final Boolean isRelease,
-                        final String coverImage,
-                        final String coverImageUrl,
-                        final String promoImage,
-                        final String promoImageUrl,
-                        final Set<Long> seasons,
-                        final Set<Long> questions) {
+  /*default*/ SeriesModelable(final Long id,
+                              final String name,
+                              final String abbreviation,
+                              final String category,
+                              final Boolean isRelease,
+                              final String coverImage,
+                              final String coverImageUrl,
+                              final String promoImage,
+                              final String promoImageUrl,
+                              final Set<Long> seasons,
+                              final Set<Long> questions) {
     this();
     this.id = id;
     this.name = name;
@@ -162,7 +162,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   }
 
   @Override
-  public void update(final SeriesDTO update) {
+  public void update(final SeriesModelable update) {
     setName(update.getName());
     setCategory(update.getCategory());
     setIsRelease(update.getIsRelease());
