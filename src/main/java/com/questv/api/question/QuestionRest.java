@@ -39,7 +39,7 @@ public class QuestionRest implements Restable<QuestionDTO> {
     try {
       final List<QuestionDTO> result = new ArrayList<>();
 
-      if (recursive) {
+      if (recursive != null && recursive) {
         result.addAll(this.questionService.findAllByParentRecursive(parentId));
       } else {
         result.addAll(this.questionService.findAllByParent(parentId));
