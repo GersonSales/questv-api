@@ -4,7 +4,6 @@ import com.questv.api.contracts.ObjectService;
 import com.questv.api.exception.IdNotFoundException;
 import com.questv.api.series.SeriesModel;
 import com.questv.api.series.SeriesRepository;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -71,7 +70,6 @@ public class SeasonService implements ObjectService<SeasonDTO> {
     return findModelById(seasonId).convert();
   }
 
-  @NotNull
   private SeasonModel findModelById(final Long seasonId) {
     final Optional<SeasonModel> foundSeason = this.seasonRepository.findById(seasonId);
     if (foundSeason.isPresent()) {

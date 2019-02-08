@@ -35,4 +35,8 @@ public class Answer {
   public boolean isCorrect() {
     return isCorrect;
   }
+
+  public Long getId() {
+    return id;
+  }
 }

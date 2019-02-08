@@ -96,15 +96,17 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
 
   @Override
   public QuestionDTO convert() {
-    final Map<String, Boolean> answersMap = new HashMap<>();
+    final Map<Long, Map<String, Boolean>> answerIdsMap = new HashMap<>();
     for (final Answer answer : this.answerSet) {
+      final Map<String, Boolean> answersMap = new HashMap<>();
       answersMap.put(answer.getValue(), answer.isCorrect());
+      answerIdsMap.put(answer.getId(), answersMap);
     }
 
     final Integer difficult = getDifficult().getDifficult();
     final Integer reward = getDifficult().getReward();
 
-    return new QuestionDTO(getId(), getOwnerId(), getDescription(), difficult, reward, answersMap);
+    return new QuestionDTO(getId(), getOwnerId(), getDescription(), difficult, reward, answerIdsMap);
   }
 
   @Override

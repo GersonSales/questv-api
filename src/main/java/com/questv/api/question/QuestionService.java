@@ -9,7 +9,6 @@ import com.questv.api.season.SeasonModel;
 import com.questv.api.season.SeasonRepository;
 import com.questv.api.series.SeriesModel;
 import com.questv.api.series.SeriesRepository;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -57,7 +56,6 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     }
   }
 
-  @NotNull
   private Questionable findQuestionableById(final Long questionableId) {
     Optional<SeriesModel> seriesById = this.seriesRepository.findById(questionableId);
     if (seriesById.isPresent()) {
@@ -96,7 +94,6 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     return findModelById(questionId).convert();
   }
 
-  @NotNull
   private QuestionModel findModelById(final Long questionId) {
     final Optional<QuestionModel> foundQuestion = this.questionRepository.findById(questionId);
     if (foundQuestion.isPresent()) {
@@ -127,7 +124,7 @@ public class QuestionService implements ObjectService<QuestionDTO> {
   }
 
   private void detachQuestionFromQuestionable(final QuestionModel questionModel,
-                                              @NotNull final Questionable questionable) {
+                                              final Questionable questionable) {
     questionable.detachQuestion(questionModel);
     saveQuestionable(questionable);
   }

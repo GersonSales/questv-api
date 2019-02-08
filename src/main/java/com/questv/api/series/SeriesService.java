@@ -4,7 +4,6 @@ import com.questv.api.contracts.ObjectService;
 import com.questv.api.exception.IdNotFoundException;
 import com.questv.api.file.FileStorageServiceImpl;
 import com.questv.api.file.UploadedFileResponse;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,7 +46,6 @@ public class SeriesService implements ObjectService<SeriesDTO> {
     return findModelById(seriesId).convert();
   }
 
-  @NotNull
   private SeriesModel findModelById(final Long seriesId) {
     final Optional<SeriesModel> seriesModel = this.seriesRepository.findById(seriesId);
     if (seriesModel.isPresent()) {

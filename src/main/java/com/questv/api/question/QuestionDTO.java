@@ -26,7 +26,7 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
   private Integer reward;
 
   @NotNull
-  private Map<String, Boolean> answers;
+  private Map<Long, Map<String, Boolean>> _answers;
 
 
   /*default*/ QuestionDTO() {
@@ -37,14 +37,14 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
                           final String description,
                           final Integer difficult,
                           final Integer reward,
-                          final Map<String, Boolean> answers) {
+                          final Map<Long, Map<String, Boolean>> _answers) {
 
     this.id = id;
     this.ownerId = ownerId;
     this.description = description;
     this.difficult = difficult;
     this.reward = reward;
-    this.answers = answers;
+    this._answers = _answers;
   }
 
   public Long getId() {
@@ -71,12 +71,12 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
     this.description = description;
   }
 
-  public Map<String, Boolean> getAnswers() {
-    return answers;
+  public Map<Long, Map<String, Boolean>> get_answers() {
+    return _answers;
   }
 
-  public void setAnswers(Map<String, Boolean> answers) {
-    this.answers = answers;
+  public void set_answers(final Map<Long, Map<String, Boolean>> _answers) {
+    this._answers = _answers;
   }
 
   public Integer getDifficult() {
@@ -98,19 +98,21 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
   @Override
   public QuestionModel convert() {
     final Set<Answer> answerSet = new HashSet<>();
-    for (final String answer : this.answers.keySet()) {
-      answerSet.add(new Answer(answer, this.answers.get(answer)));
+    for (final Long id : _answers.keySet()) {
+      for (final String answer : this._answers.get(id).keySet()) {
+        answerSet.add(new Answer(answer, this._answers.get(id).get(answer)));
+      }
     }
 
 
-    final Difficult difficult =  new Difficult(getDifficult());
+    final Difficult difficult = new Difficult(getDifficult());
     return new QuestionModel(getId(), getOwnerId(), getDescription(), difficult, answerSet);
   }
 
   @Override
   public void update(final QuestionDTO update) {
     setDescription(update.getDescription());
-    setAnswers(update.getAnswers());
+    set_answers(update.get_answers());
     setOwnerId(update.getOwnerId());
     setDifficult(update.getDifficult());
   }
