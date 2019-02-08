@@ -1,6 +1,7 @@
 package com.questv.api.user;
 
 
+import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.contracts.ObjectService;
 import com.questv.api.contracts.Restable;
 import org.springframework.http.HttpStatus;
@@ -44,5 +45,12 @@ public class UserRest implements Restable<UserDTO> {
   @DeleteMapping("/users/{userId}")
   public void delete(@PathVariable final Long userId) {
     this.userService.delete(userId);
+  }
+
+  @PostMapping("/users/{userId}/answeredQuestion")
+  public void postAnsweredQuestion(@PathVariable final Long userId,
+                                   @RequestBody final AnsweredQuestionModel answeredQuestionModel) {
+    ((UserService)this.userService).attachAnsweredModel(userId, answeredQuestionModel);
+
   }
 }

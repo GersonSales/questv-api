@@ -1,7 +1,6 @@
 package com.questv.api.user;
 
 import com.questv.api.contracts.Convertible;
-import com.questv.api.question.AnsweredQuestion;
 import com.questv.api.user.properties.Name;
 import com.questv.api.contracts.Updatable;
 
@@ -9,9 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
 

@@ -1,4 +1,4 @@
-package com.questv.api.question;
+package com.questv.api.answered.question;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Embeddable
-public class AnsweredQuestion {
+public class AnsweredQuestionModel {
 
   @Id
   @NotNull
@@ -19,10 +19,10 @@ public class AnsweredQuestion {
   @NotNull
   private Long answerId;
 
-  public AnsweredQuestion() {
+  public AnsweredQuestionModel() {
   }
 
-  public AnsweredQuestion(final Long questionId, final Long answerId) {
+  public AnsweredQuestionModel(final Long questionId, final Long answerId) {
     this.questionId = questionId;
     this.answerId = answerId;
   }
@@ -54,15 +54,14 @@ public class AnsweredQuestion {
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
-    if (!(o instanceof AnsweredQuestion)) return false;
-    AnsweredQuestion that = (AnsweredQuestion) o;
-    return Objects.equals(getId(), that.getId()) &&
-        Objects.equals(getQuestionId(), that.getQuestionId()) &&
-        Objects.equals(getAnswerId(), that.getAnswerId());
+    if (!(o instanceof AnsweredQuestionModel)) return false;
+    AnsweredQuestionModel that = (AnsweredQuestionModel) o;
+    return getQuestionId().equals(that.getQuestionId()) &&
+        getAnswerId().equals(that.getAnswerId());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(getId(), getQuestionId(), getAnswerId());
+    return Objects.hash(getQuestionId(), getAnswerId());
   }
 }

@@ -1,5 +1,7 @@
 package com.questv.api.user;
 
+import com.questv.api.answered.question.AnsweredQuestionModel;
+import com.questv.api.answered.question.AnsweredQuestionService;
 import com.questv.api.contracts.ObjectService;
 import com.questv.api.exception.IdNotFoundException;
 import com.questv.api.series.SeriesModel;
@@ -14,10 +16,14 @@ import java.util.stream.Collectors;
 public class UserService implements ObjectService<UserDTO> {
 
   private final UserRepository userRepository;
+  private final AnsweredQuestionService answeredQuestionService;
 
-  public UserService(final UserRepository userRepository) {
+  public UserService(final UserRepository userRepository,
+                     final AnsweredQuestionService answeredQuestionService) {
     this.userRepository = userRepository;
+    this.answeredQuestionService = answeredQuestionService;
     assert this.userRepository != null;
+    assert this.answeredQuestionService != null;
   }
 
   @Override
@@ -76,5 +82,22 @@ public class UserService implements ObjectService<UserDTO> {
   @Override
   public List<UserDTO> findAllByParent(Long seriesId) {
     return new ArrayList<>();
+  }
+
+  /*default*/ void attachAnsweredModel(final Long userId,
+                                  final AnsweredQuestionModel answeredQuestionModel) {
+    final AnsweredQuestionModel foundAnsweredQuestionModel
+        = this.answeredQuestionService.find(answeredQuestionModel);
+    final UserModel foundUser = findModelById(userId);
+    if (foundAnsweredQuestionModel != null) {
+      foundUser.attachAnsweredQuestion(foundAnsweredQuestionModel);
+      this.userRepository.save(foundUser);
+
+    } else {
+      final AnsweredQuestionModel savedAnsweredQuestionModel
+          = this.answeredQuestionService.create(answeredQuestionModel);
+      foundUser.attachAnsweredQuestion(savedAnsweredQuestionModel);
+      this.userRepository.save(foundUser);
+    }
   }
 }

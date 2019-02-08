@@ -2,9 +2,8 @@ package com.questv.api.user;
 
 import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Updatable;
-import com.questv.api.question.AnsweredQuestion;
+import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.user.properties.Name;
-import org.modelmapper.ModelMapper;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -44,10 +43,10 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
   @Embedded
   @ElementCollection
   @OneToMany(cascade = CascadeType.ALL)
-  private Set<AnsweredQuestion> answeredQuestions;
+  private Set<AnsweredQuestionModel> answeredQuestionModels;
 
   public UserModel() {
-    this.answeredQuestions = new HashSet<>();
+    this.answeredQuestionModels = new HashSet<>();
   }
 
   public UserModel(final Name name, final String email, final String password) {
@@ -101,8 +100,8 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
   @Override
   public UserDTO convert() {
     final Map<Long, Long> answeredQuestions = new HashMap<>();
-    for (final AnsweredQuestion answeredQuestion : this.answeredQuestions) {
-      answeredQuestions.put(answeredQuestion.getQuestionId(), answeredQuestion.getAnswerId());
+    for (final AnsweredQuestionModel answeredQuestionModel : this.answeredQuestionModels) {
+      answeredQuestions.put(answeredQuestionModel.getQuestionId(), answeredQuestionModel.getAnswerId());
     }
 
     return new UserDTO(getId(), getFirstName(), getLastName(), getEmail(), getPassword(), answeredQuestions);
@@ -114,6 +113,11 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
     setLastName(model.getLastName());
     setEmail(model.getEmail());
     setPassword(model.getPassword());
+  }
+
+
+  /*default*/ void attachAnsweredQuestion(final AnsweredQuestionModel answeredQuestionModel) {
+    this.answeredQuestionModels.add(answeredQuestionModel);
   }
 
 }
