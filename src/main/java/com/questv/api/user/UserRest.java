@@ -2,47 +2,47 @@ package com.questv.api.user;
 
 
 import com.questv.api.contracts.ObjectService;
+import com.questv.api.contracts.Restable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping()
-public class UserRest {
+public class UserRest implements Restable<UserDTO> {
 
-    private final ObjectService<UserDTO> userService;
+  private final ObjectService<UserDTO> userService;
 
-    public UserRest(final ObjectService<UserDTO> userService) {
-        this.userService = userService;
-        assert userService != null;
-    }
+  public UserRest(final ObjectService<UserDTO> userService) {
+    this.userService = userService;
+    assert userService != null;
+  }
 
-    @PostMapping("/user")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    @ResponseBody
-    public UserDTO postUser(@Valid @RequestBody final UserDTO userDTO) {
-        return this.userService.create(userDTO);
-    }
+  @PostMapping("/users")
+  @ResponseBody
+  public ResponseEntity<UserDTO> post(@Valid @RequestBody final UserDTO userDTO) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.create(userDTO));
+  }
 
-    @GetMapping("/user")
-    public List<UserDTO> getUsers() {
-        return this.userService.findAll();
-    }
+  @GetMapping("/users")
+  public ResponseEntity<List<UserDTO>> get() {
+    return ResponseEntity.ok().body(this.userService.findAll());
+  }
 
-    @GetMapping("/user/{userId}")
-    public UserDTO getUserById(@PathVariable final Long userId) {
-        return this.userService.findById(userId);
-    }
+  @GetMapping("/users/{userId}")
+  public ResponseEntity<UserDTO> get(@PathVariable final Long userId) {
+    return ResponseEntity.ok().body(this.userService.findById(userId));
+  }
 
-    @PutMapping("/user/{userId}")
-    public void putUser(@PathVariable final Long userId, @RequestBody final UserDTO userDTO) {
-        this.userService.update(userDTO);
-    }
+  @PutMapping("/users/{userId}")
+  public void put(@PathVariable final Long userId, @RequestBody final UserDTO userDTO) {
+    this.userService.update(userDTO);
+  }
 
-    @DeleteMapping("/user/{userId}")
-    public void deleteUser(@PathVariable final Long userId) {
-        this.userService.delete(userId);
-    }
+  @DeleteMapping("/users/{userId}")
+  public void delete(@PathVariable final Long userId) {
+    this.userService.delete(userId);
+  }
 }

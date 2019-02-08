@@ -1,101 +1,120 @@
 package com.questv.api.user;
 
 import com.questv.api.contracts.Convertible;
+import com.questv.api.question.AnsweredQuestion;
 import com.questv.api.user.properties.Name;
 import com.questv.api.contracts.Updatable;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
 
 
-    private Long id;
+  private Long id;
 
-    @NotEmpty
-    @Size(min = 3, max = 256, message = "First name should have 3 characters at least.")
-    private String firstName;
+  @NotEmpty
+  @Size(min = 3, max = 256, message = "First name should have 3 characters at least.")
+  private String firstName;
 
-    @NotEmpty
-    @Size(min = 3, max = 256, message = "Last name should have 3 characters at least.")
-    private String lastName;
+  @NotEmpty
+  @Size(min = 3, max = 256, message = "Last name should have 3 characters at least.")
+  private String lastName;
 
-    @NotEmpty
-    @Size(min = 3, max = 256, message = "Email must have 3 characters at least.")
-    @Email
-    private String email;
+  @NotEmpty
+  @Size(min = 3, max = 256, message = "Email must have 3 characters at least.")
+  @Email
+  private String email;
 
-    @NotEmpty
-    @Size(min = 3, max = 256, message = "Password must have 3 characters at least.")
-    private String password;
+  @NotEmpty
+  @Size(min = 3, max = 256, message = "Password must have 3 characters at least.")
+  private String password;
 
+  private Map<Long, Long> answeredQuestions;
 
-    public UserDTO() {
-    }
+  public UserDTO() {
+    this.answeredQuestions = new HashMap<>();
+  }
 
-    public String getFirstName() {
-        return firstName;
-    }
+  public UserDTO(final Long id,
+                 final String firstName,
+                 final String lastName,
+                 final String email,
+                 final String password,
+                 final Map<Long, Long> answeredQuestions) {
+    this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.password = password;
+    this.answeredQuestions = answeredQuestions;
+  }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+  public String getFirstName() {
+    return firstName;
+  }
 
-    public String getLastName() {
-        return lastName;
-    }
+  public void setFirstName(String firstName) {
+    this.firstName = firstName;
+  }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+  public String getLastName() {
+    return lastName;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    @Override
-    public UserModel convert() {
-        final Name name = new Name(getFirstName(), getLastName());
-        return new UserModel(name, getEmail(), getPassword());
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    @Override
-    public void update(final UserModel model) {
-        setFirstName(model.getFirstName());
-        setLastName(model.getLastName());
-        setEmail(model.getEmail());
-        setPassword(model.getPassword());
-    }
+  public Map<Long, Long> getAnsweredQuestions() {
+    return answeredQuestions;
+  }
 
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
+  public void setAnsweredQuestions(Map<Long, Long> answeredQuestions) {
+    this.answeredQuestions = answeredQuestions;
+  }
+
+  @Override
+  public UserModel convert() {
+
+    final Name name = new Name(getFirstName(), getLastName());
+    return new UserModel(name, getEmail(), getPassword());
+  }
+
+  @Override
+  public void update(final UserModel model) {
+    setFirstName(model.getFirstName());
+    setLastName(model.getLastName());
+    setEmail(model.getEmail());
+    setPassword(model.getPassword());
+  }
 }
