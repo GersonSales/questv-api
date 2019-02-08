@@ -20,7 +20,7 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
   }
 
   @Override
-  @PostMapping("/episode")
+  @PostMapping("/episodes")
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity<EpisodeDTO> post(@Valid @RequestBody EpisodeDTO episodeDTO) {
     try {
@@ -30,7 +30,7 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
     }
   }
 
-  @GetMapping("/season/{seasonId}/episode")
+  @GetMapping("/seasons/{seasonId}/episodes")
   public ResponseEntity<List<EpisodeDTO>> getAllBySeason(@PathVariable final Long seasonId) {
     try {
       return ResponseEntity.ok().body(this.episodeService.findAllByParent(seasonId));
@@ -40,13 +40,13 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
   }
 
   @Override
-  @GetMapping("/episode")
+  @GetMapping("/episodes")
   public ResponseEntity<List<EpisodeDTO>> get() {
     return ResponseEntity.ok().body(this.episodeService.findAll());
   }
 
   @Override
-  @GetMapping("/episode/{episodeId}")
+  @GetMapping("/episodes/{episodeId}")
   public ResponseEntity<EpisodeDTO> get(@PathVariable final Long episodeId) {
     try {
       return ResponseEntity.ok().body(this.episodeService.findById(episodeId));
@@ -56,14 +56,13 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
   }
 
   @Override
-  @DeleteMapping("/episode/{episodeId}")
+  @DeleteMapping("/episodes/{episodeId}")
   public void delete(@PathVariable Long episodeId) {
     this.episodeService.delete(episodeId);
-
   }
 
   @Override
-  @PutMapping("/episode/{episodeId}")
+  @PutMapping("/episodes/{episodeId}")
   public void put(@PathVariable("episodeId") final Long episodeId, final EpisodeDTO episodeDTO) {
     episodeDTO.setId(episodeId);
     this.episodeService.update(episodeDTO);

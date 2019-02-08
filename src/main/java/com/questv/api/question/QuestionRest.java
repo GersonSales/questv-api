@@ -22,7 +22,7 @@ public class QuestionRest implements Restable<QuestionDTO> {
   }
 
   @Override
-  @PostMapping("/question")
+  @PostMapping("/questions")
   @ResponseStatus(value = HttpStatus.CREATED)
   public ResponseEntity<QuestionDTO> post(@Valid @RequestBody final QuestionDTO questionDTO) {
     try {
@@ -33,7 +33,7 @@ public class QuestionRest implements Restable<QuestionDTO> {
     }
   }
 
-  @GetMapping("/questionable/{parentId}/question")
+  @GetMapping("/questionables/{parentId}/questions")
   public ResponseEntity<List<QuestionDTO>> getAllByParent(@PathVariable final Long parentId,
                                                           @RequestParam(required = false) final Boolean recursive) {
     try {
@@ -52,13 +52,13 @@ public class QuestionRest implements Restable<QuestionDTO> {
   }
 
   @Override
-  @GetMapping("/question")
+  @GetMapping("/questions")
   public ResponseEntity<List<QuestionDTO>> get() {
     return ResponseEntity.ok(this.questionService.findAll());
   }
 
   @Override
-  @GetMapping("/question/{questionId}")
+  @GetMapping("/questions/{questionId}")
   public ResponseEntity<QuestionDTO> get(@PathVariable final Long questionId) {
     try {
       return ResponseEntity.ok(this.questionService.findById(questionId));
@@ -68,13 +68,13 @@ public class QuestionRest implements Restable<QuestionDTO> {
   }
 
   @Override
-  @DeleteMapping("/question/{questionId}")
+  @DeleteMapping("/questions/{questionId}")
   public void delete(@PathVariable final Long questionId) {
     this.questionService.delete(questionId);
   }
 
   @Override
-  @PutMapping("/question/{questionId}")
+  @PutMapping("/questions/{questionId}")
   public void put(@PathVariable("questionId") final Long questionId, @Valid @RequestBody final QuestionDTO questionDTO) {
     questionDTO.setId(questionId);
     this.questionService.update(questionDTO);
