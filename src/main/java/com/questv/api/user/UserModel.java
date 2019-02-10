@@ -4,6 +4,7 @@ import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Updatable;
 import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.user.properties.Name;
+import org.hibernate.annotations.ManyToAny;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -40,9 +41,11 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
   @Column(name = "password", nullable = false)
   private String password;
 
-  @Embedded
-  @ElementCollection
-  @OneToMany(cascade = CascadeType.ALL)
+  @ManyToMany
+  @JoinTable(
+      name = "user_has_answered_question",
+      joinColumns = {@JoinColumn(name = "user_id")},
+      inverseJoinColumns = {@JoinColumn(name = "answered_question_id")})
   private Set<AnsweredQuestionModel> answeredQuestionModels;
 
   public UserModel() {

@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
-@Embeddable
+@Table(name = "answered_question_table")
 public class AnsweredQuestionModel {
 
   @Id
