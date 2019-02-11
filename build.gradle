@@ -38,6 +38,7 @@ dependencies {
 //    ModelMapper
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '0.7.5'
 
-
+//    JWT
+    implementation("com.auth0:java-jwt:3.4.0")
 
 }
