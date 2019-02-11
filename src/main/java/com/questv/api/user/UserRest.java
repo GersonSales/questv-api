@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequestMapping("/users")
 public class UserRest implements Restable<UserDTO> {
 
   private final ObjectService<UserDTO> userService;
@@ -21,33 +22,33 @@ public class UserRest implements Restable<UserDTO> {
     assert userService != null;
   }
 
-  @PostMapping("/users")
+  @PostMapping("/sign-up")
   @ResponseBody
   public ResponseEntity<UserDTO> post(@Valid @RequestBody final UserDTO userDTO) {
     return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.create(userDTO));
   }
 
-  @GetMapping("/users")
+  @GetMapping
   public ResponseEntity<List<UserDTO>> get() {
     return ResponseEntity.ok().body(this.userService.findAll());
   }
 
-  @GetMapping("/users/{userId}")
+  @GetMapping("/{userId}")
   public ResponseEntity<UserDTO> get(@PathVariable final Long userId) {
     return ResponseEntity.ok().body(this.userService.findById(userId));
   }
 
-  @PutMapping("/users/{userId}")
+  @PutMapping("/{userId}")
   public void put(@PathVariable final Long userId, @RequestBody final UserDTO userDTO) {
     this.userService.update(userDTO);
   }
 
-  @DeleteMapping("/users/{userId}")
+  @DeleteMapping("/{userId}")
   public void delete(@PathVariable final Long userId) {
     this.userService.delete(userId);
   }
 
-  @PostMapping("/users/{userId}/answeredQuestion")
+  @PostMapping("/{userId}/answeredQuestion")
   public void postAnsweredQuestion(@PathVariable final Long userId,
                                    @RequestBody final AnsweredQuestionModel answeredQuestionModel) {
     ((UserService)this.userService).attachAnsweredModel(userId, answeredQuestionModel);

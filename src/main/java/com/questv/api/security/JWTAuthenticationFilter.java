@@ -25,7 +25,7 @@ import static com.questv.api.security.SecurityConstants.*;
 public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
   private AuthenticationManager authenticationManager;
 
-  public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
+  /*default*/ JWTAuthenticationFilter(final AuthenticationManager authenticationManager) {
     this.authenticationManager = authenticationManager;
   }
 
@@ -38,7 +38,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
       return authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(
-              creds.getEmail(),
+              creds.getUsername(),
               creds.getPassword(),
               new ArrayList<>())
       );

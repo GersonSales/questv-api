@@ -7,6 +7,7 @@ import com.questv.api.user.properties.Name;
 import org.hibernate.annotations.ManyToAny;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import javax.management.relation.Role;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -31,6 +32,10 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
   @Embedded
   private Name name;
 
+  @NotNull
+  @NotEmpty
+  private String username;
+
   @NotEmpty
   @NotNull
   @Email
@@ -53,9 +58,13 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
     this.answeredQuestionModels = new HashSet<>();
   }
 
-  public UserModel(final Name name, final String email, final String password) {
+  public UserModel(final Name name,
+                   final String username,
+                   final String email,
+                   final String password) {
     this();
     this.name = name;
+    this.username = username;
     this.email = email;
     this.password = password;
   }
@@ -101,6 +110,14 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
     this.password = password;
   }
 
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
   @Override
   public UserDTO convert() {
     final Map<Long, Long> answeredQuestions = new HashMap<>();
@@ -108,13 +125,21 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
       answeredQuestions.put(answeredQuestionModel.getQuestionId(), answeredQuestionModel.getAnswerId());
     }
 
-    return new UserDTO(getId(), getFirstName(), getLastName(), getEmail(), getPassword(), answeredQuestions);
+    return new UserDTO(
+        getId(),
+        getFirstName(),
+        getLastName(),
+        getUsername(),
+        getEmail(),
+        getPassword(),
+        answeredQuestions);
   }
 
   @Override
   public void update(final UserModel model) {
     setFirstName(model.getFirstName());
     setLastName(model.getLastName());
+    setUsername(model.getUsername());
     setEmail(model.getEmail());
     setPassword(model.getPassword());
   }

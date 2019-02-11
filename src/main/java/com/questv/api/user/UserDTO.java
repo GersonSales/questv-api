@@ -24,6 +24,10 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
   private String lastName;
 
   @NotEmpty
+  @Size(min = 3, max = 256, message = "Last name should have 3 characters at least.")
+  private String username;
+
+  @NotEmpty
   @Size(min = 3, max = 256, message = "Email must have 3 characters at least.")
   @Email
   private String email;
@@ -41,12 +45,14 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
   public UserDTO(final Long id,
                  final String firstName,
                  final String lastName,
+                 final String username,
                  final String email,
                  final String password,
                  final Map<Long, Long> answeredQuestions) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
+    this.username = username;
     this.email = email;
     this.password = password;
     this.answeredQuestions = answeredQuestions;
@@ -66,6 +72,14 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
 
   public void setLastName(String lastName) {
     this.lastName = lastName;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
   }
 
   public String getPassword() {
@@ -104,12 +118,13 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
   public UserModel convert() {
 
     final Name name = new Name(getFirstName(), getLastName());
-    return new UserModel(name, getEmail(), getPassword());
+    return new UserModel(name, getUsername(), getEmail(), getPassword());
   }
 
   @Override
   public void update(final UserModel model) {
     setFirstName(model.getFirstName());
+    setUsername(model.getUsername());
     setLastName(model.getLastName());
     setEmail(model.getEmail());
     setPassword(model.getPassword());
