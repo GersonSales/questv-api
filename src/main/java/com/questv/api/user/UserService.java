@@ -5,6 +5,7 @@ import com.questv.api.answered.question.AnsweredQuestionService;
 import com.questv.api.contracts.ObjectService;
 import com.questv.api.exception.IdNotFoundException;
 import com.questv.api.series.SeriesModel;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,17 +18,22 @@ public class UserService implements ObjectService<UserDTO> {
 
   private final UserRepository userRepository;
   private final AnsweredQuestionService answeredQuestionService;
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
   public UserService(final UserRepository userRepository,
-                     final AnsweredQuestionService answeredQuestionService) {
+                     final AnsweredQuestionService answeredQuestionService,
+                     final BCryptPasswordEncoder bCryptPasswordEncoder) {
     this.userRepository = userRepository;
     this.answeredQuestionService = answeredQuestionService;
+    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     assert this.userRepository != null;
     assert this.answeredQuestionService != null;
+    assert this.bCryptPasswordEncoder != null;
   }
 
   @Override
   public UserDTO create(final UserDTO model) {
+    model.setPassword(bCryptPasswordEncoder.encode(model.getPassword()));
     return save(model.convert()).convert();
   }
 
@@ -85,7 +91,7 @@ public class UserService implements ObjectService<UserDTO> {
   }
 
   /*default*/ void attachAnsweredModel(final Long userId,
-                                  final AnsweredQuestionModel answeredQuestionModel) {
+                                       final AnsweredQuestionModel answeredQuestionModel) {
     final AnsweredQuestionModel foundAnsweredQuestionModel
         = this.answeredQuestionService.find(answeredQuestionModel);
     final UserModel foundUser = findModelById(userId);
