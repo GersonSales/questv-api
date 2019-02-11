@@ -5,6 +5,7 @@ import com.questv.api.contracts.Updatable;
 import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.user.properties.Name;
 import org.hibernate.annotations.ManyToAny;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;

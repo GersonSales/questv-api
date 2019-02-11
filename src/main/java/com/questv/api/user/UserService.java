@@ -4,7 +4,12 @@ import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.answered.question.AnsweredQuestionService;
 import com.questv.api.contracts.ObjectService;
 import com.questv.api.exception.IdNotFoundException;
+import com.questv.api.exception.UserNotFoundException;
 import com.questv.api.series.SeriesModel;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +19,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service(value = "userService")
-public class UserService implements ObjectService<UserDTO> {
+public class UserService implements ObjectService<UserDTO>, UserDetailsService {
 
   private final UserRepository userRepository;
   private final AnsweredQuestionService answeredQuestionService;
@@ -105,5 +110,14 @@ public class UserService implements ObjectService<UserDTO> {
       foundUser.attachAnsweredQuestion(savedAnsweredQuestionModel);
       this.userRepository.save(foundUser);
     }
+  }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    UserModel byEmail = this.userRepository.findByEmail(username);
+    if (byEmail != null) {
+      return new User(byEmail.getEmail(), byEmail.getPassword(), new ArrayList<>());
+    }
+    throw new UserNotFoundException();
   }
 }

@@ -2,6 +2,7 @@ package com.questv.api.security;
 
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.questv.api.user.UserModel;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,15 +30,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   }
 
   @Override
-  public Authentication attemptAuthentication(HttpServletRequest req,
-                                              HttpServletResponse res) throws AuthenticationException {
+  public Authentication attemptAuthentication(final HttpServletRequest req,
+                                              final HttpServletResponse res) throws AuthenticationException {
     try {
-      ApplicationUser creds = new ObjectMapper()
-          .readValue(req.getInputStream(), ApplicationUser.class);
+      UserModel creds = new ObjectMapper()
+          .readValue(req.getInputStream(), UserModel.class);
 
       return authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(
-              creds.getUsername(),
+              creds.getEmail(),
               creds.getPassword(),
               new ArrayList<>())
       );
@@ -47,10 +48,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   }
 
   @Override
-  protected void successfulAuthentication(HttpServletRequest req,
-                                          HttpServletResponse res,
-                                          FilterChain chain,
-                                          Authentication auth) throws IOException, ServletException {
+  protected void successfulAuthentication(final HttpServletRequest req,
+                                          final HttpServletResponse res,
+                                          final FilterChain chain,
+                                          final Authentication auth) throws IOException, ServletException {
 
     String token = JWT.create()
         .withSubject(((User) auth.getPrincipal()).getUsername())
