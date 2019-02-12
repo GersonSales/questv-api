@@ -5,6 +5,8 @@ import com.questv.api.contracts.Updatable;
 import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.user.properties.Name;
 import org.hibernate.annotations.ManyToAny;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.management.relation.Role;
@@ -13,10 +15,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "user_table", schema = "questv_schema")
@@ -27,6 +26,9 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
   @GeneratedValue(strategy = GenerationType.AUTO)
   @Column(name = "id")
   private Long id;
+
+  @NotNull
+  private UUID uuid;
 
   @NotNull
   @Embedded
@@ -55,6 +57,7 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
   private Set<AnsweredQuestionModel> answeredQuestionModels;
 
   public UserModel() {
+    this.uuid = UUID.randomUUID();
     this.answeredQuestionModels = new HashSet<>();
   }
 
@@ -75,6 +78,14 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getUuid() {
+    return uuid.toString();
+  }
+
+  public void setUuid(UUID uuid) {
+    this.uuid = uuid;
   }
 
   public String getFirstName() {
@@ -126,7 +137,7 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
     }
 
     return new UserDTO(
-        getId(),
+        getUuid(),
         getFirstName(),
         getLastName(),
         getUsername(),
@@ -148,5 +159,7 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
   /*default*/ void attachAnsweredQuestion(final AnsweredQuestionModel answeredQuestionModel) {
     this.answeredQuestionModels.add(answeredQuestionModel);
   }
+
+
 
 }

@@ -13,7 +13,7 @@ import java.util.Map;
 public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
 
 
-  private Long id;
+  private String id;
 
   @NotEmpty
   @Size(min = 3, max = 256, message = "First name should have 3 characters at least.")
@@ -42,7 +42,7 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
     this.answeredQuestions = new HashMap<>();
   }
 
-  public UserDTO(final Long id,
+  public UserDTO(final String id,
                  final String firstName,
                  final String lastName,
                  final String username,
@@ -98,11 +98,11 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
     this.email = email;
   }
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
