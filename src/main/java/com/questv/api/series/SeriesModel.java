@@ -6,6 +6,7 @@ import com.questv.api.contracts.Questionable;
 import com.questv.api.question.QuestionModel;
 import com.questv.api.season.SeasonModel;
 import com.questv.api.contracts.Updatable;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -19,9 +20,9 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   @Id
   @NotNull
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "id")
-  private Long id;
+  @GeneratedValue(generator="system-uuid")
+  @GenericGenerator(name="system-uuid", strategy = "uuid")
+  private String id;
 
   @NotNull
   private String name;
@@ -65,7 +66,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     setQuestions(new HashSet<>());
   }
 
-  /*default*/ SeriesModel(final Long id,
+  /*default*/ SeriesModel(final String id,
                           final String name,
                           final String abbreviation,
                           final String category,
@@ -88,12 +89,12 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   @Override
   public SeriesDTO convert() {
-    final Set<Long> seasonsIds = this.seasons
+    final Set<String> seasonsIds = this.seasons
         .stream()
         .map(SeasonModel::getId)
         .collect(Collectors.toSet());
 
-    final Set<Long> questionsIds = this.questions
+    final Set<String> questionsIds = this.questions
         .stream()
         .map(QuestionModel::getId)
         .collect(Collectors.toSet());
@@ -113,11 +114,11 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     setPromoImageUrl(update.getPromoImageUrl());
   }
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -189,7 +190,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     this.seasons.add(seasonModel);
   }
 
-  public void removeSeasonById(final Long seasonId) {
+  public void removeSeasonById(final String seasonId) {
     for (final SeasonModel seasonModel : this.seasons) {
       if (seasonModel.getId().equals(seasonId)) {
         this.seasons.remove(seasonModel);

@@ -34,24 +34,24 @@ public class UserRest implements Restable<UserDTO> {
   }
 
   @GetMapping("/{userId}")
-  public ResponseEntity<UserDTO> get(@PathVariable final Long userId) {
+  public ResponseEntity<UserDTO> get(@PathVariable final String userId) {
     return ResponseEntity.ok().body(this.userService.findById(userId));
   }
 
   @PutMapping("/{userId}")
-  public void put(@PathVariable final Long userId, @RequestBody final UserDTO userDTO) {
+  public void put(@PathVariable final String userId, @RequestBody final UserDTO userDTO) {
     this.userService.update(userDTO);
   }
 
   @DeleteMapping("/{userId}")
-  public void delete(@PathVariable final Long userId) {
+  public void delete(@PathVariable final String userId) {
     this.userService.delete(userId);
   }
 
   @PostMapping("/{userId}/answeredQuestion")
-  public void postAnsweredQuestion(@PathVariable final Long userId,
+  public void postAnsweredQuestion(@PathVariable final String userId,
                                    @RequestBody final AnsweredQuestionModel answeredQuestionModel) {
-    ((UserService)this.userService).attachAnsweredModel(userId, answeredQuestionModel);
+    ((UserService) this.userService).attachAnsweredModel(userId, answeredQuestionModel);
 
   }
 }

@@ -11,10 +11,10 @@ import java.util.Set;
 public class EpisodeDTO implements Convertible<EpisodeModel> {
 
 
-  private Long id;
+  private String id;
 
   @NotNull
-  private Long seasonId;
+  private String seasonId;
 
   @NotEmpty
   @Size(min = 3, max = 256, message = "Episode name should have 3 characters at least.")
@@ -23,17 +23,17 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
   @NotNull
   private Integer number;
 
-  private Set<Long> questions;
+  private Set<String> questions;
 
   /*default*/ EpisodeDTO() {
     this.questions = new HashSet<>();
   }
 
-  /*default*/ EpisodeDTO(final Long id,
-                         final Long seasonId,
+  /*default*/ EpisodeDTO(final String id,
+                         final String seasonId,
                          final String name,
                          final Integer number,
-                         final Set<Long> questions) {
+                         final Set<String> questions) {
     this.id = id;
     this.seasonId = seasonId;
     this.name = name;
@@ -47,19 +47,19 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
     return new EpisodeModel(getId(), getSeasonId(), getName(), getNumber());
   }
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public Long getSeasonId() {
+  public String getSeasonId() {
     return seasonId;
   }
 
-  public void setSeasonId(Long seasonId) {
+  public void setSeasonId(String seasonId) {
     this.seasonId = seasonId;
   }
 
@@ -79,11 +79,11 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
     this.number = number;
   }
 
-  public Set<Long> getQuestions() {
+  public Set<String> getQuestions() {
     return questions;
   }
 
-  public void setQuestions(Set<Long> questions) {
+  public void setQuestions(Set<String> questions) {
     this.questions = questions;
   }
 }

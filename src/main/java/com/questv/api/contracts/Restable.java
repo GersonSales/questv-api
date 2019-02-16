@@ -8,9 +8,9 @@ public interface Restable<T> {
 
   ResponseEntity<T> post(final T t);
   ResponseEntity<List<T>> get();
-  ResponseEntity<T> get(final Long tId);
-  void delete(final Long tId);
-  void put(final Long id, final T t);
+  ResponseEntity<T> get(final String tId);
+  void delete(final String tId);
+  void put(final String id, final T t);
 
 
 }

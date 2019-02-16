@@ -10,11 +10,11 @@ public interface ObjectService<T> {
 
     List<T> findAll();
 
-    T findById(final Long tId);
+    T findById(final String tId);
 
     void update(final T t);
 
-    void delete(final Long tId);
+    void delete(final String tId);
 
-    List<T> findAllByParent(final Long seriesId);
+    List<T> findAllByParent(final String parentId);
 }

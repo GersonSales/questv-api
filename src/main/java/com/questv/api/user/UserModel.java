@@ -4,6 +4,7 @@ import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Updatable;
 import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.user.properties.Name;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.ManyToAny;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,12 +24,10 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
 
   @Id
   @NotNull
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(generator = "system-uuid")
+  @GenericGenerator(name = "system-uuid",strategy = "uuid")
   @Column(name = "id")
-  private Long id;
-
-  @NotNull
-  private UUID uuid;
+  private String id;
 
   @NotNull
   @Embedded
@@ -57,7 +56,6 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
   private Set<AnsweredQuestionModel> answeredQuestionModels;
 
   public UserModel() {
-    this.uuid = UUID.randomUUID();
     this.answeredQuestionModels = new HashSet<>();
   }
 
@@ -72,20 +70,12 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
     this.password = password;
   }
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
-  }
-
-  public String getUuid() {
-    return uuid.toString();
-  }
-
-  public void setUuid(UUID uuid) {
-    this.uuid = uuid;
   }
 
   public String getFirstName() {
@@ -137,7 +127,7 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
     }
 
     return new UserDTO(
-        getUuid(),
+        getId(),
         getFirstName(),
         getLastName(),
         getUsername(),
@@ -159,7 +149,6 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
   /*default*/ void attachAnsweredQuestion(final AnsweredQuestionModel answeredQuestionModel) {
     this.answeredQuestionModels.add(answeredQuestionModel);
   }
-
 
 
 }

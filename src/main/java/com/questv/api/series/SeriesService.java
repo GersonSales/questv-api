@@ -42,11 +42,11 @@ public class SeriesService implements ObjectService<SeriesDTO> {
   }
 
   @Override
-  public SeriesDTO findById(final Long seriesId) {
+  public SeriesDTO findById(final String seriesId) {
     return findModelById(seriesId).convert();
   }
 
-  private SeriesModel findModelById(final Long seriesId) {
+  private SeriesModel findModelById(final String seriesId) {
     final Optional<SeriesModel> seriesModel = this.seriesRepository.findById(seriesId);
     if (seriesModel.isPresent()) {
       return seriesModel.get();
@@ -70,7 +70,7 @@ public class SeriesService implements ObjectService<SeriesDTO> {
   }
 
   @Override
-  public void delete(final Long seriesId) {
+  public void delete(final String seriesId) {
     this.seriesRepository.deleteById(seriesId);
   }
 
@@ -79,7 +79,7 @@ public class SeriesService implements ObjectService<SeriesDTO> {
     return  seriesDTO;
   }
 
-  /*default*/ UploadedFileResponse attachSeriesCover(final Long seriesId, final MultipartFile file) {
+  /*default*/ UploadedFileResponse attachSeriesCover(final String seriesId, final MultipartFile file) {
 
     final SeriesModel seriesModel = findModelById(seriesId);
     final String fileName = fileStorageService.store(file, seriesModel);
@@ -94,7 +94,7 @@ public class SeriesService implements ObjectService<SeriesDTO> {
         file.getContentType(), file.getSize());
   }
 
-  /*default*/ UploadedFileResponse attachSeriesPromoImage(final Long seriesId, final MultipartFile file) {
+  /*default*/ UploadedFileResponse attachSeriesPromoImage(final String seriesId, final MultipartFile file) {
 
     final SeriesModel seriesModel = findModelById(seriesId);
     final String fileName = fileStorageService.store(file, seriesModel);
@@ -109,15 +109,15 @@ public class SeriesService implements ObjectService<SeriesDTO> {
         file.getContentType(), file.getSize());
   }
 
-  /*default*/ Resource findSeriesCover(final Long seriesId) {
+  /*default*/ Resource findSeriesCover(final String seriesId) {
     return this.fileStorageService.loadAsResource(findById(seriesId).getCoverImage());
   }
 
-  /*default*/ Resource findSeriesPromoImage(final Long seriesId) {
+  /*default*/ Resource findSeriesPromoImage(final String seriesId) {
     return this.fileStorageService.loadAsResource(findById(seriesId).getPromoImage());
   }
 
-  private String getFileUri(final Long seriesId, final String type) {
+  private String getFileUri(final String seriesId, final String type) {
     return ServletUriComponentsBuilder.fromCurrentContextPath()
         .path("/series/")
         .path(String.valueOf(seriesId))
@@ -126,7 +126,7 @@ public class SeriesService implements ObjectService<SeriesDTO> {
   }
 
   @Override
-  public List<SeriesDTO> findAllByParent(final Long seriesId) {
+  public List<SeriesDTO> findAllByParent(final String seriesId) {
     return new ArrayList<>();
   }
 }

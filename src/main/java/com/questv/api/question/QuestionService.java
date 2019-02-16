@@ -56,7 +56,7 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     }
   }
 
-  private Questionable findQuestionableById(final Long questionableId) {
+  private Questionable findQuestionableById(final String questionableId) {
     Optional<SeriesModel> seriesById = this.seriesRepository.findById(questionableId);
     if (seriesById.isPresent()) {
       return seriesById.get();
@@ -90,11 +90,11 @@ public class QuestionService implements ObjectService<QuestionDTO> {
   }
 
   @Override
-  public QuestionDTO findById(final Long questionId) {
+  public QuestionDTO findById(final String questionId) {
     return findModelById(questionId).convert();
   }
 
-  private QuestionModel findModelById(final Long questionId) {
+  private QuestionModel findModelById(final String questionId) {
     final Optional<QuestionModel> foundQuestion = this.questionRepository.findById(questionId);
     if (foundQuestion.isPresent()) {
       return foundQuestion.get();
@@ -116,7 +116,7 @@ public class QuestionService implements ObjectService<QuestionDTO> {
 
 
   @Override
-  public void delete(final Long questionId) {
+  public void delete(final String questionId) {
     final QuestionModel questionModel = findModelById(questionId);
     final Questionable questionable = findQuestionableById(questionModel.getOwnerId());
     detachQuestionFromQuestionable(questionModel, questionable);
@@ -130,7 +130,7 @@ public class QuestionService implements ObjectService<QuestionDTO> {
   }
 
   @Override
-  public List<QuestionDTO> findAllByParent(Long parentId) {
+  public List<QuestionDTO> findAllByParent(String parentId) {
     final List<QuestionDTO> result = new ArrayList<>();
     for (final QuestionDTO questionDTO : this.findAll()) {
       if (questionDTO.getOwnerId().equals(parentId)) {
@@ -140,7 +140,7 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     return result;
   }
 
-  /*default*/ List<QuestionDTO> findAllByParentRecursive(final Long parentId) {
+  /*default*/ List<QuestionDTO> findAllByParentRecursive(final String parentId) {
     return findQuestionableById(parentId)
         .getQuestionsRecursively()
         .stream()

@@ -5,6 +5,7 @@ import com.questv.api.contracts.Questionable;
 import com.questv.api.contracts.Updatable;
 import com.questv.api.question.QuestionModel;
 import org.aspectj.weaver.patterns.TypePatternQuestions;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -21,11 +22,12 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
 
   @Id
   @NotNull
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  @GeneratedValue(generator = "system-uuid")
+  @GenericGenerator(name = "system-uuid", strategy = "uuid")
+  private String id;
 
   @NotNull
-  private Long seasonId;
+  private String seasonId;
 
   @NotNull
   @NotEmpty
@@ -43,8 +45,8 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
     this.questions = new HashSet<>();
   }
 
-  /*default*/ EpisodeModel(final Long id,
-                           final Long seasonId,
+  /*default*/ EpisodeModel(final String id,
+                           final String seasonId,
                            final String name,
                            final Integer number) {
     this.id = id;
@@ -53,19 +55,19 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
     this.number = number;
   }
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public Long getSeasonId() {
+  public String getSeasonId() {
     return seasonId;
   }
 
-  public void setSeasonId(Long seasonId) {
+  public void setSeasonId(String seasonId) {
     this.seasonId = seasonId;
   }
 
@@ -87,7 +89,7 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
 
   @Override
   public EpisodeDTO convert() {
-    final Set<Long> questionsIds = questions == null ? new HashSet<>() : questions//TODO
+    final Set<String> questionsIds = questions == null ? new HashSet<>() : questions//TODO
         .stream()
         .map(QuestionModel::getId)
         .collect(Collectors.toSet());

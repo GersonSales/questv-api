@@ -12,7 +12,7 @@ public class Answer {
   @Id
   @NotNull
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  private String id;
 
   @NotNull
   private String value;
@@ -36,7 +36,7 @@ public class Answer {
     return isCorrect;
   }
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 }

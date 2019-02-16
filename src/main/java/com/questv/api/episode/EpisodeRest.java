@@ -31,7 +31,7 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
   }
 
   @GetMapping("/seasons/{seasonId}/episodes")
-  public ResponseEntity<List<EpisodeDTO>> getAllBySeason(@PathVariable final Long seasonId) {
+  public ResponseEntity<List<EpisodeDTO>> getAllBySeason(@PathVariable final String seasonId) {
     try {
       return ResponseEntity.ok().body(this.episodeService.findAllByParent(seasonId));
     } catch (final Exception exception) {
@@ -47,7 +47,7 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
 
   @Override
   @GetMapping("/episodes/{episodeId}")
-  public ResponseEntity<EpisodeDTO> get(@PathVariable final Long episodeId) {
+  public ResponseEntity<EpisodeDTO> get(@PathVariable final String episodeId) {
     try {
       return ResponseEntity.ok().body(this.episodeService.findById(episodeId));
     } catch (final Exception exception) {
@@ -57,13 +57,13 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
 
   @Override
   @DeleteMapping("/episodes/{episodeId}")
-  public void delete(@PathVariable Long episodeId) {
+  public void delete(@PathVariable String episodeId) {
     this.episodeService.delete(episodeId);
   }
 
   @Override
   @PutMapping("/episodes/{episodeId}")
-  public void put(@PathVariable("episodeId") final Long episodeId, final EpisodeDTO episodeDTO) {
+  public void put(@PathVariable("episodeId") final String episodeId, final EpisodeDTO episodeDTO) {
     episodeDTO.setId(episodeId);
     this.episodeService.update(episodeDTO);
   }

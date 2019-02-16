@@ -5,8 +5,6 @@ import com.questv.api.answered.question.AnsweredQuestionService;
 import com.questv.api.contracts.ObjectService;
 import com.questv.api.exception.IdNotFoundException;
 import com.questv.api.exception.UserNotFoundException;
-import com.questv.api.series.SeriesModel;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -53,11 +51,11 @@ public class UserService implements ObjectService<UserDTO>, UserDetailsService {
   }
 
   @Override
-  public UserDTO findById(final Long userId) {
+  public UserDTO findById(final String userId) {
     return findModelById(userId).convert();
   }
 
-  private UserModel findModelById(final Long userId) {
+  private UserModel findModelById(final String userId) {
     final Optional<UserModel> userModel = this.userRepository.findById(userId);
     if (userModel.isPresent()) {
       return userModel.get();
@@ -81,7 +79,7 @@ public class UserService implements ObjectService<UserDTO>, UserDetailsService {
   }
 
   @Override
-  public void delete(final Long userId) {
+  public void delete(final String userId) {
     this.userRepository.deleteById(userId);
   }
 
@@ -91,11 +89,11 @@ public class UserService implements ObjectService<UserDTO>, UserDetailsService {
   }
 
   @Override
-  public List<UserDTO> findAllByParent(Long seriesId) {
+  public List<UserDTO> findAllByParent(String seriesId) {
     return new ArrayList<>();
   }
 
-  /*default*/ void attachAnsweredModel(final Long userId,
+  /*default*/ void attachAnsweredModel(final String userId,
                                        final AnsweredQuestionModel answeredQuestionModel) {
     final AnsweredQuestionModel foundAnsweredQuestionModel
         = this.answeredQuestionService.find(answeredQuestionModel);
@@ -116,7 +114,7 @@ public class UserService implements ObjectService<UserDTO>, UserDetailsService {
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
     UserModel byUsername = this.userRepository.findByUsername(username);
     if (byUsername != null) {
-      return new UserPayload(byUsername.getUuid(), byUsername.getUsername(), byUsername.getPassword(), new ArrayList<>());
+      return new UserPayload(byUsername.getId(), byUsername.getUsername(), byUsername.getPassword(), new ArrayList<>());
     }
     throw new UserNotFoundException();
   }

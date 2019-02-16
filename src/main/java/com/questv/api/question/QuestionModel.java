@@ -3,6 +3,7 @@ package com.questv.api.question;
 import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Updatable;
 import com.questv.api.question.difficult.Difficult;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -19,11 +20,12 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
 
   @Id
   @NotNull
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  @GeneratedValue(generator="system-uuid")
+  @GenericGenerator(name="system-uuid", strategy = "uuid")
+  private String id;
 
   @NotNull
-  private Long ownerId;
+  private String ownerId;
 
   @NotEmpty
   private String description;
@@ -42,8 +44,8 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
   /*default*/ QuestionModel() {
   }
 
-  /*default*/ QuestionModel(final Long id,
-                            final Long ownerId,
+  /*default*/ QuestionModel(final String id,
+                            final String ownerId,
                             final String description,
                             final Difficult difficult,
                             final Set<Answer> answerSet) {
@@ -54,19 +56,19 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
     this.answerSet = answerSet;
   }
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public Long getOwnerId() {
+  public String getOwnerId() {
     return ownerId;
   }
 
-  public void setOwnerId(Long ownerId) {
+  public void setOwnerId(String ownerId) {
     this.ownerId = ownerId;
   }
 
@@ -96,7 +98,7 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
 
   @Override
   public QuestionDTO convert() {
-    final Map<Long, Map<String, Boolean>> answerIdsMap = new HashMap<>();
+    final Map<String, Map<String, Boolean>> answerIdsMap = new HashMap<>();
     for (final Answer answer : this.answerSet) {
       final Map<String, Boolean> answersMap = new HashMap<>();
       answersMap.put(answer.getValue(), answer.isCorrect());

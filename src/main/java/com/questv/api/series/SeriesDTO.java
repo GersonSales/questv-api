@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>, Modelable {
 
-  private Long id;
+  private String id;
 
   @NotEmpty
   @Size(min = 3, max = 256, message = "Series name should have 3 characters at least.")
@@ -35,8 +35,8 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   private String promoImage;
   private String promoImageUrl;
 
-  private Set<Long> seasons;
-  private Set<Long> questions;
+  private Set<String> seasons;
+  private Set<String> questions;
 
   /*default*/ SeriesDTO() {
     setName("");
@@ -51,7 +51,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     setQuestions(new HashSet<>());
   }
 
-  /*default*/ SeriesDTO(final Long id,
+  /*default*/ SeriesDTO(final String id,
                         final String name,
                         final String abbreviation,
                         final String category,
@@ -60,8 +60,8 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
                         final String coverImageUrl,
                         final String promoImage,
                         final String promoImageUrl,
-                        final Set<Long> seasons,
-                        final Set<Long> questions) {
+                        final Set<String> seasons,
+                        final Set<String> questions) {
     this();
     this.id = id;
     this.name = name;
@@ -76,11 +76,11 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     this.questions = questions;
   }
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -132,11 +132,11 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     this.promoImage = promoImage;
   }
 
-  public Set<Long> getSeasons() {
+  public Set<String> getSeasons() {
     return seasons;
   }
 
-  public void setSeasons(Set<Long> seasons) {
+  public void setSeasons(Set<String> seasons) {
     this.seasons = seasons;
   }
 
@@ -148,11 +148,11 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     this.coverImageUrl = coverImageUrl;
   }
 
-  public Set<Long> getQuestions() {
+  public Set<String> getQuestions() {
     return questions;
   }
 
-  public void setQuestions(Set<Long> questions) {
+  public void setQuestions(Set<String> questions) {
     this.questions = questions;
   }
 

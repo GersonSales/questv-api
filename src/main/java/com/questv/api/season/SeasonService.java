@@ -28,7 +28,7 @@ public class SeasonService implements ObjectService<SeasonDTO> {
 
   @Override
   public SeasonDTO createAndAttach(final SeasonDTO seasonDTO) {
-    final Long seriesId = seasonDTO.getSeriesId();
+    final String seriesId = seasonDTO.getSeriesId();
     final SeriesModel seriesModel = findSeriesById(seriesId);
     final SeasonModel seasonModel = save(seasonDTO.convert());
     seriesModel.attachSeason(seasonModel);
@@ -36,7 +36,7 @@ public class SeasonService implements ObjectService<SeasonDTO> {
     return seasonModel.convert();
   }
 
-  private SeriesModel findSeriesById(final Long seriesId) {
+  private SeriesModel findSeriesById(final String seriesId) {
     Optional<SeriesModel> foundSeries = this.seriesRepository.findById(seriesId);
     if (foundSeries.isPresent()) {
       return foundSeries.get();
@@ -66,11 +66,11 @@ public class SeasonService implements ObjectService<SeasonDTO> {
   }
 
   @Override
-  public SeasonDTO findById(final Long seasonId) {
+  public SeasonDTO findById(final String seasonId) {
     return findModelById(seasonId).convert();
   }
 
-  private SeasonModel findModelById(final Long seasonId) {
+  private SeasonModel findModelById(final String seasonId) {
     final Optional<SeasonModel> foundSeason = this.seasonRepository.findById(seasonId);
     if (foundSeason.isPresent()) {
       return foundSeason.get();
@@ -90,7 +90,7 @@ public class SeasonService implements ObjectService<SeasonDTO> {
   }
 
   @Override
-  public void delete(final Long seasonId) {
+  public void delete(final String seasonId) {
     final SeasonModel seasonModel = findModelById(seasonId);
     final SeriesModel seriesModel = findSeriesById(seasonModel.getSeriesId());
 
@@ -100,7 +100,7 @@ public class SeasonService implements ObjectService<SeasonDTO> {
   }
 
   @Override
-  public List<SeasonDTO> findAllByParent(final Long seriesId) {
+  public List<SeasonDTO> findAllByParent(final String seriesId) {
     final SeriesModel seriesModel = findSeriesById(seriesId);
     return seriesModel
         .getSeasons()

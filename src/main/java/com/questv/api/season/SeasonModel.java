@@ -5,6 +5,7 @@ import com.questv.api.episode.EpisodeModel;
 import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Updatable;
 import com.questv.api.question.QuestionModel;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -21,11 +22,12 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
 
   @Id
   @NotNull
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  @GeneratedValue(generator = "system-uuid")
+  @GenericGenerator(name = "system-uuid", strategy = "uuid")
+  private String id;
 
   @NotNull
-  private Long seriesId;
+  private String seriesId;
 
   @NotNull
   private Integer number;
@@ -49,7 +51,7 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
     this.questions = new HashSet<>();
   }
 
-  /*default*/ SeasonModel(final Long id, final Long seriesId, final Integer number, final String name) {
+  /*default*/ SeasonModel(final String id, final String seriesId, final Integer number, final String name) {
 
     this();
     this.id = id;
@@ -59,11 +61,11 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
   }
 
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -85,12 +87,12 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
 
   @Override
   public SeasonDTO convert() {
-    final Set<Long> episodesIds = episodes
+    final Set<String> episodesIds = episodes
         .stream()
         .map(EpisodeModel::getId)
         .collect(Collectors.toSet());
 
-    final Set<Long> questionsIds = this.questions
+    final Set<String> questionsIds = this.questions
         .stream()
         .map(QuestionModel::getId)
         .collect(Collectors.toSet());
@@ -103,11 +105,11 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
     setName(update.getName());
   }
 
-  public Long getSeriesId() {
+  public String getSeriesId() {
     return seriesId;
   }
 
-  public void setSeriesId(Long seriesId) {
+  public void setSeriesId(String seriesId) {
     this.seriesId = seriesId;
   }
 
@@ -123,7 +125,7 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
     this.episodes.add(episodeModel);
   }
 
-  public void removeEpisodeById(final Long episodeId) {
+  public void removeEpisodeById(final String episodeId) {
     for (final EpisodeModel episodeModel : this.episodes) {
       if (episodeModel.getId().equals(episodeId)) {
         this.episodes.remove(episodeModel);

@@ -10,30 +10,30 @@ import java.util.Set;
 
 public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO> {
 
-  private Long id;
+  private String id;
 
   @NotNull
   private Integer number;
 
   @NotNull
-  private Long seriesId;
+  private String seriesId;
 
   @NotEmpty
   @Size(min = 3, max = 256, message = "Season name should have 3 characters at least.")
   private String name;
 
-  private Set<Long> episodes;
+  private Set<String> episodes;
 
-  private Set<Long> questions;
+  private Set<String> questions;
 
   /*default*/ SeasonDTO() { }
 
-  /*default*/ SeasonDTO(final Long id,
-                        final Long seriesId,
+  /*default*/ SeasonDTO(final String id,
+                        final String seriesId,
                         final Integer number,
                         final String name,
-                        final Set<Long> episodes,
-                        final Set<Long> questions) {
+                        final Set<String> episodes,
+                        final Set<String> questions) {
     this.id = id;
     this.seriesId = seriesId;
     this.number = number;
@@ -53,11 +53,11 @@ public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO>
     setName(update.getName());
   }
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -77,27 +77,27 @@ public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO>
     this.name = name;
   }
 
-  public Long getSeriesId() {
+  public String getSeriesId() {
     return seriesId;
   }
 
-  public void setSeriesId(Long seriesId) {
+  public void setSeriesId(String seriesId) {
     this.seriesId = seriesId;
   }
 
-  public Set<Long> getEpisodes() {
+  public Set<String> getEpisodes() {
     return episodes;
   }
 
-  public void setEpisodes(Set<Long> episodes) {
+  public void setEpisodes(Set<String> episodes) {
     this.episodes = episodes;
   }
 
-  public Set<Long> getQuestions() {
+  public Set<String> getQuestions() {
     return questions;
   }
 
-  public void setQuestions(Set<Long> questions) {
+  public void setQuestions(Set<String> questions) {
     this.questions = questions;
   }
 }

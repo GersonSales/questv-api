@@ -52,11 +52,11 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
   }
 
   @Override
-  public EpisodeDTO findById(Long episodeId) {
+  public EpisodeDTO findById(String episodeId) {
     return findModelById(episodeId).convert();
   }
 
-  private EpisodeModel findModelById(Long episodeId) {
+  private EpisodeModel findModelById(String episodeId) {
     Optional<EpisodeModel> episodeModel = this.episodeRepository.findById(episodeId);
     if (episodeModel.isPresent()) {
       return episodeModel.get();
@@ -76,7 +76,7 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
   }
 
 
-  private SeasonModel findSeasonById(final Long seasonId) {
+  private SeasonModel findSeasonById(final String seasonId) {
     final Optional<SeasonModel> seasonModel = this.seasonRepository.findById(seasonId);
     if (seasonModel.isPresent()) {
       return seasonModel.get();
@@ -85,7 +85,7 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
   }
 
   @Override
-  public void delete(final Long episodeId) {
+  public void delete(final String episodeId) {
     final EpisodeModel episodeModel = findModelById(episodeId);
     final SeasonModel seasonModel = findSeasonById(episodeModel.getSeasonId());
     seasonModel.removeEpisodeById(episodeId);
@@ -94,7 +94,7 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
   }
 
   @Override
-  public List<EpisodeDTO> findAllByParent(final Long seasonId) {
+  public List<EpisodeDTO> findAllByParent(final String seasonId) {
     final SeasonModel seasonModel = findSeasonById(seasonId);
     return seasonModel
         .getEpisodes()
