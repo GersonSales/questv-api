@@ -121,7 +121,7 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
 
   @Override
   public UserDTO convert() {
-    final Map<Long, Long> answeredQuestions = new HashMap<>();
+    final Map<String, String> answeredQuestions = new HashMap<>();
     for (final AnsweredQuestionModel answeredQuestionModel : this.answeredQuestionModels) {
       answeredQuestions.put(answeredQuestionModel.getQuestionId(), answeredQuestionModel.getAnswerId());
     }

@@ -11,43 +11,43 @@ public class AnsweredQuestionModel {
   @Id
   @NotNull
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  private String id;
 
   @NotNull
-  private Long questionId;
+  private String questionId;
 
   @NotNull
-  private Long answerId;
+  private String answerId;
 
   public AnsweredQuestionModel() {
   }
 
-  public AnsweredQuestionModel(final Long questionId, final Long answerId) {
+  public AnsweredQuestionModel(final String questionId, final String answerId) {
     this.questionId = questionId;
     this.answerId = answerId;
   }
 
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
-  public Long getQuestionId() {
+  public String getQuestionId() {
     return questionId;
   }
 
-  public void setQuestionId(Long questionId) {
+  public void setQuestionId(String questionId) {
     this.questionId = questionId;
   }
 
-  public Long getAnswerId() {
+  public String getAnswerId() {
     return answerId;
   }
 
-  public void setAnswerId(Long answerId) {
+  public void setAnswerId(String answerId) {
     this.answerId = answerId;
   }
 

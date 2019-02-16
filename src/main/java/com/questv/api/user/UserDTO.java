@@ -36,7 +36,7 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
   @Size(min = 3, max = 256, message = "Password must have 3 characters at least.")
   private String password;
 
-  private Map<Long, Long> answeredQuestions;
+  private Map<String, String> answeredQuestions;
 
   public UserDTO() {
     this.answeredQuestions = new HashMap<>();
@@ -48,7 +48,7 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
                  final String username,
                  final String email,
                  final String password,
-                 final Map<Long, Long> answeredQuestions) {
+                 final Map<String, String> answeredQuestions) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -106,11 +106,11 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
     this.id = id;
   }
 
-  public Map<Long, Long> getAnsweredQuestions() {
+  public Map<String, String> getAnsweredQuestions() {
     return answeredQuestions;
   }
 
-  public void setAnsweredQuestions(Map<Long, Long> answeredQuestions) {
+  public void setAnsweredQuestions(Map<String, String> answeredQuestions) {
     this.answeredQuestions = answeredQuestions;
   }
 
