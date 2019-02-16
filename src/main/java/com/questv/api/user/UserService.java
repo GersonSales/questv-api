@@ -114,9 +114,9 @@ public class UserService implements ObjectService<UserDTO>, UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-    UserModel byEmail = this.userRepository.findByUsername(username);
-    if (byEmail != null) {
-      return new User(byEmail.getUsername(), byEmail.getPassword(), new ArrayList<>());
+    UserModel byUsername = this.userRepository.findByUsername(username);
+    if (byUsername != null) {
+      return new UserPayload(byUsername.getUuid(), byUsername.getUsername(), byUsername.getPassword(), new ArrayList<>());
     }
     throw new UserNotFoundException();
   }

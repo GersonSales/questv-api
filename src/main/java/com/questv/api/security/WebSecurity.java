@@ -13,7 +13,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.context.annotation.Bean;
 
-import static com.questv.api.security.SecurityConstants.SIGN_UP_URL;
+import static com.questv.api.security.SecurityConstants.*;
+import static org.springframework.http.HttpMethod.GET;
 
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
@@ -32,6 +33,10 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.cors().and().csrf().disable().authorizeRequests()
         .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
+        .antMatchers(GET, SERIES_URL).permitAll()
+        .antMatchers(GET, SEASONS_URL).permitAll()
+        .antMatchers(GET, EPISODES_URL).permitAll()
+        .antMatchers(GET, QUESTIONS_URL).permitAll()
         .anyRequest().authenticated()
         .and()
         .addFilter(new JWTAuthenticationFilter(authenticationManager()))
