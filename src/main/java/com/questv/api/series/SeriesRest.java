@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
+@RequestMapping("/series")
 public class SeriesRest implements Restable<SeriesDTO> {
   private final ObjectService<SeriesDTO> seriesService;
 
@@ -23,44 +24,44 @@ public class SeriesRest implements Restable<SeriesDTO> {
     this.seriesService = seriesService;
   }
 
-  @PostMapping("/series")
+  @PostMapping()
   public ResponseEntity<SeriesDTO> post(@Valid @RequestBody final SeriesDTO seriesDTO) {
     return ResponseEntity.ok(this.seriesService.create(seriesDTO));
   }
 
-  @PostMapping("/series/{seriesId}/cover")
+  @PostMapping("/{seriesId}/cover")
   public UploadedFileResponse postSeriesCover(@PathVariable("seriesId") final String seriesId,
                                               @RequestParam("file") final MultipartFile file) {
     return ((SeriesService) this.seriesService).attachSeriesCover(seriesId, file);
   }
 
 
-  @GetMapping("/series/{seriesId}/cover")
+  @GetMapping("/{seriesId}/cover")
   public ResponseEntity<Resource> getSeriesCover(@PathVariable("seriesId") final String seriesId,
                                                  HttpServletRequest request) {
     final Resource resource = ((SeriesService) this.seriesService).findSeriesCover(seriesId);
     return getPreparedResponseEntity(request, resource);
   }
 
-  @PostMapping("/series/{seriesId}/promoImage")
+  @PostMapping("/{seriesId}/promoImage")
   public UploadedFileResponse postSeriesPromoImage(@PathVariable("seriesId") final String seriesId,
                                                    @RequestParam("file") final MultipartFile file) {
     return ((SeriesService) this.seriesService).attachSeriesPromoImage(seriesId, file);
   }
 
-  @GetMapping("/series/{seriesId}/promoImage")
+  @GetMapping("/{seriesId}/promoImage")
   public ResponseEntity<Resource> getSeriesPromoImage(@PathVariable("seriesId") final String seriesId,
                                                       HttpServletRequest request) {
     final Resource resource = ((SeriesService) this.seriesService).findSeriesPromoImage(seriesId);
     return getPreparedResponseEntity(request, resource);
   }
 
-  @GetMapping("/series")
+  @GetMapping()
   public ResponseEntity<List<SeriesDTO>> get() {
     return ResponseEntity.ok(this.seriesService.findAll());
   }
 
-  @GetMapping("/series/{seriesId}")
+  @GetMapping("/{seriesId}")
   public ResponseEntity<SeriesDTO> get(@PathVariable String seriesId) {
     try {
       return ResponseEntity.ok(this.seriesService.findById(seriesId));
@@ -70,13 +71,13 @@ public class SeriesRest implements Restable<SeriesDTO> {
   }
 
   @Override
-  @PutMapping("/series/{seriesId}")
+  @PutMapping("/{seriesId}")
   public void put(@PathVariable String seriesId, @RequestBody final SeriesDTO seriesDTO) {
     seriesDTO.setId(seriesId);
     this.seriesService.update(seriesDTO);
   }
 
-  @DeleteMapping("/series/{seriesId}")
+  @DeleteMapping("/{seriesId}")
   public void delete(@PathVariable final String seriesId) {
     this.seriesService.delete(seriesId);
   }
@@ -103,7 +104,4 @@ public class SeriesRest implements Restable<SeriesDTO> {
     }
     return contentType;
   }
-
-
-
 }

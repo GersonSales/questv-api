@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class QuestionRest implements Restable<QuestionDTO> {
+@RequestMapping("/questionable/{questionableId}/questions")
+public class QuestionRest {
 
   private final QuestionService questionService;
 
@@ -21,10 +22,11 @@ public class QuestionRest implements Restable<QuestionDTO> {
     assert this.questionService != null;
   }
 
-  @Override
-  @PostMapping("/questions")
+  
+  @PostMapping()
   @ResponseStatus(value = HttpStatus.CREATED)
-  public ResponseEntity<QuestionDTO> post(@Valid @RequestBody final QuestionDTO questionDTO) {
+  public ResponseEntity<QuestionDTO> post(@PathVariable("questionableId") final String questionableId,
+                                          @Valid @RequestBody final QuestionDTO questionDTO) {
     try {
       return ResponseEntity.status(HttpStatus.CREATED)
           .body(this.questionService.createAndAttach(questionDTO));
@@ -33,16 +35,16 @@ public class QuestionRest implements Restable<QuestionDTO> {
     }
   }
 
-  @GetMapping("/questionables/{parentId}/questions")
-  public ResponseEntity<List<QuestionDTO>> getAllByParent(@PathVariable final String parentId,
+  @GetMapping()
+  public ResponseEntity<List<QuestionDTO>> getAllByParent(@PathVariable("questionableId") final String questionableId,
                                                           @RequestParam(required = false) final Boolean recursive) {
     try {
       final List<QuestionDTO> result = new ArrayList<>();
 
       if (recursive != null && recursive) {
-        result.addAll(this.questionService.findAllByParentRecursive(parentId));
+        result.addAll(this.questionService.findAllByParentRecursive(questionableId));
       } else {
-        result.addAll(this.questionService.findAllByParent(parentId));
+        result.addAll(this.questionService.findAllByParent(questionableId));
       }
       return ResponseEntity.ok(result);
 
@@ -51,15 +53,16 @@ public class QuestionRest implements Restable<QuestionDTO> {
     }
   }
 
-  @Override
+  
   @GetMapping("/questions")
   public ResponseEntity<List<QuestionDTO>> get() {
     return ResponseEntity.ok(this.questionService.findAll());
   }
 
-  @Override
-  @GetMapping("/questions/{questionId}")
-  public ResponseEntity<QuestionDTO> get(@PathVariable final String questionId) {
+  
+  @GetMapping("/{questionId}")
+  public ResponseEntity<QuestionDTO> get(@PathVariable("questionableId") final String questionableId,
+                                         @PathVariable final String questionId) {
     try {
       return ResponseEntity.ok(this.questionService.findById(questionId));
     } catch (IdNotFoundException exception) {
@@ -67,15 +70,18 @@ public class QuestionRest implements Restable<QuestionDTO> {
     }
   }
 
-  @Override
-  @DeleteMapping("/questions/{questionId}")
-  public void delete(@PathVariable final String questionId) {
+  
+  @DeleteMapping("/{questionId}")
+  public void delete(@PathVariable("questionableId") final String questionableId,
+                     @PathVariable final String questionId) {
     this.questionService.delete(questionId);
   }
 
-  @Override
-  @PutMapping("/questions/{questionId}")
-  public void put(@PathVariable("questionId") final String questionId, @Valid @RequestBody final QuestionDTO questionDTO) {
+  
+  @PutMapping("/{questionId}")
+  public void put(@PathVariable("questionableId") final String questionableId,
+                  @PathVariable("questionId") final String questionId,
+                  @Valid @RequestBody final QuestionDTO questionDTO) {
     questionDTO.setId(questionId);
     this.questionService.update(questionDTO);
   }

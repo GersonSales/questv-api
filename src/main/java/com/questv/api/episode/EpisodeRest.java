@@ -10,7 +10,8 @@ import java.util.List;
 
 
 @RestController
-public class EpisodeRest implements Restable<EpisodeDTO> {
+@RequestMapping("/series/{seriesId}/seasons/{seasonId}/episodes")
+public class EpisodeRest  {
 
   private final EpisodeService episodeService;
 
@@ -19,10 +20,11 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
     assert this.episodeService != null;
   }
 
-  @Override
-  @PostMapping("/episodes")
-  @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity<EpisodeDTO> post(@Valid @RequestBody EpisodeDTO episodeDTO) {
+  
+  @PostMapping()
+  public ResponseEntity<EpisodeDTO> post(@PathVariable("seriesId") final String seriesId,
+                                         @PathVariable("seasonId") final String seasonId,
+                                         @Valid @RequestBody EpisodeDTO episodeDTO) {
     try {
       return ResponseEntity.status(HttpStatus.CREATED).body(this.episodeService.createAndAttach(episodeDTO));
     } catch (final Exception exception) {
@@ -30,8 +32,9 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
     }
   }
 
-  @GetMapping("/seasons/{seasonId}/episodes")
-  public ResponseEntity<List<EpisodeDTO>> getAllBySeason(@PathVariable final String seasonId) {
+  @GetMapping()
+  public ResponseEntity<List<EpisodeDTO>> getAllBySeason(@PathVariable("seriesId") final String seriesId,
+                                                         @PathVariable final String seasonId) {
     try {
       return ResponseEntity.ok().body(this.episodeService.findAllByParent(seasonId));
     } catch (final Exception exception) {
@@ -39,15 +42,17 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
     }
   }
 
-  @Override
-  @GetMapping("/episodes")
+  
+  @GetMapping("/episodesasd")
   public ResponseEntity<List<EpisodeDTO>> get() {
     return ResponseEntity.ok().body(this.episodeService.findAll());
   }
 
-  @Override
-  @GetMapping("/episodes/{episodeId}")
-  public ResponseEntity<EpisodeDTO> get(@PathVariable final String episodeId) {
+  
+  @GetMapping("/{episodeId}")
+  public ResponseEntity<EpisodeDTO> get(@PathVariable("seriesId") final String seriesId,
+                                        @PathVariable final String seasonId,
+                                        @PathVariable final String episodeId) {
     try {
       return ResponseEntity.ok().body(this.episodeService.findById(episodeId));
     } catch (final Exception exception) {
@@ -55,15 +60,19 @@ public class EpisodeRest implements Restable<EpisodeDTO> {
     }
   }
 
-  @Override
-  @DeleteMapping("/episodes/{episodeId}")
-  public void delete(@PathVariable String episodeId) {
+  
+  @DeleteMapping("/{episodeId}")
+  public void delete(@PathVariable("seriesId") final String seriesId,
+                     @PathVariable final String seasonId,
+                     @PathVariable String episodeId) {
     this.episodeService.delete(episodeId);
   }
 
-  @Override
-  @PutMapping("/episodes/{episodeId}")
-  public void put(@PathVariable("episodeId") final String episodeId, final EpisodeDTO episodeDTO) {
+  
+  @PutMapping("/{episodeId}")
+  public void put(@PathVariable("seriesId") final String seriesId,
+                  @PathVariable final String seasonId,
+                  @PathVariable("episodeId") final String episodeId, final EpisodeDTO episodeDTO) {
     episodeDTO.setId(episodeId);
     this.episodeService.update(episodeDTO);
   }

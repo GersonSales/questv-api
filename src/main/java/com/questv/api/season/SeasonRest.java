@@ -10,7 +10,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-public class SeasonRest implements Restable<SeasonDTO> {
+@RequestMapping("/series/{seriesId}/seasons")
+public class SeasonRest {
   private final ObjectService<SeasonDTO> seasonService;
 
   public SeasonRest(final ObjectService<SeasonDTO> seasonService) {
@@ -18,9 +19,9 @@ public class SeasonRest implements Restable<SeasonDTO> {
     assert this.seasonService != null;
   }
 
-  @Override
-  @PostMapping("/seasons")
-  public ResponseEntity<SeasonDTO> post(@Valid @RequestBody final SeasonDTO seasonDTO) {
+  @PostMapping()
+  public ResponseEntity<SeasonDTO> post(@PathVariable("seriesId") final String seriesId,
+                                        @Valid @RequestBody final SeasonDTO seasonDTO) {
     try {
       SeasonDTO attachedSeason = this.seasonService.createAndAttach(seasonDTO);
       return ResponseEntity.status(HttpStatus.CREATED).body(attachedSeason);
@@ -29,7 +30,7 @@ public class SeasonRest implements Restable<SeasonDTO> {
     }
   }
 
-  @GetMapping("/series/{seriesId}/seasons")
+  @GetMapping()
   public ResponseEntity<List<SeasonDTO>> getAllBySeries(@PathVariable final String seriesId) {
     try {
       final List<SeasonDTO> allByParent = this.seasonService.findAllByParent(seriesId);
@@ -39,15 +40,14 @@ public class SeasonRest implements Restable<SeasonDTO> {
     }
   }
 
-  @Override
-  @GetMapping("/seasons")
-  public ResponseEntity<List<SeasonDTO>> get() {
+  public ResponseEntity<List<SeasonDTO>> get(@PathVariable final String seriesId) {
     return ResponseEntity.ok(this.seasonService.findAll());
   }
 
-  @Override
-  @GetMapping("/seasons/{seasonId}")
-  public ResponseEntity<SeasonDTO> get(@PathVariable final String seasonId) {
+  
+  @GetMapping("/{seasonId}")
+  public ResponseEntity<SeasonDTO> get(@PathVariable final String seriesId,
+                                       @PathVariable final String seasonId) {
     try {
       return ResponseEntity.ok(this.seasonService.findById(seasonId));
     } catch (final Exception exception) {
@@ -55,15 +55,18 @@ public class SeasonRest implements Restable<SeasonDTO> {
     }
   }
 
-  @Override
-  @DeleteMapping("/seasons/{seasonId}")
-  public void delete(@PathVariable final String seasonId) {
+  
+  @DeleteMapping("/{seasonId}")
+  public void delete(@PathVariable final String seriesId,
+                     @PathVariable final String seasonId) {
     this.seasonService.delete(seasonId);
   }
 
-  @Override
-  @PutMapping("/seasons/{seasonId}")
-  public void put(@PathVariable("seasonId") final String seasonId, @Valid @RequestBody final SeasonDTO seasonDTO) {
+  
+  @PutMapping("/{seasonId}")
+  public void put(@PathVariable final String seriesId,
+                  @PathVariable("seasonId") final String seasonId,
+                  @Valid @RequestBody final SeasonDTO seasonDTO) {
     seasonDTO.setId(seasonId);
     this.seasonService.update(seasonDTO);
   }
