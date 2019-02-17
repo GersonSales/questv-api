@@ -5,9 +5,7 @@ import com.questv.api.contracts.Updatable;
 import com.questv.api.question.difficult.Difficult;
 
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class QuestionDTO implements Convertible<QuestionModel>, Updatable<QuestionDTO> {
 
@@ -27,6 +25,7 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
 
 
   /*default*/ QuestionDTO() {
+    this._answers = new HashMap<>();
   }
 
   /*default*/ QuestionDTO(final Long id,
