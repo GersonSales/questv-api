@@ -1,6 +1,8 @@
 package com.questv.api.question;
 
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -11,7 +13,8 @@ public class Answer {
 
   @Id
   @NotNull
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(generator = "system-uuid")
+  @GenericGenerator(name = "system-uuid", strategy = "uuid")
   private String id;
 
   @NotNull
