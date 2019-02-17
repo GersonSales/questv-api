@@ -1,5 +1,6 @@
 package com.questv.api.user;
 
+import com.questv.api.answered.question.AnsweredQuestionDTO;
 import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.answered.question.AnsweredQuestionService;
 import com.questv.api.contracts.ObjectService;
@@ -17,7 +18,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service(value = "userService")
-public class UserService implements ObjectService<UserDTO>, UserDetailsService {
+public class UserService implements UserDetailsService {
 
   private final UserRepository userRepository;
   private final AnsweredQuestionService answeredQuestionService;
@@ -34,13 +35,11 @@ public class UserService implements ObjectService<UserDTO>, UserDetailsService {
     assert this.bCryptPasswordEncoder != null;
   }
 
-  @Override
   public UserDTO create(final UserDTO model) {
     model.setPassword(bCryptPasswordEncoder.encode(model.getPassword()));
     return save(model.convert()).convert();
   }
 
-  @Override
   public List<UserDTO> findAll() {
     final List<UserModel> result = new ArrayList<>();
     this.userRepository.findAll().forEach(result::add);
@@ -50,7 +49,6 @@ public class UserService implements ObjectService<UserDTO>, UserDetailsService {
         .collect(Collectors.toList());
   }
 
-  @Override
   public UserDTO findById(final String userId) {
     return findModelById(userId).convert();
   }
@@ -63,7 +61,6 @@ public class UserService implements ObjectService<UserDTO>, UserDetailsService {
     throw new IdNotFoundException();
   }
 
-  @Override
   public void update(final UserDTO userDTO) {
     update(userDTO.convert());
   }
@@ -78,25 +75,22 @@ public class UserService implements ObjectService<UserDTO>, UserDetailsService {
     return this.userRepository.save(userModel);
   }
 
-  @Override
   public void delete(final String userId) {
     this.userRepository.deleteById(userId);
   }
 
-  @Override
   public UserDTO createAndAttach(UserDTO model) {
     return model;
   }
 
-  @Override
   public List<UserDTO> findAllByParent(String seriesId) {
     return new ArrayList<>();
   }
 
-  /*default*/ void attachAnsweredModel(final String userId,
-                                       final AnsweredQuestionModel answeredQuestionModel) {
+  /*default*/ void attachAnsweredQuestion(final String userId,
+                                          final AnsweredQuestionDTO answeredQuestionDTO) {
     final AnsweredQuestionModel foundAnsweredQuestionModel
-        = this.answeredQuestionService.find(answeredQuestionModel);
+        = this.answeredQuestionService.find(answeredQuestionDTO.convert());
     final UserModel foundUser = findModelById(userId);
     if (foundAnsweredQuestionModel != null) {
       foundUser.attachAnsweredQuestion(foundAnsweredQuestionModel);
@@ -104,7 +98,7 @@ public class UserService implements ObjectService<UserDTO>, UserDetailsService {
 
     } else {
       final AnsweredQuestionModel savedAnsweredQuestionModel
-          = this.answeredQuestionService.create(answeredQuestionModel);
+          = this.answeredQuestionService.create(answeredQuestionDTO.convert());
       foundUser.attachAnsweredQuestion(savedAnsweredQuestionModel);
       this.userRepository.save(foundUser);
     }

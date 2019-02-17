@@ -19,8 +19,7 @@ public class AnsweredQuestionService {
   }
 
 
-  public AnsweredQuestionModel find(
-      final AnsweredQuestionModel answeredQuestionModel) {
+  public AnsweredQuestionModel find(final AnsweredQuestionModel answeredQuestionModel) {
     final List<AnsweredQuestionModel> answeredQuestionModels
         = this.answeredQuestionRepository.findAll();
 

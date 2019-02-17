@@ -1,14 +1,17 @@
 package com.questv.api.user;
 
+import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.contracts.Convertible;
-import com.questv.api.user.properties.Name;
 import com.questv.api.contracts.Updatable;
+import com.questv.api.user.properties.Name;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
 
@@ -36,7 +39,7 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
   @Size(min = 3, max = 256, message = "Password must have 3 characters at least.")
   private String password;
 
-  private Map<String, String> answeredQuestions;
+  private Map<Long, Long> answeredQuestions;
 
   public UserDTO() {
     this.answeredQuestions = new HashMap<>();
@@ -48,7 +51,7 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
                  final String username,
                  final String email,
                  final String password,
-                 final Map<String, String> answeredQuestions) {
+                 final Map<Long, Long> answeredQuestions) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
@@ -106,19 +109,26 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
     this.id = id;
   }
 
-  public Map<String, String> getAnsweredQuestions() {
+  public Map<Long, Long> getAnsweredQuestions() {
     return answeredQuestions;
   }
 
-  public void setAnsweredQuestions(Map<String, String> answeredQuestions) {
+  public void setAnsweredQuestions(Map<Long, Long> answeredQuestions) {
     this.answeredQuestions = answeredQuestions;
   }
 
   @Override
   public UserModel convert() {
-
     final Name name = new Name(getFirstName(), getLastName());
-    return new UserModel(name, getUsername(), getEmail(), getPassword());
+    final Set<AnsweredQuestionModel> answeredQuestions = new HashSet<>();
+
+    for (final Long key : this.answeredQuestions.keySet()) {
+      answeredQuestions.add(new AnsweredQuestionModel(key, this.answeredQuestions.get(key)));
+    }
+
+    final UserModel userModel = new UserModel(name, getUsername(), getEmail(), getPassword());
+    userModel.setAnsweredQuestionModels(answeredQuestions);
+    return userModel;
   }
 
   @Override

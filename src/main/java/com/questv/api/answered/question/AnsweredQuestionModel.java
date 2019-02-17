@@ -1,53 +1,55 @@
 package com.questv.api.answered.question;
 
+import com.questv.api.contracts.Convertible;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
 @Table(name = "answered_question_table")
-public class AnsweredQuestionModel {
+public class AnsweredQuestionModel implements Convertible<AnsweredQuestionDTO> {
 
   @Id
   @NotNull
   @GeneratedValue(strategy = GenerationType.AUTO)
-  private String id;
+  private Long id;
 
   @NotNull
-  private String questionId;
+  private Long questionId;
 
   @NotNull
-  private String answerId;
+  private Long answerId;
 
   public AnsweredQuestionModel() {
   }
 
-  public AnsweredQuestionModel(final String questionId, final String answerId) {
+  public AnsweredQuestionModel(final Long questionId, final Long answerId) {
     this.questionId = questionId;
     this.answerId = answerId;
   }
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
-  public String getQuestionId() {
+  public Long getQuestionId() {
     return questionId;
   }
 
-  public void setQuestionId(String questionId) {
+  public void setQuestionId(Long questionId) {
     this.questionId = questionId;
   }
 
-  public String getAnswerId() {
+  public Long getAnswerId() {
     return answerId;
   }
 
-  public void setAnswerId(String answerId) {
+  public void setAnswerId(Long answerId) {
     this.answerId = answerId;
   }
 
@@ -63,5 +65,10 @@ public class AnsweredQuestionModel {
   @Override
   public int hashCode() {
     return Objects.hash(getQuestionId(), getAnswerId());
+  }
+
+  @Override
+  public AnsweredQuestionDTO convert() {
+    return null;
   }
 }

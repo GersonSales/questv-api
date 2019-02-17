@@ -25,7 +25,7 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
   @Id
   @NotNull
   @GeneratedValue(generator = "system-uuid")
-  @GenericGenerator(name = "system-uuid",strategy = "uuid")
+  @GenericGenerator(name = "system-uuid", strategy = "uuid")
   @Column(name = "id")
   private String id;
 
@@ -119,9 +119,17 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
     this.username = username;
   }
 
+  public Set<AnsweredQuestionModel> getAnsweredQuestionModels() {
+    return answeredQuestionModels;
+  }
+
+  public void setAnsweredQuestionModels(Set<AnsweredQuestionModel> answeredQuestionModels) {
+    this.answeredQuestionModels = answeredQuestionModels;
+  }
+
   @Override
   public UserDTO convert() {
-    final Map<String, String> answeredQuestions = new HashMap<>();
+    final Map<Long, Long> answeredQuestions = new HashMap<>();
     for (final AnsweredQuestionModel answeredQuestionModel : this.answeredQuestionModels) {
       answeredQuestions.put(answeredQuestionModel.getQuestionId(), answeredQuestionModel.getAnswerId());
     }
@@ -147,8 +155,14 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
 
 
   /*default*/ void attachAnsweredQuestion(final AnsweredQuestionModel answeredQuestionModel) {
+    for (final AnsweredQuestionModel answeredQuestion : getAnsweredQuestionModels()) {
+      if (answeredQuestion.getQuestionId().equals(answeredQuestionModel.getQuestionId())) {
+        answeredQuestion.setAnswerId(answeredQuestionModel.getAnswerId());
+        return;
+      }
+    }
     this.answeredQuestionModels.add(answeredQuestionModel);
-  }
+ }
 
 
 }

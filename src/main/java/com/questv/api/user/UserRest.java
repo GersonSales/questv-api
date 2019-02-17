@@ -1,9 +1,7 @@
 package com.questv.api.user;
 
 
-import com.questv.api.answered.question.AnsweredQuestionModel;
-import com.questv.api.contracts.ObjectService;
-import com.questv.api.contracts.Restable;
+import com.questv.api.answered.question.AnsweredQuestionDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +11,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-public class UserRest implements Restable<UserDTO> {
+public class UserRest {
 
-  private final ObjectService<UserDTO> userService;
+  private final UserService userService;
 
-  public UserRest(final ObjectService<UserDTO> userService) {
+  public UserRest(final UserService userService) {
     this.userService = userService;
     assert userService != null;
   }
@@ -50,8 +48,8 @@ public class UserRest implements Restable<UserDTO> {
 
   @PostMapping("/{userId}/answeredQuestion")
   public void postAnsweredQuestion(@PathVariable final String userId,
-                                   @RequestBody final AnsweredQuestionModel answeredQuestionModel) {
-    ((UserService) this.userService).attachAnsweredModel(userId, answeredQuestionModel);
+                                   @RequestBody final AnsweredQuestionDTO answeredQuestionModel) {
+    this.userService.attachAnsweredQuestion(userId, answeredQuestionModel);
 
   }
 }
