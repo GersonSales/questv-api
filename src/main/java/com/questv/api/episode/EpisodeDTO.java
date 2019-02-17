@@ -13,9 +13,6 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
 
   private Long id;
 
-  @NotNull
-  private String seasonId;
-
   @NotEmpty
   @Size(min = 3, max = 256, message = "Episode name should have 3 characters at least.")
   private String name;
@@ -30,12 +27,10 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
   }
 
   /*default*/ EpisodeDTO(final Long id,
-                         final String seasonId,
                          final String name,
                          final Integer number,
                          final Set<Long> questions) {
     this.id = id;
-    this.seasonId = seasonId;
     this.name = name;
     this.number = number;
     this.questions = questions;
@@ -44,7 +39,7 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
 
   @Override
   public EpisodeModel convert() {
-    return new EpisodeModel(getId(), getSeasonId(), getName(), getNumber());
+    return new EpisodeModel(getId(), getName(), getNumber());
   }
 
   public Long getId() {
@@ -53,14 +48,6 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  public String getSeasonId() {
-    return seasonId;
-  }
-
-  public void setSeasonId(String seasonId) {
-    this.seasonId = seasonId;
   }
 
   public String getName() {
