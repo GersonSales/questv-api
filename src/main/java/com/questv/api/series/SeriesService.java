@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service(value = "seriesService")
-public class SeriesService implements ObjectService<SeriesDTO> {
+public class SeriesService {
 
   private final SeriesRepository seriesRepository;
   private final FileStorageServiceImpl fileStorageService;
@@ -26,12 +26,12 @@ public class SeriesService implements ObjectService<SeriesDTO> {
     assert this.seriesRepository != null;
   }
 
-  @Override
+  
   public SeriesDTO create(final SeriesDTO seriesDTO) {
     return save(seriesDTO.convert()).convert();
   }
 
-  @Override
+  
   public List<SeriesDTO> findAll() {
     final List<SeriesModel> result = new ArrayList<>();
     this.seriesRepository.findAll().forEach(result::add);
@@ -41,12 +41,12 @@ public class SeriesService implements ObjectService<SeriesDTO> {
         .collect(Collectors.toList());
   }
 
-  @Override
-  public SeriesDTO findById(final String seriesId) {
+  
+  public SeriesDTO findById(final Long seriesId) {
     return findModelById(seriesId).convert();
   }
 
-  private SeriesModel findModelById(final String seriesId) {
+  private SeriesModel findModelById(final Long seriesId) {
     final Optional<SeriesModel> seriesModel = this.seriesRepository.findById(seriesId);
     if (seriesModel.isPresent()) {
       return seriesModel.get();
@@ -54,7 +54,7 @@ public class SeriesService implements ObjectService<SeriesDTO> {
     throw new IdNotFoundException();
   }
 
-  @Override
+  
   public void update(final SeriesDTO seriesDTO) {
     update(seriesDTO.convert());
   }
@@ -69,17 +69,17 @@ public class SeriesService implements ObjectService<SeriesDTO> {
     return this.seriesRepository.save(seriesModel);
   }
 
-  @Override
-  public void delete(final String seriesId) {
+  
+  public void delete(final Long seriesId) {
     this.seriesRepository.deleteById(seriesId);
   }
 
-  @Override
+  
   public SeriesDTO createAndAttach(final SeriesDTO seriesDTO) {
     return  seriesDTO;
   }
 
-  /*default*/ UploadedFileResponse attachSeriesCover(final String seriesId, final MultipartFile file) {
+  /*default*/ UploadedFileResponse attachSeriesCover(final Long seriesId, final MultipartFile file) {
 
     final SeriesModel seriesModel = findModelById(seriesId);
     final String fileName = fileStorageService.store(file, seriesModel);
@@ -94,7 +94,7 @@ public class SeriesService implements ObjectService<SeriesDTO> {
         file.getContentType(), file.getSize());
   }
 
-  /*default*/ UploadedFileResponse attachSeriesPromoImage(final String seriesId, final MultipartFile file) {
+  /*default*/ UploadedFileResponse attachSeriesPromoImage(final Long seriesId, final MultipartFile file) {
 
     final SeriesModel seriesModel = findModelById(seriesId);
     final String fileName = fileStorageService.store(file, seriesModel);
@@ -109,15 +109,15 @@ public class SeriesService implements ObjectService<SeriesDTO> {
         file.getContentType(), file.getSize());
   }
 
-  /*default*/ Resource findSeriesCover(final String seriesId) {
+  /*default*/ Resource findSeriesCover(final Long seriesId) {
     return this.fileStorageService.loadAsResource(findById(seriesId).getCoverImage());
   }
 
-  /*default*/ Resource findSeriesPromoImage(final String seriesId) {
+  /*default*/ Resource findSeriesPromoImage(final Long seriesId) {
     return this.fileStorageService.loadAsResource(findById(seriesId).getPromoImage());
   }
 
-  private String getFileUri(final String seriesId, final String type) {
+  private String getFileUri(final Long seriesId, final String type) {
     return ServletUriComponentsBuilder.fromCurrentContextPath()
         .path("/series/")
         .path(String.valueOf(seriesId))
@@ -125,7 +125,7 @@ public class SeriesService implements ObjectService<SeriesDTO> {
         .toUriString();
   }
 
-  @Override
+  
   public List<SeriesDTO> findAllByParent(final String seriesId) {
     return new ArrayList<>();
   }

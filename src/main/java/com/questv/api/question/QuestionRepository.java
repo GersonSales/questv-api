@@ -8,8 +8,4 @@ import java.util.Optional;
 public interface QuestionRepository extends CrudRepository<QuestionModel, Long> {
   List<QuestionModel> findAll();
 
-  Optional<QuestionModel> findById(final String id);
-
-  void deleteById(final String id);
-
 }

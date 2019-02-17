@@ -7,8 +7,4 @@ import java.util.Optional;
 
 public interface SeasonRepository extends CrudRepository<SeasonModel, Long> {
   List<SeasonModel> findByName(final String name);
-
-  Optional<SeasonModel> findById(final String id);
-
-  void deleteById(final String id);
 }

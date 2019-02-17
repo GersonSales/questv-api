@@ -17,10 +17,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/series")
-public class SeriesRest implements Restable<SeriesDTO> {
-  private final ObjectService<SeriesDTO> seriesService;
+public class SeriesRest  {
+  private final SeriesService seriesService;
 
-  public SeriesRest(final ObjectService<SeriesDTO> seriesService) {
+  public SeriesRest(final SeriesService seriesService) {
     this.seriesService = seriesService;
   }
 
@@ -30,27 +30,27 @@ public class SeriesRest implements Restable<SeriesDTO> {
   }
 
   @PostMapping("/{seriesId}/cover")
-  public UploadedFileResponse postSeriesCover(@PathVariable("seriesId") final String seriesId,
+  public UploadedFileResponse postSeriesCover(@PathVariable("seriesId") final Long seriesId,
                                               @RequestParam("file") final MultipartFile file) {
     return ((SeriesService) this.seriesService).attachSeriesCover(seriesId, file);
   }
 
 
   @GetMapping("/{seriesId}/cover")
-  public ResponseEntity<Resource> getSeriesCover(@PathVariable("seriesId") final String seriesId,
+  public ResponseEntity<Resource> getSeriesCover(@PathVariable("seriesId") final Long seriesId,
                                                  HttpServletRequest request) {
     final Resource resource = ((SeriesService) this.seriesService).findSeriesCover(seriesId);
     return getPreparedResponseEntity(request, resource);
   }
 
   @PostMapping("/{seriesId}/promoImage")
-  public UploadedFileResponse postSeriesPromoImage(@PathVariable("seriesId") final String seriesId,
+  public UploadedFileResponse postSeriesPromoImage(@PathVariable("seriesId") final Long seriesId,
                                                    @RequestParam("file") final MultipartFile file) {
     return ((SeriesService) this.seriesService).attachSeriesPromoImage(seriesId, file);
   }
 
   @GetMapping("/{seriesId}/promoImage")
-  public ResponseEntity<Resource> getSeriesPromoImage(@PathVariable("seriesId") final String seriesId,
+  public ResponseEntity<Resource> getSeriesPromoImage(@PathVariable("seriesId") final Long seriesId,
                                                       HttpServletRequest request) {
     final Resource resource = ((SeriesService) this.seriesService).findSeriesPromoImage(seriesId);
     return getPreparedResponseEntity(request, resource);
@@ -62,7 +62,7 @@ public class SeriesRest implements Restable<SeriesDTO> {
   }
 
   @GetMapping("/{seriesId}")
-  public ResponseEntity<SeriesDTO> get(@PathVariable String seriesId) {
+  public ResponseEntity<SeriesDTO> get(@PathVariable Long seriesId) {
     try {
       return ResponseEntity.ok(this.seriesService.findById(seriesId));
     } catch (final IdNotFoundException exception) {
@@ -70,15 +70,15 @@ public class SeriesRest implements Restable<SeriesDTO> {
     }
   }
 
-  @Override
+  
   @PutMapping("/{seriesId}")
-  public void put(@PathVariable String seriesId, @RequestBody final SeriesDTO seriesDTO) {
+  public void put(@PathVariable Long seriesId, @RequestBody final SeriesDTO seriesDTO) {
     seriesDTO.setId(seriesId);
     this.seriesService.update(seriesDTO);
   }
 
   @DeleteMapping("/{seriesId}")
-  public void delete(@PathVariable final String seriesId) {
+  public void delete(@PathVariable final Long seriesId) {
     this.seriesService.delete(seriesId);
   }
 

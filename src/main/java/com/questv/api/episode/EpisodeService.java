@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 
 @Service(value = "episodeService")
-public class EpisodeService implements ObjectService<EpisodeDTO> {
+public class EpisodeService {
 
   private final EpisodeRepository episodeRepository;
   private final SeasonRepository seasonRepository;
@@ -27,21 +27,22 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
   }
 
 
-  @Override
-  public EpisodeDTO createAndAttach(final EpisodeDTO episodeDTO) {
-    final SeasonModel seasonModel = findSeasonById(episodeDTO.getSeasonId());
+  
+  public EpisodeDTO createAndAttach(final Long seasonId,
+                                    final EpisodeDTO episodeDTO) {
+    final SeasonModel seasonModel = findSeasonById(seasonId);
     final EpisodeModel episodeModel = save(episodeDTO.convert());
     seasonModel.attachEpisode(episodeModel);
     this.seasonRepository.save(seasonModel);
     return episodeModel.convert();
   }
 
-  @Override
+  
   public EpisodeDTO create(final EpisodeDTO episodeDTO) {
     return this.episodeRepository.save(episodeDTO.convert()).convert();
   }
 
-  @Override
+  
   public List<EpisodeDTO> findAll() {
     final List<EpisodeModel> result = new ArrayList<>();
     this.episodeRepository.findAll().forEach(result::add);
@@ -51,12 +52,12 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
         .collect(Collectors.toList());
   }
 
-  @Override
-  public EpisodeDTO findById(String episodeId) {
+  
+  public EpisodeDTO findById(final Long episodeId) {
     return findModelById(episodeId).convert();
   }
 
-  private EpisodeModel findModelById(String episodeId) {
+  private EpisodeModel findModelById(Long episodeId) {
     Optional<EpisodeModel> episodeModel = this.episodeRepository.findById(episodeId);
     if (episodeModel.isPresent()) {
       return episodeModel.get();
@@ -64,7 +65,7 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
     throw new IdNotFoundException();
   }
 
-  @Override
+  
   public void update(final EpisodeDTO episodeDTO) {
     final EpisodeModel episodeModel = findModelById(episodeDTO.getId());
     episodeModel.update(episodeDTO.convert());
@@ -76,7 +77,7 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
   }
 
 
-  private SeasonModel findSeasonById(final String seasonId) {
+  private SeasonModel findSeasonById(final Long seasonId) {
     final Optional<SeasonModel> seasonModel = this.seasonRepository.findById(seasonId);
     if (seasonModel.isPresent()) {
       return seasonModel.get();
@@ -84,17 +85,16 @@ public class EpisodeService implements ObjectService<EpisodeDTO> {
     throw new IdNotFoundException();
   }
 
-  @Override
-  public void delete(final String episodeId) {
-    final EpisodeModel episodeModel = findModelById(episodeId);
-    final SeasonModel seasonModel = findSeasonById(episodeModel.getSeasonId());
+  
+  public void delete(final Long seasonId, final Long episodeId) {
+    final SeasonModel seasonModel = findSeasonById(seasonId);
     seasonModel.removeEpisodeById(episodeId);
     this.seasonRepository.save(seasonModel);
     this.episodeRepository.deleteById(episodeId);
   }
 
-  @Override
-  public List<EpisodeDTO> findAllByParent(final String seasonId) {
+  
+  public List<EpisodeDTO> findAllByParent(final Long seasonId) {
     final SeasonModel seasonModel = findSeasonById(seasonId);
     return seasonModel
         .getEpisodes()

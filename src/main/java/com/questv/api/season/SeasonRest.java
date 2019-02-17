@@ -12,18 +12,18 @@ import java.util.List;
 @RestController
 @RequestMapping("/series/{seriesId}/seasons")
 public class SeasonRest {
-  private final ObjectService<SeasonDTO> seasonService;
+  private final SeasonService seasonService;
 
-  public SeasonRest(final ObjectService<SeasonDTO> seasonService) {
+  public SeasonRest(final SeasonService seasonService) {
     this.seasonService = seasonService;
     assert this.seasonService != null;
   }
 
   @PostMapping()
-  public ResponseEntity<SeasonDTO> post(@PathVariable("seriesId") final String seriesId,
+  public ResponseEntity<SeasonDTO> post(@PathVariable("seriesId") final Long seriesId,
                                         @Valid @RequestBody final SeasonDTO seasonDTO) {
     try {
-      SeasonDTO attachedSeason = this.seasonService.createAndAttach(seasonDTO);
+      SeasonDTO attachedSeason = this.seasonService.createAndAttach(seriesId, seasonDTO);
       return ResponseEntity.status(HttpStatus.CREATED).body(attachedSeason);
     } catch (final Exception exception) {
       return ResponseEntity.badRequest().body(null);
@@ -31,7 +31,7 @@ public class SeasonRest {
   }
 
   @GetMapping()
-  public ResponseEntity<List<SeasonDTO>> getAllBySeries(@PathVariable final String seriesId) {
+  public ResponseEntity<List<SeasonDTO>> getAllBySeries(@PathVariable final Long seriesId) {
     try {
       final List<SeasonDTO> allByParent = this.seasonService.findAllByParent(seriesId);
       return ResponseEntity.ok(allByParent);
@@ -39,15 +39,10 @@ public class SeasonRest {
       return ResponseEntity.badRequest().body(null);
     }
   }
-
-  public ResponseEntity<List<SeasonDTO>> get(@PathVariable final String seriesId) {
-    return ResponseEntity.ok(this.seasonService.findAll());
-  }
-
   
   @GetMapping("/{seasonId}")
-  public ResponseEntity<SeasonDTO> get(@PathVariable final String seriesId,
-                                       @PathVariable final String seasonId) {
+  public ResponseEntity<SeasonDTO> get(@PathVariable final Long seriesId,
+                                       @PathVariable final Long seasonId) {
     try {
       return ResponseEntity.ok(this.seasonService.findById(seasonId));
     } catch (final Exception exception) {
@@ -57,15 +52,15 @@ public class SeasonRest {
 
   
   @DeleteMapping("/{seasonId}")
-  public void delete(@PathVariable final String seriesId,
-                     @PathVariable final String seasonId) {
-    this.seasonService.delete(seasonId);
+  public void delete(@PathVariable final Long seriesId,
+                     @PathVariable final Long seasonId) {
+    this.seasonService.delete(seriesId, seasonId);
   }
 
   
   @PutMapping("/{seasonId}")
-  public void put(@PathVariable final String seriesId,
-                  @PathVariable("seasonId") final String seasonId,
+  public void put(@PathVariable final Long seriesId,
+                  @PathVariable("seasonId") final Long seasonId,
                   @Valid @RequestBody final SeasonDTO seasonDTO) {
     seasonDTO.setId(seasonId);
     this.seasonService.update(seasonDTO);

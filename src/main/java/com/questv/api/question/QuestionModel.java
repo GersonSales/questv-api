@@ -20,12 +20,8 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
 
   @Id
   @NotNull
-  @GeneratedValue(generator = "system-uuid")
-  @GenericGenerator(name = "system-uuid", strategy = "uuid")
-  private String id;
-
-  @NotNull
-  private String ownerId;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
   @NotEmpty
   private String description;
@@ -44,32 +40,22 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
   /*default*/ QuestionModel() {
   }
 
-  /*default*/ QuestionModel(final String id,
-                            final String ownerId,
+  /*default*/ QuestionModel(final Long id,
                             final String description,
                             final Difficult difficult,
                             final Set<Answer> answerSet) {
     this.id = id;
-    this.ownerId = ownerId;
     this.description = description;
     this.difficult = difficult;
     this.answerSet = answerSet;
   }
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
-  }
-
-  public String getOwnerId() {
-    return ownerId;
-  }
-
-  public void setOwnerId(String ownerId) {
-    this.ownerId = ownerId;
   }
 
   public String getDescription() {
@@ -98,7 +84,7 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
 
   @Override
   public QuestionDTO convert() {
-    final Map<String, Map<String, Boolean>> answerIdsMap = new HashMap<>();
+    final Map<Long, Map<String, Boolean>> answerIdsMap = new HashMap<>();
     for (final Answer answer : this.answerSet) {
       final Map<String, Boolean> answersMap = new HashMap<>();
       answersMap.put(answer.getValue(), answer.isCorrect());
@@ -108,13 +94,12 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
     final Integer difficult = getDifficult().getDifficult();
     final Integer reward = getDifficult().getReward();
 
-    return new QuestionDTO(getId(), getOwnerId(), getDescription(), difficult, reward, answerIdsMap);
+    return new QuestionDTO(getId(), getDescription(), difficult, reward, answerIdsMap);
   }
 
   @Override
   public void update(final QuestionModel update) {
     setDescription(update.getDescription());
-    setOwnerId(update.getOwnerId());
     setAnswerSet(update.getAnswerSet());
     difficult.evaluate(update.getDifficult().getDifficult());
   }

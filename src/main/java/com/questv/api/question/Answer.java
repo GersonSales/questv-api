@@ -13,9 +13,8 @@ public class Answer {
 
   @Id
   @NotNull
-  @GeneratedValue(generator = "system-uuid")
-  @GenericGenerator(name = "system-uuid", strategy = "uuid")
-  private String id;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
   @NotNull
   private String value;
@@ -39,7 +38,7 @@ public class Answer {
     return isCorrect;
   }
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 }

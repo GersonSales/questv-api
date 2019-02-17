@@ -22,19 +22,19 @@ public class EpisodeRest  {
 
   
   @PostMapping()
-  public ResponseEntity<EpisodeDTO> post(@PathVariable("seriesId") final String seriesId,
-                                         @PathVariable("seasonId") final String seasonId,
+  public ResponseEntity<EpisodeDTO> post(@PathVariable("seriesId") final Long seriesId,
+                                         @PathVariable("seasonId") final Long seasonId,
                                          @Valid @RequestBody EpisodeDTO episodeDTO) {
     try {
-      return ResponseEntity.status(HttpStatus.CREATED).body(this.episodeService.createAndAttach(episodeDTO));
+      return ResponseEntity.status(HttpStatus.CREATED).body(this.episodeService.createAndAttach(seasonId, episodeDTO));
     } catch (final Exception exception) {
       return ResponseEntity.badRequest().build();
     }
   }
 
   @GetMapping()
-  public ResponseEntity<List<EpisodeDTO>> getAllBySeason(@PathVariable("seriesId") final String seriesId,
-                                                         @PathVariable final String seasonId) {
+  public ResponseEntity<List<EpisodeDTO>> getAllBySeason(@PathVariable("seriesId") final Long seriesId,
+                                                         @PathVariable final Long seasonId) {
     try {
       return ResponseEntity.ok().body(this.episodeService.findAllByParent(seasonId));
     } catch (final Exception exception) {
@@ -50,9 +50,9 @@ public class EpisodeRest  {
 
   
   @GetMapping("/{episodeId}")
-  public ResponseEntity<EpisodeDTO> get(@PathVariable("seriesId") final String seriesId,
-                                        @PathVariable final String seasonId,
-                                        @PathVariable final String episodeId) {
+  public ResponseEntity<EpisodeDTO> get(@PathVariable("seriesId") final Long seriesId,
+                                        @PathVariable final Long seasonId,
+                                        @PathVariable final Long episodeId) {
     try {
       return ResponseEntity.ok().body(this.episodeService.findById(episodeId));
     } catch (final Exception exception) {
@@ -62,17 +62,18 @@ public class EpisodeRest  {
 
   
   @DeleteMapping("/{episodeId}")
-  public void delete(@PathVariable("seriesId") final String seriesId,
-                     @PathVariable final String seasonId,
-                     @PathVariable String episodeId) {
-    this.episodeService.delete(episodeId);
+  public void delete(@PathVariable("seriesId") final Long seriesId,
+                     @PathVariable final Long seasonId,
+                     @PathVariable Long episodeId) {
+    this.episodeService.delete(seasonId, episodeId);
   }
 
   
   @PutMapping("/{episodeId}")
-  public void put(@PathVariable("seriesId") final String seriesId,
-                  @PathVariable final String seasonId,
-                  @PathVariable("episodeId") final String episodeId, final EpisodeDTO episodeDTO) {
+  public void put(@PathVariable("seriesId") final Long seriesId,
+                  @PathVariable final Long seasonId,
+                  @PathVariable("episodeId") final Long episodeId,
+                  final EpisodeDTO episodeDTO) {
     episodeDTO.setId(episodeId);
     this.episodeService.update(episodeDTO);
   }

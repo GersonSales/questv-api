@@ -20,9 +20,8 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   @Id
   @NotNull
-  @GeneratedValue(generator="system-uuid")
-  @GenericGenerator(name="system-uuid", strategy = "uuid")
-  private String id;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
   @NotNull
   private String name;
@@ -66,7 +65,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     setQuestions(new HashSet<>());
   }
 
-  /*default*/ SeriesModel(final String id,
+  /*default*/ SeriesModel(final Long id,
                           final String name,
                           final String abbreviation,
                           final String category,
@@ -89,17 +88,27 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   @Override
   public SeriesDTO convert() {
-    final Set<String> seasonsIds = this.seasons
+    final Set<Long> seasonsIds = this.seasons
         .stream()
         .map(SeasonModel::getId)
         .collect(Collectors.toSet());
 
-    final Set<String> questionsIds = this.questions
+    final Set<Long> questionsIds = this.questions
         .stream()
         .map(QuestionModel::getId)
         .collect(Collectors.toSet());
 
-    return new SeriesDTO(getId(), getName(), getAbbreviation(), getCategory(), getIsRelease(), getCoverImage(), getCoverImageUrl(), getPromoImage(), getPromoImageUrl(), seasonsIds, questionsIds);
+    return new SeriesDTO(getId(),
+        getName(),
+        getAbbreviation(),
+        getCategory(),
+        getIsRelease(),
+        getCoverImage(),
+        getCoverImageUrl(),
+        getPromoImage(),
+        getPromoImageUrl(),
+        seasonsIds,
+        questionsIds);
   }
 
   @Override
@@ -114,11 +123,11 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     setPromoImageUrl(update.getPromoImageUrl());
   }
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -190,7 +199,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     this.seasons.add(seasonModel);
   }
 
-  public void removeSeasonById(final String seasonId) {
+  public void removeSeasonById(final Long seasonId) {
     for (final SeasonModel seasonModel : this.seasons) {
       if (seasonModel.getId().equals(seasonId)) {
         this.seasons.remove(seasonModel);

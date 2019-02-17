@@ -14,11 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
 @Service(value = "questionService")
-public class QuestionService implements ObjectService<QuestionDTO> {
+public class QuestionService {
 
   private final QuestionRepository questionRepository;
   private final SeriesRepository seriesRepository;
@@ -37,9 +38,10 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     assert this.questionRepository != null;
   }
 
-  @Override
-  public QuestionDTO createAndAttach(final QuestionDTO questionDTO) {
-    final Questionable questionable = findQuestionableById(questionDTO.getOwnerId());
+
+  public QuestionDTO createAndAttach(final Long questionableId,
+                                     final QuestionDTO questionDTO) {
+    final Questionable questionable = findQuestionableById(questionableId);
     final QuestionModel questionModel = save(questionDTO.convert());
     questionable.attachQuestion(questionModel);
     saveQuestionable(questionable);
@@ -56,7 +58,7 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     }
   }
 
-  private Questionable findQuestionableById(final String questionableId) {
+  private Questionable findQuestionableById(final Long questionableId) {
     Optional<SeriesModel> seriesById = this.seriesRepository.findById(questionableId);
     if (seriesById.isPresent()) {
       return seriesById.get();
@@ -75,12 +77,12 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     throw new IdNotFoundException("Cannot find the question owner with this given id");
   }
 
-  @Override
+
   public QuestionDTO create(final QuestionDTO model) {
     throw new RuntimeException("Cannot attach a question into an empty owner.");
   }
 
-  @Override
+
   public List<QuestionDTO> findAll() {
     return this.questionRepository
         .findAll()
@@ -89,12 +91,12 @@ public class QuestionService implements ObjectService<QuestionDTO> {
         .collect(Collectors.toList());
   }
 
-  @Override
-  public QuestionDTO findById(final String questionId) {
+
+  public QuestionDTO findById(final Long questionId) {
     return findModelById(questionId).convert();
   }
 
-  private QuestionModel findModelById(final String questionId) {
+  private QuestionModel findModelById(final Long questionId) {
     final Optional<QuestionModel> foundQuestion = this.questionRepository.findById(questionId);
     if (foundQuestion.isPresent()) {
       return foundQuestion.get();
@@ -103,7 +105,7 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     }
   }
 
-  @Override
+
   public void update(QuestionDTO questionDTO) {
     final QuestionModel questionModel = findModelById(questionDTO.getId());
     questionModel.update(questionDTO.convert());
@@ -115,10 +117,9 @@ public class QuestionService implements ObjectService<QuestionDTO> {
   }
 
 
-  @Override
-  public void delete(final String questionId) {
+  public void delete(final Long questionableId, final Long questionId) {
     final QuestionModel questionModel = findModelById(questionId);
-    final Questionable questionable = findQuestionableById(questionModel.getOwnerId());
+    final Questionable questionable = findQuestionableById(questionableId);
     detachQuestionFromQuestionable(questionModel, questionable);
     this.questionRepository.deleteById(questionId);
   }
@@ -129,18 +130,17 @@ public class QuestionService implements ObjectService<QuestionDTO> {
     saveQuestionable(questionable);
   }
 
-  @Override
-  public List<QuestionDTO> findAllByParent(String parentId) {
-    final List<QuestionDTO> result = new ArrayList<>();
-    for (final QuestionDTO questionDTO : this.findAll()) {
-      if (questionDTO.getOwnerId().equals(parentId)) {
-        result.add(questionDTO);
-      }
-    }
-    return result;
+
+  public List<QuestionDTO> findAllByParent(final Long questionableId) {
+    Questionable questionable = findQuestionableById(questionableId);
+    return questionable
+        .getQuestions()
+        .stream()
+        .map(QuestionModel::convert)
+        .collect(Collectors.toList());
   }
 
-  /*default*/ List<QuestionDTO> findAllByParentRecursive(final String parentId) {
+  /*default*/ List<QuestionDTO> findAllByParentRecursive(final Long parentId) {
     return findQuestionableById(parentId)
         .getQuestionsRecursively()
         .stream()

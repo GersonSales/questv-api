@@ -11,7 +11,7 @@ import java.util.Set;
 public class EpisodeDTO implements Convertible<EpisodeModel> {
 
 
-  private String id;
+  private Long id;
 
   @NotNull
   private String seasonId;
@@ -23,17 +23,17 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
   @NotNull
   private Integer number;
 
-  private Set<String> questions;
+  private Set<Long> questions;
 
   /*default*/ EpisodeDTO() {
     this.questions = new HashSet<>();
   }
 
-  /*default*/ EpisodeDTO(final String id,
+  /*default*/ EpisodeDTO(final Long id,
                          final String seasonId,
                          final String name,
                          final Integer number,
-                         final Set<String> questions) {
+                         final Set<Long> questions) {
     this.id = id;
     this.seasonId = seasonId;
     this.name = name;
@@ -47,11 +47,11 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
     return new EpisodeModel(getId(), getSeasonId(), getName(), getNumber());
   }
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -79,11 +79,11 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
     this.number = number;
   }
 
-  public Set<String> getQuestions() {
+  public Set<Long> getQuestions() {
     return questions;
   }
 
-  public void setQuestions(Set<String> questions) {
+  public void setQuestions(Set<Long> questions) {
     this.questions = questions;
   }
 }

@@ -11,10 +11,7 @@ import java.util.Set;
 
 public class QuestionDTO implements Convertible<QuestionModel>, Updatable<QuestionDTO> {
 
-  private String id;
-
-  @NotNull
-  private String ownerId;
+  private Long id;
 
   @NotNull
   private String description;
@@ -26,41 +23,31 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
   private Integer reward;
 
   @NotNull
-  private Map<String, Map<String, Boolean>> _answers;
+  private Map<Long, Map<String, Boolean>> _answers;
 
 
   /*default*/ QuestionDTO() {
   }
 
-  /*default*/ QuestionDTO(final String id,
-                          final String ownerId,
+  /*default*/ QuestionDTO(final Long id,
                           final String description,
                           final Integer difficult,
                           final Integer reward,
-                          final Map<String, Map<String, Boolean>> _answers) {
+                          final Map<Long, Map<String, Boolean>> _answers) {
 
     this.id = id;
-    this.ownerId = ownerId;
     this.description = description;
     this.difficult = difficult;
     this.reward = reward;
     this._answers = _answers;
   }
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
-  }
-
-  public String getOwnerId() {
-    return ownerId;
-  }
-
-  public void setOwnerId(String ownerId) {
-    this.ownerId = ownerId;
   }
 
   public String getDescription() {
@@ -71,11 +58,11 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
     this.description = description;
   }
 
-  public Map<String, Map<String, Boolean>> get_answers() {
+  public Map<Long, Map<String, Boolean>> get_answers() {
     return _answers;
   }
 
-  public void set_answers(final Map<String, Map<String, Boolean>> _answers) {
+  public void set_answers(final Map<Long, Map<String, Boolean>> _answers) {
     this._answers = _answers;
   }
 
@@ -98,7 +85,7 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
   @Override
   public QuestionModel convert() {
     final Set<Answer> answerSet = new HashSet<>();
-    for (final String id : _answers.keySet()) {
+    for (final Long id : _answers.keySet()) {
       for (final String answer : this._answers.get(id).keySet()) {
         answerSet.add(new Answer(answer, this._answers.get(id).get(answer)));
       }
@@ -106,14 +93,13 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
 
 
     final Difficult difficult = new Difficult(getDifficult());
-    return new QuestionModel(getId(), getOwnerId(), getDescription(), difficult, answerSet);
+    return new QuestionModel(getId(), getDescription(), difficult, answerSet);
   }
 
   @Override
   public void update(final QuestionDTO update) {
     setDescription(update.getDescription());
     set_answers(update.get_answers());
-    setOwnerId(update.getOwnerId());
     setDifficult(update.getDifficult());
   }
 }

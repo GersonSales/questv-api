@@ -22,9 +22,8 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
 
   @Id
   @NotNull
-  @GeneratedValue(generator = "system-uuid")
-  @GenericGenerator(name = "system-uuid", strategy = "uuid")
-  private String id;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
   @NotNull
   private String seasonId;
@@ -45,7 +44,7 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
     this.questions = new HashSet<>();
   }
 
-  /*default*/ EpisodeModel(final String id,
+  /*default*/ EpisodeModel(final Long id,
                            final String seasonId,
                            final String name,
                            final Integer number) {
@@ -55,11 +54,11 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
     this.number = number;
   }
 
-  public String getId() {
+  public Long getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -89,7 +88,7 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
 
   @Override
   public EpisodeDTO convert() {
-    final Set<String> questionsIds = questions == null ? new HashSet<>() : questions//TODO
+    final Set<Long> questionsIds = questions == null ? new HashSet<>() : questions//TODO
         .stream()
         .map(QuestionModel::getId)
         .collect(Collectors.toSet());
