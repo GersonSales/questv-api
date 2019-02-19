@@ -42,6 +42,7 @@ public class QuestionService {
   public QuestionDTO createAndAttach(final Long questionableId,
                                      final QuestionDTO questionDTO) {
     final Questionable questionable = findQuestionableById(questionableId);
+    questionDTO.setQuestionableId(questionableId);
     final QuestionModel questionModel = save(questionDTO.convert());
     questionable.attachQuestion(questionModel);
     saveQuestionable(questionable);
@@ -58,7 +59,7 @@ public class QuestionService {
     }
   }
 
-  private Questionable findQuestionableById(final Long questionableId) {
+  public Questionable findQuestionableById(final Long questionableId) {
     Optional<SeriesModel> seriesById = this.seriesRepository.findById(questionableId);
     if (seriesById.isPresent()) {
       return seriesById.get();

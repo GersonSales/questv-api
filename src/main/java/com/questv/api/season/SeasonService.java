@@ -31,6 +31,7 @@ public class SeasonService {
   public SeasonDTO createAndAttach(final Long seriesId,
                                    final SeasonDTO seasonDTO) {
     final SeriesModel seriesModel = findSeriesById(seriesId);
+    seasonDTO.setOwnerId(seriesModel.getId());
     final SeasonModel seasonModel = save(seasonDTO.convert());
     seriesModel.attachSeason(seasonModel);
     saveSeries(seriesModel);

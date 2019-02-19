@@ -1,9 +1,12 @@
 package com.questv.api.question;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.questv.api.contracts.Convertible;
+import com.questv.api.contracts.Questionable;
 import com.questv.api.contracts.Updatable;
 import com.questv.api.question.difficult.Difficult;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.ManyToAny;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -30,6 +33,9 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
   @OneToOne(cascade = CascadeType.ALL)
   private Difficult difficult;
 
+  @NotNull
+  private Long questionableId;
+
 
   @NotNull
   @Embedded
@@ -43,10 +49,12 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
   /*default*/ QuestionModel(final Long id,
                             final String description,
                             final Difficult difficult,
+                            final Long questionableId,
                             final Set<Answer> answerSet) {
     this.id = id;
     this.description = description;
     this.difficult = difficult;
+    this.questionableId = questionableId;
     this.answerSet = answerSet;
   }
 
@@ -76,6 +84,15 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
     this.answerSet = answerSet;
   }
 
+
+  public void setQuestionableId(Long questionableId) {
+    this.questionableId = questionableId;
+  }
+
+  public Long getQuestionableId() {
+    return questionableId;
+  }
+
   public Difficult getDifficult() {
     return difficult;
   }
@@ -96,7 +113,7 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
     final Integer difficult = getDifficult().getDifficult();
     final Integer reward = getDifficult().getReward();
 
-    return new QuestionDTO(getId(), getDescription(), difficult, reward, answerIdsMap);
+    return new QuestionDTO(getId(), getDescription(), difficult, reward, getQuestionableId(), answerIdsMap);
   }
 
   @Override

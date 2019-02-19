@@ -112,4 +112,12 @@ public class UserService implements UserDetailsService {
     }
     throw new UserNotFoundException();
   }
+
+  public void detachAnsweredQuestion(final String userId,
+                                     final AnsweredQuestionDTO answeredQuestionModel) {
+
+    final UserModel userModel = findModelById(userId);
+    userModel.detachAnsweredQuestion(answeredQuestionModel.convert());
+    this.userRepository.save(userModel);
+  }
 }

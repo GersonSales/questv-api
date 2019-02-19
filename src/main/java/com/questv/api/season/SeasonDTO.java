@@ -1,5 +1,6 @@
 package com.questv.api.season;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Updatable;
 
@@ -11,6 +12,8 @@ import java.util.Set;
 public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO> {
 
   private Long id;
+
+  private Long ownerId;
 
   @NotNull
   private Integer number;
@@ -26,11 +29,13 @@ public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO>
   /*default*/ SeasonDTO() { }
 
   /*default*/ SeasonDTO(final Long id,
+                        final Long ownerId,
                         final Integer number,
                         final String name,
                         final Set<Long> episodes,
                         final Set<Long> questions) {
     this.id = id;
+    this.ownerId = ownerId;
     this.number = number;
     this.name = name;
     this.episodes = episodes;
@@ -40,7 +45,7 @@ public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO>
 
   @Override
   public SeasonModel convert() {
-    return new SeasonModel(getId(), getNumber(), getName());
+    return new SeasonModel(getId(), getOwnerId(), getNumber(), getName());
   }
 
   @Override
@@ -54,6 +59,15 @@ public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO>
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  @JsonIgnore
+  public Long getOwnerId() {
+    return ownerId;
+  }
+
+  public void setOwnerId(Long ownerId) {
+    this.ownerId = ownerId;
   }
 
   public Integer getNumber() {

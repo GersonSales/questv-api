@@ -1,5 +1,6 @@
 package com.questv.api.episode;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.questv.api.contracts.Convertible;
 
 import javax.validation.constraints.NotEmpty;
@@ -12,6 +13,9 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
 
 
   private Long id;
+
+  @JsonIgnore
+  private Long ownerId;
 
   @NotEmpty
   @Size(min = 3, max = 256, message = "Episode name should have 3 characters at least.")
@@ -27,10 +31,12 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
   }
 
   /*default*/ EpisodeDTO(final Long id,
+                         final Long ownerId,
                          final String name,
                          final Integer number,
                          final Set<Long> questions) {
     this.id = id;
+    this.ownerId = ownerId;
     this.name = name;
     this.number = number;
     this.questions = questions;
@@ -39,7 +45,7 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
 
   @Override
   public EpisodeModel convert() {
-    return new EpisodeModel(getId(), getName(), getNumber());
+    return new EpisodeModel(getId(), getOwnerId(), getName(), getNumber());
   }
 
   public Long getId() {
@@ -48,6 +54,15 @@ public class EpisodeDTO implements Convertible<EpisodeModel> {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+
+  public Long getOwnerId() {
+    return ownerId;
+  }
+
+  public void setOwnerId(Long ownerId) {
+    this.ownerId = ownerId;
   }
 
   public String getName() {

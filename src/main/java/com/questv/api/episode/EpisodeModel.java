@@ -26,6 +26,9 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
   private Long id;
 
   @NotNull
+  private Long ownerId;
+
+  @NotNull
   @NotEmpty
   private String name;
 
@@ -42,9 +45,11 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
   }
 
   /*default*/ EpisodeModel(final Long id,
+                           final Long ownerId,
                            final String name,
                            final Integer number) {
     this.id = id;
+    this.ownerId = ownerId;
     this.name = name;
     this.number = number;
   }
@@ -55,6 +60,14 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public Long getOwnerId() {
+    return ownerId;
+  }
+
+  public void setOwnerId(Long ownerId) {
+    this.ownerId = ownerId;
   }
 
   public String getName() {
@@ -80,7 +93,7 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
         .map(QuestionModel::getId)
         .collect(Collectors.toSet());
 
-    return new EpisodeDTO(getId(), getName(), getNumber(), questionsIds);
+    return new EpisodeDTO(getId(), getOwnerId(),  getName(), getNumber(), questionsIds);
   }
 
   @Override
@@ -113,5 +126,10 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
   @Override
   public Set<QuestionModel> getQuestionsRecursively() {
     return getQuestions();
+  }
+
+  @Override
+  public Integer getQuestionsCount() {
+    return getQuestions().size();
   }
 }

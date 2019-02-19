@@ -27,6 +27,9 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
   private Long id;
 
   @NotNull
+  private Long ownerId;
+
+  @NotNull
   private Integer number;
 
   @NotNull
@@ -48,10 +51,11 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
     this.questions = new HashSet<>();
   }
 
-  /*default*/ SeasonModel(final Long id, final Integer number, final String name) {
+  /*default*/ SeasonModel(final Long id, final Long ownerId, final Integer number, final String name) {
 
     this();
     this.id = id;
+    this.ownerId = ownerId;
     this.number = number;
     this.name = name;
   }
@@ -63,6 +67,14 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public Long getOwnerId() {
+    return ownerId;
+  }
+
+  public void setOwnerId(Long ownerId) {
+    this.ownerId = ownerId;
   }
 
   public Integer getNumber() {
@@ -96,6 +108,7 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
         .collect(Collectors.toSet());
 
     return new SeasonDTO(getId(),
+        getOwnerId(),
         getNumber(),
         getName(),
         episodesIds,
@@ -163,5 +176,10 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
       }
     }
     throw new EpisodeNotFoundException();
+  }
+
+  @Override
+  public Integer getQuestionsCount() {
+    return getQuestionsRecursively().size();
   }
 }

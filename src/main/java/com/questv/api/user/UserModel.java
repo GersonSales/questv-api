@@ -165,4 +165,7 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
  }
 
 
+  public void detachAnsweredQuestion(final AnsweredQuestionModel answeredQuestion) {
+    this.answeredQuestionModels.remove(answeredQuestion);
+  }
 }

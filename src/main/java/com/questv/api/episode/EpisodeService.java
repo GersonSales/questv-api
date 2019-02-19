@@ -39,6 +39,7 @@ public class EpisodeService {
                                     final Integer seasonNumber,
                                     final EpisodeDTO episodeDTO) {
     final SeasonModel seasonModel = findSeasonByNumber(seriesId, seasonNumber);
+    episodeDTO.setOwnerId(seasonModel.getId());
     final EpisodeModel episodeModel = save(episodeDTO.convert());
     seasonModel.attachEpisode(episodeModel);
     this.seasonRepository.save(seasonModel);

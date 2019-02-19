@@ -139,4 +139,8 @@ public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
     setEmail(model.getEmail());
     setPassword(model.getPassword());
   }
+
+  public Integer getAnsweredQuestionsCount() {
+    return getAnsweredQuestions().size();
+  }
 }

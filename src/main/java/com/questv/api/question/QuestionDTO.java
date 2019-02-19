@@ -1,7 +1,9 @@
 package com.questv.api.question;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Updatable;
+import com.questv.api.exception.AnswerNotFoundException;
 import com.questv.api.question.difficult.Difficult;
 
 import javax.validation.constraints.NotNull;
@@ -20,6 +22,9 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
   @NotNull
   private Integer reward;
 
+  @JsonIgnore
+  private Long questionableId;
+
   @NotNull
   private Map<Long, Map<String, Boolean>> _answers;
 
@@ -32,12 +37,14 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
                           final String description,
                           final Integer difficult,
                           final Integer reward,
+                          final Long questionableId,
                           final Map<Long, Map<String, Boolean>> _answers) {
 
     this.id = id;
     this.description = description;
     this.difficult = difficult;
     this.reward = reward;
+    this.questionableId = questionableId;
     this._answers = _answers;
   }
 
@@ -81,6 +88,15 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
     this.reward = reward;
   }
 
+  /*default*/
+  public Long getQuestionableId() {
+    return questionableId;
+  }
+
+  void setQuestionableId(Long questionableId) {
+    this.questionableId = questionableId;
+  }
+
   @Override
   public QuestionModel convert() {
     final Set<Answer> answerSet = new HashSet<>();
@@ -92,7 +108,7 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
 
 
     final Difficult difficult = new Difficult(getDifficult());
-    return new QuestionModel(getId(), getDescription(), difficult, answerSet);
+    return new QuestionModel(getId(), getDescription(), difficult, getQuestionableId(), answerSet);
   }
 
   @Override
@@ -101,4 +117,15 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
     set_answers(update.get_answers());
     setDifficult(update.getDifficult());
   }
+
+  @JsonIgnore
+  public Long getCorrectAnswerId() {
+    for (final Long answerId : this._answers.keySet()) {
+      if (this._answers.get(answerId).containsValue(true)) {
+        return answerId;
+      }
+    }
+    throw new AnswerNotFoundException("This question has no correct answers.");
+  }
+
 }

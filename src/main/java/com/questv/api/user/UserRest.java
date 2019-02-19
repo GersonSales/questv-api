@@ -52,4 +52,11 @@ public class UserRest {
     this.userService.attachAnsweredQuestion(userId, answeredQuestionModel);
 
   }
+
+  @DeleteMapping("/{userId}/answeredQuestion")
+  public void deleteAnsweredQuestion(@PathVariable final String userId,
+                                   @RequestBody final AnsweredQuestionDTO answeredQuestionModel) {
+    this.userService.detachAnsweredQuestion(userId, answeredQuestionModel);
+
+  }
 }

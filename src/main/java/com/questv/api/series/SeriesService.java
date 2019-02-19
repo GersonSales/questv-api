@@ -46,7 +46,7 @@ public class SeriesService {
     return findModelById(seriesId).convert();
   }
 
-  private SeriesModel findModelById(final Long seriesId) {
+  public SeriesModel findModelById(final Long seriesId) {
     final Optional<SeriesModel> seriesModel = this.seriesRepository.findById(seriesId);
     if (seriesModel.isPresent()) {
       return seriesModel.get();

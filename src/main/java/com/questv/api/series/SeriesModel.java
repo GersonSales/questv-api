@@ -47,9 +47,10 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   @OneToMany(cascade = CascadeType.ALL)
   private Set<SeasonModel> seasons;
 
-  @Embedded
-  @ElementCollection
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany
+  @JoinTable(name = "questionable_has_question",
+      joinColumns = {@JoinColumn(name = "questionable_id")},
+      inverseJoinColumns = {@JoinColumn(name = "question_id")})
   private Set<QuestionModel> questions;
 
 
@@ -257,5 +258,10 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     }
 
     throw new SeasonNotFoundException();
+  }
+
+  @Override
+  public Integer getQuestionsCount() {
+    return getQuestionsRecursively().size();
   }
 }
