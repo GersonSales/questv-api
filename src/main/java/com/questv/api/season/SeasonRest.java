@@ -40,11 +40,11 @@ public class SeasonRest {
     }
   }
   
-  @GetMapping("/{seasonId}")
+  @GetMapping("/{seasonNumber}")
   public ResponseEntity<SeasonDTO> get(@PathVariable final Long seriesId,
-                                       @PathVariable final Long seasonId) {
+                                       @PathVariable final Integer seasonNumber) {
     try {
-      return ResponseEntity.ok(this.seasonService.findById(seasonId));
+      return ResponseEntity.ok(this.seasonService.findByNumber(seriesId, seasonNumber));
     } catch (final Exception exception) {
       return ResponseEntity.badRequest().body(null);
     }

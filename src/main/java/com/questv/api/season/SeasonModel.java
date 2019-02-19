@@ -80,6 +80,8 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
     this.name = name;
   }
 
+
+
   @Override
   public SeasonDTO convert() {
     final Set<Long> episodesIds = episodes

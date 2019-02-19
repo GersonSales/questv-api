@@ -3,6 +3,7 @@ package com.questv.api.series;
 import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Modelable;
 import com.questv.api.contracts.Questionable;
+import com.questv.api.exception.SeasonNotFoundException;
 import com.questv.api.question.QuestionModel;
 import com.questv.api.season.SeasonModel;
 import com.questv.api.contracts.Updatable;
@@ -246,5 +247,15 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
       result.addAll(questionable.getQuestionsRecursively());
     }
     return result;
+  }
+
+  public SeasonModel getSeasonByNumber(final Integer seasonNumber) {
+    for (final SeasonModel seasonModel : this.seasons) {
+      if (seasonModel.getNumber().equals(seasonNumber)) {
+        return seasonModel;
+      }
+    }
+
+    throw new SeasonNotFoundException();
   }
 }

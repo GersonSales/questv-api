@@ -2,6 +2,7 @@ package com.questv.api.season;
 
 import com.questv.api.contracts.ObjectService;
 import com.questv.api.exception.IdNotFoundException;
+import com.questv.api.exception.SeasonNotFoundException;
 import com.questv.api.series.SeriesModel;
 import com.questv.api.series.SeriesRepository;
 import org.springframework.stereotype.Service;
@@ -68,6 +69,22 @@ public class SeasonService {
   
   public SeasonDTO findById(final Long seasonId) {
     return findModelById(seasonId).convert();
+  }
+
+  public SeasonDTO findByNumber(final Long seriesId, final Integer seasonNumber) {
+    return findModelByNumber(seriesId, seasonNumber).convert();
+  }
+
+  private SeasonModel findModelByNumber(final Long seriesId,
+                                        final Integer seasonNumber) {
+    final Optional<SeriesModel> optSeriesModel = this.seriesRepository.findById(seriesId);
+    if (optSeriesModel.isPresent()) {
+      final SeriesModel seriesModel = optSeriesModel.get();
+      return seriesModel.getSeasonByNumber(seasonNumber);
+    }
+
+
+    throw new SeasonNotFoundException();
   }
 
   private SeasonModel findModelById(final Long seasonId) {
