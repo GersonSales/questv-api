@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/series/{seriesId}/seasons/{seasonId}/episodes")
+@RequestMapping("/series/{seriesId}/seasons/{seasonNumber}/episodes")
 public class EpisodeRest  {
 
   private final EpisodeService episodeService;
@@ -22,21 +22,22 @@ public class EpisodeRest  {
 
   
   @PostMapping()
-  public ResponseEntity<EpisodeDTO> post(@PathVariable("seriesId") final Long seriesId,
-                                         @PathVariable("seasonId") final Long seasonId,
+  public ResponseEntity<EpisodeDTO> post(@PathVariable final Long seriesId,
+                                         @PathVariable final Integer seasonNumber,
                                          @Valid @RequestBody EpisodeDTO episodeDTO) {
     try {
-      return ResponseEntity.status(HttpStatus.CREATED).body(this.episodeService.createAndAttach(seasonId, episodeDTO));
+      final EpisodeDTO attachedEpisode = this.episodeService.createAndAttach(seriesId, seasonNumber, episodeDTO);
+      return ResponseEntity.status(HttpStatus.CREATED).body(attachedEpisode);
     } catch (final Exception exception) {
       return ResponseEntity.badRequest().build();
     }
   }
 
   @GetMapping()
-  public ResponseEntity<List<EpisodeDTO>> getAllBySeason(@PathVariable("seriesId") final Long seriesId,
-                                                         @PathVariable final Long seasonId) {
+  public ResponseEntity<List<EpisodeDTO>> getAllBySeason(@PathVariable final Long seriesId,
+                                                         @PathVariable final Integer seasonNumber) {
     try {
-      return ResponseEntity.ok().body(this.episodeService.findAllByParent(seasonId));
+      return ResponseEntity.ok().body(this.episodeService.findAllByParent(seriesId, seasonNumber));
     } catch (final Exception exception) {
       return ResponseEntity.badRequest().build();
     }
@@ -49,32 +50,31 @@ public class EpisodeRest  {
   }
 
   
-  @GetMapping("/{episodeId}")
-  public ResponseEntity<EpisodeDTO> get(@PathVariable("seriesId") final Long seriesId,
-                                        @PathVariable final Long seasonId,
-                                        @PathVariable final Long episodeId) {
+  @GetMapping("/{episodeNumber}")
+  public ResponseEntity<EpisodeDTO> get(@PathVariable final Long seriesId,
+                                        @PathVariable final Integer seasonNumber,
+                                        @PathVariable final Integer episodeNumber) {
     try {
-      return ResponseEntity.ok().body(this.episodeService.findById(episodeId));
+      return ResponseEntity.ok().body(this.episodeService.findByNumber(seriesId, seasonNumber, episodeNumber));
     } catch (final Exception exception) {
       return ResponseEntity.badRequest().build();
     }
   }
 
   
-  @DeleteMapping("/{episodeId}")
-  public void delete(@PathVariable("seriesId") final Long seriesId,
-                     @PathVariable final Long seasonId,
-                     @PathVariable Long episodeId) {
-    this.episodeService.delete(seasonId, episodeId);
+  @DeleteMapping("/{episodeNumber}")
+  public void delete(@PathVariable final Long seriesId,
+                     @PathVariable final Integer seasonNumber,
+                     @PathVariable final Integer episodeNumber) {
+    this.episodeService.delete(seriesId, seasonNumber, episodeNumber);
   }
 
   
-  @PutMapping("/{episodeId}")
-  public void put(@PathVariable("seriesId") final Long seriesId,
-                  @PathVariable final Long seasonId,
-                  @PathVariable("episodeId") final Long episodeId,
+  @PutMapping("/{episodeNumber}")
+  public void put(@PathVariable final Long seriesId,
+                  @PathVariable final Integer seasonNumber,
+                  @PathVariable final Integer episodeNumber,
                   final EpisodeDTO episodeDTO) {
-    episodeDTO.setId(episodeId);
-    this.episodeService.update(episodeDTO);
+    this.episodeService.update(seriesId, seasonNumber, episodeNumber, episodeDTO);
   }
 }

@@ -4,6 +4,7 @@ import com.questv.api.contracts.Questionable;
 import com.questv.api.episode.EpisodeModel;
 import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Updatable;
+import com.questv.api.exception.EpisodeNotFoundException;
 import com.questv.api.question.QuestionModel;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -153,5 +154,14 @@ public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonMode
       result.addAll(questionable.getQuestionsRecursively());
     }
     return result;
+  }
+
+  public EpisodeModel getEpisodesByNumber(final Integer episodeNumber) {
+    for (final EpisodeModel episodeModel : this.episodes) {
+      if (episodeModel.getNumber().equals(episodeNumber)) {
+        return episodeModel;
+      }
+    }
+    throw new EpisodeNotFoundException();
   }
 }
