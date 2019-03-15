@@ -51,4 +51,4 @@ public class AnalyticsDTO {
   public void attachAnsweredSeries(final AnsweredSeries answeredSeries) {
     getAnsweredSeries().add(answeredSeries);
   }
-}
+  }

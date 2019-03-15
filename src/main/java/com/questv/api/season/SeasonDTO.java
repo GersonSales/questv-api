@@ -61,7 +61,7 @@ public class SeasonDTO implements Convertible<SeasonModel>, Updatable<SeasonDTO>
     this.id = id;
   }
 
-  @JsonIgnore
+
   public Long getOwnerId() {
     return ownerId;
   }
