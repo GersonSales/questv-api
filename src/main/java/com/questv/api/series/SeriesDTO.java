@@ -3,6 +3,7 @@ package com.questv.api.series;
 import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Modelable;
 import com.questv.api.contracts.Updatable;
+import jdk.nashorn.internal.parser.JSONParser;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -49,6 +50,15 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     setPromoImageUrl("");
     setSeasons(new HashSet<>());
     setQuestions(new HashSet<>());
+  }
+
+  public SeriesDTO(final String name,
+                        final String abbreviation,
+                        final String category) {
+    this();
+    this.name = name;
+    this.abbreviation = abbreviation;
+    this.category = category;
   }
 
   /*default*/ SeriesDTO(final Long id,
@@ -180,7 +190,30 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     setCoverImageUrl(update.getCoverImageUrl());
     setPromoImage(update.getPromoImage());
     setPromoImageUrl(update.getPromoImageUrl());
+  }
 
+  public String toStringPost() {
+    final String name = "name: '".concat(getName()).concat("'");
+    final String abbreviation = "abbreviation: '".concat(getAbbreviation()).concat("'");
+    final String category = "category: '".concat(getCategory()).concat("'");
+    return "{".concat(name).concat(",").concat(abbreviation).concat(",").concat(category).concat("}");
+  }
+
+  @Override
+  public String toString() {
+    return "SeriesDTO{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", abbreviation='" + abbreviation + '\'' +
+            ", category='" + category + '\'' +
+            ", isRelease=" + isRelease +
+            ", coverImage='" + coverImage + '\'' +
+            ", coverImageUrl='" + coverImageUrl + '\'' +
+            ", promoImage='" + promoImage + '\'' +
+            ", promoImageUrl='" + promoImageUrl + '\'' +
+            ", seasons=" + seasons +
+            ", questions=" + questions +
+            '}';
   }
 
   public String getPromoImageUrl() {
