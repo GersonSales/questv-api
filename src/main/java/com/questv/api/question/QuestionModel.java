@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Embeddable
 @Entity
-@Table(name = "question_table", schema = "questv_schema")
+@Table(name = "question_table")
 public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<QuestionModel> {
 
 

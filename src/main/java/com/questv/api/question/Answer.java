@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Embeddable
-@Table(name = "answer_table", schema = "questv_schema")
+@Table(name = "answer_table")
 public class Answer {
 
   @Id

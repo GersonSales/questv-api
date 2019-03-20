@@ -19,7 +19,7 @@ import javax.validation.constraints.Size;
 import java.util.*;
 
 @Entity
-@Table(name = "user_table", schema = "questv_schema")
+@Table(name = "user_table")
 public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
 
   @Id

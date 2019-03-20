@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Embeddable
-@Table(name = "season_table", schema = "questv_schema")
+@Table(name = "season_table")
 public class SeasonModel implements Convertible<SeasonDTO>, Updatable<SeasonModel>, Questionable {
 
 

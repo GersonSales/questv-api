@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Embeddable
-@Table(name = "episode_table", schema = "questv_schema")
+@Table(name = "episode_table")
 public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeModel>, Questionable {
 
   @Id

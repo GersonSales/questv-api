@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "series_table", schema = "questv_schema")
+@Table(name = "series_table")
 public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesModel>, Questionable, Modelable {
 
   @Id

@@ -5,7 +5,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "difficult_table", schema = "questv_schema")
+@Table(name = "difficult_table")
 public final class Difficult {
 
   @Id
