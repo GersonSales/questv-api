@@ -16,9 +16,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class ApiFeeder {
 
-  private static final String TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnZXJzb25zYWxlcyIsImlkIjoiZmY4MDgxODE2OTliZGY1NTAxNjk5YmUxZGZmMjAwMDAiLCJleHAiOjE1NTM5NjI1MTl9.0y1e8sKvwaxZxtci_18PmZThdAlVgEigwpTNss4GFJC-0LTyPfb2WsEI3t8nkzxitQICE2X0NKmMyXyEkPILoA";
+  private static final String TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMiLCJpZCI6ImZmODA4MTgxNjlhOGExZTcwMTY5YThhMjRjM2IwMDAwIiwiZXhwIjoxNTU0MTc2NDEzfQ.2QvBNN4B9KKUsjv6PtXk-Ga2Sh9zkclGfewMunMiX2wraTot-DDeAmEcRH21WIsmQCuSpPHojEzmQf4IdSP03A";
   private static final String BASE_URL = "http://localhost:5000";
-  private static final String BASE_PATH = "/home/geronsales/Pictures/questv";
+  private static final String BASE_PATH = "/home/gersonsales/github/questv-api/artifacts/images";
   private final List<SeriesDTO> seriesDTOList;
   private final List<SeriesDTO> seriesDTOListResponse;
   private final Map<String, File> promoImageFileMap;

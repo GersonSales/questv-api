@@ -151,11 +151,18 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   }
 
   public String getCoverImageUrl() {
-    return coverImageUrl;
+    return coverImageUrl;//.replace("localhost", "192.168.25.44");
   }
 
   public void setCoverImageUrl(String coverImageUrl) {
     this.coverImageUrl = coverImageUrl;
+  }
+  public String getPromoImageUrl() {
+    return promoImageUrl;//.replace("localhost", "192.168.25.44");
+  }
+
+  public void setPromoImageUrl(String promoImageUrl) {
+    this.promoImageUrl = promoImageUrl;
   }
 
   public Set<Long> getQuestions() {
@@ -216,11 +223,5 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
             '}';
   }
 
-  public String getPromoImageUrl() {
-    return promoImageUrl;
-  }
 
-  public void setPromoImageUrl(String promoImageUrl) {
-    this.promoImageUrl = promoImageUrl;
-  }
 }

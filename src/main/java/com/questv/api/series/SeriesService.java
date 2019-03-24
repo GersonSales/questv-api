@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,12 +28,12 @@ public class SeriesService {
     assert this.seriesRepository != null;
   }
 
-  
+
   public SeriesDTO create(final SeriesDTO seriesDTO) {
     return save(seriesDTO.convert()).convert();
   }
 
-  
+
   public List<SeriesDTO> findAll() {
     final List<SeriesModel> result = new ArrayList<>();
     this.seriesRepository.findAll().forEach(result::add);
@@ -41,7 +43,7 @@ public class SeriesService {
         .collect(Collectors.toList());
   }
 
-  
+
   public SeriesDTO findById(final Long seriesId) {
     return findModelById(seriesId).convert();
   }
@@ -54,7 +56,7 @@ public class SeriesService {
     throw new IdNotFoundException();
   }
 
-  
+
   public void update(final SeriesDTO seriesDTO) {
     update(seriesDTO.convert());
   }
@@ -69,14 +71,14 @@ public class SeriesService {
     return this.seriesRepository.save(seriesModel);
   }
 
-  
+
   public void delete(final Long seriesId) {
     this.seriesRepository.deleteById(seriesId);
   }
 
-  
+
   public SeriesDTO createAndAttach(final SeriesDTO seriesDTO) {
-    return  seriesDTO;
+    return seriesDTO;
   }
 
   /*default*/ UploadedFileResponse attachSeriesCover(final Long seriesId, final MultipartFile file) {
@@ -118,14 +120,17 @@ public class SeriesService {
   }
 
   private String getFileUri(final Long seriesId, final String type) {
-    return ServletUriComponentsBuilder.fromCurrentContextPath()
+    return ServletUriComponentsBuilder
+        .fromCurrentContextPath()
         .path("/series/")
         .path(String.valueOf(seriesId))
         .path("/".concat(type))
         .toUriString();
+
+
   }
 
-  
+
   public List<SeriesDTO> findAllByParent(final String seriesId) {
     return new ArrayList<>();
   }
