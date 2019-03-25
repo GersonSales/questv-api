@@ -4,6 +4,7 @@ import com.questv.api.answered.question.AnsweredQuestionDTO;
 import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.answered.question.AnsweredQuestionService;
 import com.questv.api.contracts.ObjectService;
+import com.questv.api.contracts.Rankable;
 import com.questv.api.exception.IdNotFoundException;
 import com.questv.api.exception.UserNotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,6 +41,30 @@ public class UserService implements UserDetailsService {
     return save(model.convert()).convert();
   }
 
+
+  public List<Rankable> findAllRanked() {
+    return findAllModels()
+        .stream()
+        .map(this::getNewRankable)
+        .distinct()
+        .collect(Collectors.toList());
+  }
+
+  private Rankable getNewRankable(final Rankable rankable) {
+    return new Rankable() {
+      @Override
+      public String getUsername() {
+        return rankable.getUsername();
+      }
+
+      @Override
+      public Integer getPoints() {
+        return rankable.getPoints();
+      }
+    };
+  }
+
+
   public List<UserDTO> findAll() {
     final List<UserModel> result = new ArrayList<>();
     this.userRepository.findAll().forEach(result::add);
@@ -47,6 +72,12 @@ public class UserService implements UserDetailsService {
         .stream()
         .map(UserModel::convert)
         .collect(Collectors.toList());
+  }
+
+  private List<UserModel> findAllModels() {
+    final List<UserModel> result = new ArrayList<>();
+    this.userRepository.findAll().forEach(result::add);
+    return result;
   }
 
   public UserDTO findById(final String userId) {

@@ -1,6 +1,7 @@
 package com.questv.api.user;
 
 import com.questv.api.contracts.Convertible;
+import com.questv.api.contracts.Rankable;
 import com.questv.api.contracts.Updatable;
 import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.user.properties.Name;
@@ -20,7 +21,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "user_table")
-public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
+public class UserModel implements Convertible<UserDTO>, Updatable<UserModel>, Rankable {
 
   @Id
   @NotNull
@@ -48,6 +49,8 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
   @Column(name = "password", nullable = false)
   private String password;
 
+  private Integer points;
+
   @ManyToMany
   @JoinTable(
       name = "user_has_answered_question",
@@ -56,6 +59,7 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
   private Set<AnsweredQuestionModel> answeredQuestionModels;
 
   public UserModel() {
+    this.points = 0;
     this.answeredQuestionModels = new HashSet<>();
   }
 
@@ -167,5 +171,10 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel> {
 
   public void detachAnsweredQuestion(final AnsweredQuestionModel answeredQuestion) {
     this.answeredQuestionModels.remove(answeredQuestion);
+  }
+
+  @Override
+  public Integer getPoints() {
+    return this.points;
   }
 }

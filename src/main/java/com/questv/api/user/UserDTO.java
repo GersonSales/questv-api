@@ -2,6 +2,7 @@ package com.questv.api.user;
 
 import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.contracts.Convertible;
+import com.questv.api.contracts.Identifiable;
 import com.questv.api.contracts.Updatable;
 import com.questv.api.user.properties.Name;
 
@@ -13,7 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class UserDTO implements Convertible<UserModel>, Updatable<UserModel> {
+public class UserDTO implements Convertible<UserModel>, Updatable<UserModel>, Identifiable {
 
 
   private String id;
