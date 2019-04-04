@@ -16,7 +16,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class ApiFeeder {
 
-  private static final String TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMjMiLCJpZCI6ImZmODA4MTgxNjlhOGExZTcwMTY5YThhMjRjM2IwMDAwIiwiZXhwIjoxNTU0MTc2NDEzfQ.2QvBNN4B9KKUsjv6PtXk-Ga2Sh9zkclGfewMunMiX2wraTot-DDeAmEcRH21WIsmQCuSpPHojEzmQf4IdSP03A";
+  private static final String TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnZXJzb25zYWxlcyIsImlkIjoiZmY4MDgxODE2OWU1ZDRlYTAxNjllNWQ1MGZkNjAwMDAiLCJleHAiOjE1NTUyMDMxNDR9.4HuQm_Me8TwaNjhkFphzKqueEvvmhVmBg3EpC1aDgJcp91-PsOBGzVy9Wcv42lChbj8i4Ij5SK-GF9rbrVGkjQ";
   private static final String BASE_URL = "http://localhost:5000";
   private static final String BASE_PATH = "/home/gersonsales/github/questv-api/artifacts/images";
   private final List<SeriesDTO> seriesDTOList;
@@ -134,7 +134,7 @@ public class ApiFeeder {
 
     //Comedy
     this.seriesDTOList.add(new SeriesDTO("How I Met Your Mother", "HIMYM", "Comedy"));
-    this.seriesDTOList.add(new SeriesDTO("Grey's Anatomy", "Grey's Anatomy", "Comedy"));
+//    this.seriesDTOList.add(new SeriesDTO("Grey's Anatomy", "Grey's Anatomy", "Comedy"));
     this.seriesDTOList.add(new SeriesDTO("The Big Bang Theory", "TBBT", "Comedy"));
     this.seriesDTOList.add(new SeriesDTO("Two And A Half Man", "TAAHM", "Comedy"));
     this.seriesDTOList.add(new SeriesDTO("Modern Family", "Modern Family", "Comedy"));
