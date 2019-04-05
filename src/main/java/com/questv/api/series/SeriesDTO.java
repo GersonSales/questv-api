@@ -151,14 +151,14 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   }
 
   public String getCoverImageUrl() {
-    return coverImageUrl.replace("localhost", "192.168.25.15");
+    return coverImageUrl.replace("localhost", "192.168.25.18");
   }
 
   public void setCoverImageUrl(String coverImageUrl) {
     this.coverImageUrl = coverImageUrl;
   }
   public String getPromoImageUrl() {
-    return promoImageUrl.replace("localhost", "192.168.25.15");
+    return promoImageUrl.replace("localhost", "192.168.25.18");
   }
 
   public void setPromoImageUrl(String promoImageUrl) {
