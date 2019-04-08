@@ -22,7 +22,8 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
   @NotNull
   private Integer reward;
 
-  @JsonIgnore
+  private Double rate;
+
   private Long questionableId;
 
   @NotNull
@@ -38,6 +39,7 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
                           final Integer difficult,
                           final Integer reward,
                           final Long questionableId,
+                          final Double rate,
                           final Map<Long, Map<String, Boolean>> _answers) {
 
     this.id = id;
@@ -45,6 +47,7 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
     this.difficult = difficult;
     this.reward = reward;
     this.questionableId = questionableId;
+    this.rate = rate;
     this._answers = _answers;
   }
 
@@ -88,6 +91,14 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
     this.reward = reward;
   }
 
+  public Double getRate() {
+    return rate;
+  }
+
+  public void setRate(Double rate) {
+    this.rate = rate;
+  }
+
   /*default*/
   public Long getQuestionableId() {
     return questionableId;
@@ -108,7 +119,12 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
 
 
     final Difficult difficult = new Difficult(getDifficult());
-    return new QuestionModel(getId(), getDescription(), difficult, getQuestionableId(), answerSet);
+    return new QuestionModel(getId(),
+        getDescription(),
+        difficult,
+        getQuestionableId(),
+        getRate(),
+        answerSet);
   }
 
   @Override
@@ -116,6 +132,8 @@ public class QuestionDTO implements Convertible<QuestionModel>, Updatable<Questi
     setDescription(update.getDescription());
     set_answers(update.get_answers());
     setDifficult(update.getDifficult());
+    setReward(update.getReward());
+    setRate(update.getRate());
   }
 
   @JsonIgnore

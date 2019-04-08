@@ -36,6 +36,7 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
   @NotNull
   private Long questionableId;
 
+  private Double rate;
 
   @NotNull
   @Embedded
@@ -50,11 +51,13 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
                             final String description,
                             final Difficult difficult,
                             final Long questionableId,
+                            final Double rate,
                             final Set<Answer> answerSet) {
     this.id = id;
     this.description = description;
     this.difficult = difficult;
     this.questionableId = questionableId;
+    this.rate = rate;
     this.answerSet = answerSet;
   }
 
@@ -74,6 +77,14 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public Double getRate() {
+    return rate;
+  }
+
+  public void setRate(Double rate) {
+    this.rate = rate;
   }
 
   public Set<Answer> getAnswerSet() {
@@ -113,13 +124,20 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
     final Integer difficult = getDifficult().getDifficult();
     final Integer reward = getDifficult().getReward();
 
-    return new QuestionDTO(getId(), getDescription(), difficult, reward, getQuestionableId(), answerIdsMap);
+    return new QuestionDTO(getId(),
+        getDescription(),
+        difficult,
+        reward,
+        getQuestionableId(),
+        getRate(),
+        answerIdsMap);
   }
 
   @Override
   public void update(final QuestionModel update) {
     setDescription(update.getDescription());
     setAnswerSet(update.getAnswerSet());
+    setRate((getRate() + update.getRate()) / 2.0);
     difficult.evaluate(update.getDifficult().getDifficult());
   }
 }
