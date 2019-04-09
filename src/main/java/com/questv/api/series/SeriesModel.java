@@ -36,6 +36,8 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   @NotNull
   private Boolean isRelease;
 
+  private Double rate;
+
   private String coverImage;
   private String coverImageUrl;
 
@@ -59,6 +61,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     setAbbreviation("");
     setCategory("");
     setIsRelease(false);
+    setRate(0.0);
     setCoverImage("");
     setCoverImageUrl("");
     setPromoImage("");
@@ -72,6 +75,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
                           final String abbreviation,
                           final String category,
                           final Boolean isRelease,
+                          final Double rate,
                           final String coverImage,
                           final String coverImageUrl,
                           final String promoImage,
@@ -82,6 +86,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     this.abbreviation = abbreviation;
     this.category = category;
     this.isRelease = isRelease;
+    this.rate = rate;
     this.coverImage = coverImage;
     this.coverImageUrl = coverImageUrl;
     this.promoImage = promoImage;
@@ -105,6 +110,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
         getAbbreviation(),
         getCategory(),
         getIsRelease(),
+        getRate(),
         getCoverImage(),
         getCoverImageUrl(),
         getPromoImage(),
@@ -119,6 +125,7 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     setAbbreviation(update.getAbbreviation());
     setCategory(update.getCategory());
     setIsRelease(update.getIsRelease());
+    setRate((getRate() + update.getRate()) / 2.0);
     setCoverImage(update.getCoverImage());
     setCoverImageUrl(update.getCoverImageUrl());
     setPromoImage(update.getPromoImage());
@@ -187,6 +194,14 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
 
   public void setIsRelease(Boolean isRelease) {
     this.isRelease = isRelease;
+  }
+
+  public Double getRate() {
+    return rate == null ? 0.0 : rate;
+  }
+
+  public void setRate(Double rate) {
+    this.rate = rate;
   }
 
   public String getCoverImageUrl() {

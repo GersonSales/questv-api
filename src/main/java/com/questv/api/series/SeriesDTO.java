@@ -30,6 +30,8 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   @NotNull
   private Boolean isRelease;
 
+  private Double rate;
+
   private String coverImage;
   private  String coverImageUrl;
 
@@ -66,6 +68,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
                         final String abbreviation,
                         final String category,
                         final Boolean isRelease,
+                        final Double rate,
                         final String coverImage,
                         final String coverImageUrl,
                         final String promoImage,
@@ -78,6 +81,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     this.abbreviation = abbreviation;
     this.category = category;
     this.isRelease = isRelease;
+    this.rate = rate;
     this.coverImage = coverImage;
     this.coverImageUrl = coverImageUrl;
     this.promoImage = promoImage;
@@ -118,6 +122,14 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     this.isRelease = isRelease;
   }
 
+  public Double getRate() {
+    return rate;
+  }
+
+  public void setRate(Double rate) {
+    this.rate = rate;
+  }
+
   public String getAbbreviation() {
     return abbreviation;
   }
@@ -151,14 +163,14 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   }
 
   public String getCoverImageUrl() {
-    return coverImageUrl.replace("localhost", "192.168.25.44");
+    return coverImageUrl.replace("localhost", "192.168.0.121");
   }
 
   public void setCoverImageUrl(String coverImageUrl) {
     this.coverImageUrl = coverImageUrl;
   }
   public String getPromoImageUrl() {
-    return promoImageUrl.replace("localhost", "192.168.25.44");
+    return promoImageUrl.replace("localhost", "192.168.0.121");
   }
 
   public void setPromoImageUrl(String promoImageUrl) {
@@ -181,6 +193,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
         getAbbreviation(),
         getCategory(),
         getIsRelease(),
+        getRate(),
         getCoverImage(),
         getCoverImageUrl(),
         getPromoImage(),
@@ -192,6 +205,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
     setName(update.getName());
     setCategory(update.getCategory());
     setIsRelease(update.getIsRelease());
+    setRate(update.getRate());
     setAbbreviation(update.getAbbreviation());
     setCoverImage(update.getCoverImage());
     setCoverImageUrl(update.getCoverImageUrl());
