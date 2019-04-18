@@ -4,6 +4,7 @@ import com.questv.api.contracts.ObjectService;
 import com.questv.api.exception.IdNotFoundException;
 import com.questv.api.file.FileStorageServiceImpl;
 import com.questv.api.file.UploadedFileResponse;
+import com.questv.api.uitl.NetworkUtil;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -120,12 +121,13 @@ public class SeriesService {
   }
 
   private String getFileUri(final Long seriesId, final String type) {
+    String publicIp = NetworkUtil.getPublicIp();
     return ServletUriComponentsBuilder
         .fromCurrentContextPath()
         .path("/series/")
         .path(String.valueOf(seriesId))
         .path("/".concat(type))
-        .toUriString();
+        .toUriString().replace("localhost", publicIp);
 
 
   }

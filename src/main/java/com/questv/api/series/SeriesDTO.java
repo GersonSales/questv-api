@@ -3,11 +3,17 @@ package com.questv.api.series;
 import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Modelable;
 import com.questv.api.contracts.Updatable;
+import com.questv.api.uitl.NetworkUtil;
 import jdk.nashorn.internal.parser.JSONParser;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,7 +39,7 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   private Double rate;
 
   private String coverImage;
-  private  String coverImageUrl;
+  private String coverImageUrl;
 
   private String promoImage;
   private String promoImageUrl;
@@ -55,8 +61,8 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   }
 
   public SeriesDTO(final String name,
-                        final String abbreviation,
-                        final String category) {
+                   final String abbreviation,
+                   final String category) {
     this();
     this.name = name;
     this.abbreviation = abbreviation;
@@ -163,14 +169,15 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   }
 
   public String getCoverImageUrl() {
-    return coverImageUrl.replace("localhost", "192.168.0.121");
+    return coverImageUrl;
   }
 
   public void setCoverImageUrl(String coverImageUrl) {
     this.coverImageUrl = coverImageUrl;
   }
+
   public String getPromoImageUrl() {
-    return promoImageUrl.replace("localhost", "192.168.0.121");
+    return promoImageUrl;
   }
 
   public void setPromoImageUrl(String promoImageUrl) {
@@ -223,18 +230,18 @@ public class SeriesDTO implements Convertible<SeriesModel>, Updatable<SeriesDTO>
   @Override
   public String toString() {
     return "SeriesDTO{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", abbreviation='" + abbreviation + '\'' +
-            ", category='" + category + '\'' +
-            ", isRelease=" + isRelease +
-            ", coverImage='" + coverImage + '\'' +
-            ", coverImageUrl='" + coverImageUrl + '\'' +
-            ", promoImage='" + promoImage + '\'' +
-            ", promoImageUrl='" + promoImageUrl + '\'' +
-            ", seasons=" + seasons +
-            ", questions=" + questions +
-            '}';
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", abbreviation='" + abbreviation + '\'' +
+        ", category='" + category + '\'' +
+        ", isRelease=" + isRelease +
+        ", coverImage='" + coverImage + '\'' +
+        ", coverImageUrl='" + coverImageUrl + '\'' +
+        ", promoImage='" + promoImage + '\'' +
+        ", promoImageUrl='" + promoImageUrl + '\'' +
+        ", seasons=" + seasons +
+        ", questions=" + questions +
+        '}';
   }
 
 
