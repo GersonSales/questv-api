@@ -10,5 +10,5 @@ public class SecurityConstants {
   public static final String SEASONS_URL = "/seasons";
   public static final String EPISODES_URL = "/episodes";
     public static final String QUESTIONS_URL = "/questions";
-    public static final String HEROKU_URL = "/questv-api.git";
+    public static final String HEROKU_URL = "/**";
 }
