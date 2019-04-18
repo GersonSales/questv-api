@@ -6,7 +6,7 @@ public class SecurityConstants {
   public static final String TOKEN_PREFIX = "Bearer ";
   public static final String HEADER_STRING = "Authorization";
   public static final String SIGN_UP_URL = "/users/sign-up";
-  public static final String SERIES_URL = "**/series/**" ;
+  public static final String SERIES_URL = "/questv-api.git/series/**" ;
   public static final String SEASONS_URL = "/seasons";
   public static final String EPISODES_URL = "/episodes";
     public static final String QUESTIONS_URL = "/questions";
