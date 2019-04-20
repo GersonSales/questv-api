@@ -2,7 +2,6 @@ package com.questv.api.analytics.model;
 
 public class AnsweredItem {
   private final String name;
-  private final Integer totalOfQuestions;
   private Integer answeredQuestions;
   private Integer correctAnsweredQuestions;
   private Integer wrongAnsweredQuestions;
@@ -10,7 +9,6 @@ public class AnsweredItem {
 
   public AnsweredItem(final String name) {
     this.name = name;
-    this.totalOfQuestions =
     this.answeredQuestions
         = this.correctAnsweredQuestions
         = this.wrongAnsweredQuestions = 0;
@@ -30,10 +28,6 @@ public class AnsweredItem {
 
   public Integer getWrongAnsweredQuestions() {
     return wrongAnsweredQuestions;
-  }
-
-  public Integer getTotalOfQuestions() {
-    return totalOfQuestions;
   }
 
   public void IncrementCorrectAnswersCount() {
