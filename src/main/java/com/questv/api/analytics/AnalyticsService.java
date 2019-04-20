@@ -1,7 +1,7 @@
 package com.questv.api.analytics;
 
-import com.questv.api.analytics.model.AnsweredCategory;
 import com.questv.api.analytics.model.AnsweredItem;
+import com.questv.api.analytics.model.ITEM_TYPE;
 import com.questv.api.contracts.Questionable;
 import com.questv.api.episode.EpisodeModel;
 import com.questv.api.episode.EpisodeService;
@@ -17,6 +17,9 @@ import com.questv.api.user.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+
+import static com.questv.api.analytics.model.ITEM_TYPE.CATEGORY;
+import static com.questv.api.analytics.model.ITEM_TYPE.NAME;
 
 @Service(value = "analyticsService ")
 public class AnalyticsService {
@@ -48,8 +51,8 @@ public class AnalyticsService {
     final UserDTO userDTO = this.userService.findById(userId);
     final AnalyticsDTO result = new AnalyticsDTO();
 
-    result.setAnsweredSeries(getAnsweredSeries(userDTO));
-    result.setAnsweredCategories(getAnsweredCategories(userDTO));
+    result.setAnsweredSeries(getAnsweredMap(userDTO, NAME));
+    result.setAnsweredCategories(getAnsweredMap(userDTO, CATEGORY));
 
     final Integer totalOfAnsweredQuestions = userDTO.getAnsweredQuestionsCount();
     result.setTotalOfAnsweredQuestions(totalOfAnsweredQuestions);
@@ -79,33 +82,34 @@ public class AnalyticsService {
   }
 
 
-  private List<AnsweredItem> getAnsweredCategories(final UserDTO userDTO) {
-    final Map<String, AnsweredItem> answeredCategoriesMap = new HashMap<>();
-    populateAnsweredMap(userDTO, answeredCategoriesMap);
-    return new ArrayList<>(answeredCategoriesMap.values());
-  }
-
-
-  private List<AnsweredItem> getAnsweredSeries(final UserDTO userDTO) {
+  private List<AnsweredItem> getAnsweredMap(UserDTO userDTO, final ITEM_TYPE type) {
     final Map<String, AnsweredItem> answeredSeriesMap = new HashMap<>();
-    populateAnsweredMap(userDTO, answeredSeriesMap);
-    return new ArrayList<>(answeredSeriesMap.values());
-  }
-
-  private void populateAnsweredMap(UserDTO userDTO, Map<String, AnsweredItem> answeredSeriesMap) {
     final Map<Long, Long> answeredQuestions = userDTO.getAnsweredQuestions();
     for (final Long questionId : answeredQuestions.keySet()) {
       final QuestionDTO questionModel = this.questionService.findById(questionId);
-      final SeriesModel seriesModel = getSeasonModel(questionModel);
+      final SeriesModel seriesModel = getSeriesModel(questionModel);
+      final String key;
 
-      final String seriesName = seriesModel.getName();
+      switch (type) {
+        case NAME:
+          key = seriesModel.getName();
+          break;
+        case CATEGORY:
+          key = seriesModel.getCategory();
+          break;
+        default:
+          return new ArrayList<>();
+      }
+
+
       Long userAnswer = answeredQuestions.get(questionId);
 
       updateAnsweredMap(answeredSeriesMap,
           userAnswer,
           questionModel,
-          seriesName);
+          key);
     }
+    return new ArrayList<>(answeredSeriesMap.values());
   }
 
   private void updateAnsweredMap(final Map<String, AnsweredItem> answeredSeriesMap,
@@ -132,7 +136,7 @@ public class AnalyticsService {
     }
   }
 
-  private SeriesModel getSeasonModel(final QuestionDTO questionModel) {
+  private SeriesModel getSeriesModel(final QuestionDTO questionModel) {
     Questionable questionable = this.questionService.findQuestionableById(questionModel.getQuestionableId());
     if (questionable instanceof EpisodeModel) {
       final SeasonDTO seasonModel = this.seasonService.findById(((EpisodeModel) questionable).getOwnerId());
