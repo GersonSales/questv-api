@@ -76,30 +76,30 @@ public class AnalyticsService {
   }
 
   private List<AnsweredSeries> getAnsweredSeries(final UserDTO userDTO) {
-    final Map<String, AnsweredSeries> answeredSeriesMap = new HashMap<>();
+    final Map<Long, AnsweredSeries> answeredSeriesMap = new HashMap<>();
     Map<Long, Long> answeredQuestions = userDTO.getAnsweredQuestions();
     for (final Long questionId : answeredQuestions.keySet()) {
       final QuestionDTO questionModel = this.questionService.findById(questionId);
       final SeriesModel seriesModel = getSeasonModel(questionModel);
 
 
-      String seriesName = seriesModel.getName();
-      if (answeredSeriesMap.containsKey(seriesName)) {
+      Long seriesId = seriesModel.getId();
+      if (answeredSeriesMap.containsKey(seriesId)) {
         if (questionModel.getCorrectAnswerId().equals(answeredQuestions.get(questionId))) {
-          answeredSeriesMap.get(seriesName).IncrementCorrectAnswersCount();
+          answeredSeriesMap.get(seriesId).IncrementCorrectAnswersCount();
         } else {
-          answeredSeriesMap.get(seriesName).IncrementWrongAnswersCount();
+          answeredSeriesMap.get(seriesId).IncrementWrongAnswersCount();
         }
       } else {
         Integer questionsCount = seriesModel.getQuestionsCount();
         if (questionModel.getCorrectAnswerId().equals(answeredQuestions.get(questionId))) {
-          final AnsweredSeries answeredSeries = new AnsweredSeries(seriesName, questionsCount);
+          final AnsweredSeries answeredSeries = new AnsweredSeries(seriesId, questionsCount);
           answeredSeries.IncrementCorrectAnswersCount();
-          answeredSeriesMap.put(seriesName, answeredSeries);
+          answeredSeriesMap.put(seriesId, answeredSeries);
         } else {
-          final AnsweredSeries answeredSeries = new AnsweredSeries(seriesName, questionsCount);
+          final AnsweredSeries answeredSeries = new AnsweredSeries(seriesId, questionsCount);
           answeredSeries.IncrementWrongAnswersCount();
-          answeredSeriesMap.put(seriesName, answeredSeries);
+          answeredSeriesMap.put(seriesId, answeredSeries);
         }
       }
     }

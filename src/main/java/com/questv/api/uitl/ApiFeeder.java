@@ -16,8 +16,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class ApiFeeder {
 
-  private static final String TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnZXJzb25zYWxlcyIsImlkIjoiZmY4MDgxODE2OWU1ZDRlYTAxNjllNWQ1MGZkNjAwMDAiLCJleHAiOjE1NTUyMDMxNDR9.4HuQm_Me8TwaNjhkFphzKqueEvvmhVmBg3EpC1aDgJcp91-PsOBGzVy9Wcv42lChbj8i4Ij5SK-GF9rbrVGkjQ";
-  private static final String BASE_URL = "http://localhost:5000";
+  private static final String TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnZXJzb25zYWxlcyIsImlkIjoiZmY4MDgxODE2OWU1ZDRlYTAxNjllNWQ1MGZkNjAwMDAiLCJleHAiOjE1NTY0MjM1Njd9.WjqgSwmljyWcL8XVwz8wPSxmNbHkBANkgE5YK56V5hKzO1TDMqkbYouE65OHC5ietDRjoqRoatfmEuOICSdmyw";
+  private static final String BASE_URL = "https://questv-api.herokuapp.com";
+//  private static final String BASE_URL = "http://localhost:5000";
   private static final String BASE_PATH = "/home/gersonsales/github/questv-api/artifacts/images";
   private final List<SeriesDTO> seriesDTOList;
   private final List<SeriesDTO> seriesDTOListResponse;
