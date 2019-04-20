@@ -14,7 +14,7 @@ public class AnsweredItem {
         = this.wrongAnsweredQuestions = 0;
   }
 
-  public String getId() {
+  public String getName() {
     return this.name;
   }
 
