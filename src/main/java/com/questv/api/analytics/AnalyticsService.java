@@ -1,5 +1,6 @@
 package com.questv.api.analytics;
 
+import com.questv.api.analytics.model.AnsweredSeries;
 import com.questv.api.contracts.Questionable;
 import com.questv.api.episode.EpisodeModel;
 import com.questv.api.episode.EpisodeService;

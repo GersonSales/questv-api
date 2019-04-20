@@ -1,6 +1,6 @@
 package com.questv.api.analytics;
 
-import com.questv.api.user.properties.Name;
+import com.questv.api.analytics.model.AnsweredSeries;
 
 import java.util.ArrayList;
 import java.util.List;

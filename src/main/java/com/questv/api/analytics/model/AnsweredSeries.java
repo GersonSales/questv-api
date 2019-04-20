@@ -1,4 +1,4 @@
-package com.questv.api.analytics;
+package com.questv.api.analytics.model;
 
 public class AnsweredSeries {
   private final Long id;
