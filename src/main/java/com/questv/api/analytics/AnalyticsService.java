@@ -1,6 +1,7 @@
 package com.questv.api.analytics;
 
-import com.questv.api.analytics.model.AnsweredSeries;
+import com.questv.api.analytics.model.AnsweredCategory;
+import com.questv.api.analytics.model.AnsweredItem;
 import com.questv.api.contracts.Questionable;
 import com.questv.api.episode.EpisodeModel;
 import com.questv.api.episode.EpisodeService;
@@ -48,6 +49,7 @@ public class AnalyticsService {
     final AnalyticsDTO result = new AnalyticsDTO();
 
     result.setAnsweredSeries(getAnsweredSeries(userDTO));
+    result.setAnsweredCategories(getAnsweredCategories(userDTO));
 
     final Integer totalOfAnsweredQuestions = userDTO.getAnsweredQuestionsCount();
     result.setTotalOfAnsweredQuestions(totalOfAnsweredQuestions);
@@ -76,35 +78,58 @@ public class AnalyticsService {
     return result;
   }
 
-  private List<AnsweredSeries> getAnsweredSeries(final UserDTO userDTO) {
-    final Map<Long, AnsweredSeries> answeredSeriesMap = new HashMap<>();
-    Map<Long, Long> answeredQuestions = userDTO.getAnsweredQuestions();
+
+  private List<AnsweredItem> getAnsweredCategories(final UserDTO userDTO) {
+    final Map<String, AnsweredItem> answeredCategoriesMap = new HashMap<>();
+    populateAnsweredMap(userDTO, answeredCategoriesMap);
+    return new ArrayList<>(answeredCategoriesMap.values());
+  }
+
+
+  private List<AnsweredItem> getAnsweredSeries(final UserDTO userDTO) {
+    final Map<String, AnsweredItem> answeredSeriesMap = new HashMap<>();
+    populateAnsweredMap(userDTO, answeredSeriesMap);
+    return new ArrayList<>(answeredSeriesMap.values());
+  }
+
+  private void populateAnsweredMap(UserDTO userDTO, Map<String, AnsweredItem> answeredSeriesMap) {
+    final Map<Long, Long> answeredQuestions = userDTO.getAnsweredQuestions();
     for (final Long questionId : answeredQuestions.keySet()) {
       final QuestionDTO questionModel = this.questionService.findById(questionId);
       final SeriesModel seriesModel = getSeasonModel(questionModel);
 
+      final String seriesName = seriesModel.getName();
+      Long userAnswer = answeredQuestions.get(questionId);
 
-      Long seriesId = seriesModel.getId();
-      if (answeredSeriesMap.containsKey(seriesId)) {
-        if (questionModel.getCorrectAnswerId().equals(answeredQuestions.get(questionId))) {
-          answeredSeriesMap.get(seriesId).IncrementCorrectAnswersCount();
-        } else {
-          answeredSeriesMap.get(seriesId).IncrementWrongAnswersCount();
-        }
+      updateAnsweredMap(answeredSeriesMap,
+          userAnswer,
+          questionModel,
+          seriesName);
+    }
+  }
+
+  private void updateAnsweredMap(final Map<String, AnsweredItem> answeredSeriesMap,
+                                 final Long userAnswer,
+                                 final QuestionDTO questionModel,
+                                 final String key) {
+
+    if (answeredSeriesMap.containsKey(key)) {
+      if (questionModel.getCorrectAnswerId().equals(userAnswer)) {
+        answeredSeriesMap.get(key).IncrementCorrectAnswersCount();
       } else {
-        Integer questionsCount = seriesModel.getQuestionsCount();
-        if (questionModel.getCorrectAnswerId().equals(answeredQuestions.get(questionId))) {
-          final AnsweredSeries answeredSeries = new AnsweredSeries(seriesId, questionsCount);
-          answeredSeries.IncrementCorrectAnswersCount();
-          answeredSeriesMap.put(seriesId, answeredSeries);
-        } else {
-          final AnsweredSeries answeredSeries = new AnsweredSeries(seriesId, questionsCount);
-          answeredSeries.IncrementWrongAnswersCount();
-          answeredSeriesMap.put(seriesId, answeredSeries);
-        }
+        answeredSeriesMap.get(key).IncrementWrongAnswersCount();
+      }
+    } else {
+      if (questionModel.getCorrectAnswerId().equals(userAnswer)) {
+        final AnsweredItem answeredItem = new AnsweredItem(key);
+        answeredItem.IncrementCorrectAnswersCount();
+        answeredSeriesMap.put(key, answeredItem);
+      } else {
+        final AnsweredItem answeredItem = new AnsweredItem(key);
+        answeredItem.IncrementWrongAnswersCount();
+        answeredSeriesMap.put(key, answeredItem);
       }
     }
-    return new ArrayList<>(answeredSeriesMap.values());
   }
 
   private SeriesModel getSeasonModel(final QuestionDTO questionModel) {

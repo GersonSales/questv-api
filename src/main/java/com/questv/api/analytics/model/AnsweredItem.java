@@ -1,23 +1,23 @@
 package com.questv.api.analytics.model;
 
-public class AnsweredSeries {
-  private final Long id;
+public class AnsweredItem {
+  private final String name;
   private final Integer totalOfQuestions;
   private Integer answeredQuestions;
   private Integer correctAnsweredQuestions;
   private Integer wrongAnsweredQuestions;
 
 
-  public AnsweredSeries(final Long id, final Integer totalOfQuestions) {
-    this.id = id;
-    this.totalOfQuestions = totalOfQuestions;
+  public AnsweredItem(final String name) {
+    this.name = name;
+    this.totalOfQuestions =
     this.answeredQuestions
         = this.correctAnsweredQuestions
         = this.wrongAnsweredQuestions = 0;
   }
 
-  public Long getId() {
-    return this.id;
+  public String getId() {
+    return this.name;
   }
 
   public Integer getAnsweredQuestions() {
