@@ -8,6 +8,6 @@ public interface Rankable extends Identifiable, Comparable<Rankable>{
 
   @Override
   default int compareTo(Rankable o) {
-    return getPoints() - o.getPoints();
+    return o.getPoints() - getPoints();
   }
 }
