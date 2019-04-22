@@ -61,6 +61,11 @@ public class UserService implements UserDetailsService {
       public Integer getPoints() {
         return rankable.getPoints();
       }
+
+      @Override
+      public String getId() {
+        return rankable.getId();
+      }
     };
   }
 
