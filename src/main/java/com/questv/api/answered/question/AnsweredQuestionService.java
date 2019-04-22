@@ -43,7 +43,7 @@ public class AnsweredQuestionService {
   public Integer calculatePoints(final Set<AnsweredQuestionModel> answeredQuestionModels) {
     Integer result = 0;
     for (final AnsweredQuestionModel answeredQuestionModel : answeredQuestionModels) {
-      final QuestionDTO question = questionService.findById(answeredQuestionModel.getId());
+      final QuestionDTO question = questionService.findById(answeredQuestionModel.getQuestionId());
       result += question.getReward();
     }
 
