@@ -122,7 +122,7 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
     }
 
     final Integer difficult = getDifficult().getDifficult();
-    final Integer reward = getDifficult().getReward();
+    final Integer reward = getDifficult().getReward() +  (int)(0.2 * rate);
 
     return new QuestionDTO(getId(),
         getDescription(),

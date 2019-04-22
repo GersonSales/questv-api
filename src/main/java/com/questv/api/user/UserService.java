@@ -50,21 +50,21 @@ public class UserService implements UserDetailsService {
         .collect(Collectors.toList());
   }
 
-  private Rankable getNewRankable(final Rankable rankable) {
+  private Rankable getNewRankable(final UserModel userModel) {
     return new Rankable() {
       @Override
       public String getUsername() {
-        return rankable.getUsername();
+        return userModel.getUsername();
       }
 
       @Override
       public Integer getPoints() {
-        return rankable.getPoints();
+        return answeredQuestionService.calculatePoints(userModel.getAnsweredQuestionModels());
       }
 
       @Override
       public String getId() {
-        return rankable.getId();
+        return userModel.getId();
       }
     };
   }

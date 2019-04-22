@@ -1,9 +1,11 @@
 package com.questv.api.answered.question;
 
+import com.questv.api.question.QuestionDTO;
 import com.questv.api.question.QuestionService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service(value = "answeredQuestionService")
 public class AnsweredQuestionService {
@@ -38,4 +40,13 @@ public class AnsweredQuestionService {
     return null;
   }
 
+  public Integer calculatePoints(final Set<AnsweredQuestionModel> answeredQuestionModels) {
+    Integer result = 0;
+    for (final AnsweredQuestionModel answeredQuestionModel : answeredQuestionModels) {
+      final QuestionDTO question = questionService.findById(answeredQuestionModel.getId());
+      result += question.getReward();
+    }
+
+    return result;
+  }
 }
