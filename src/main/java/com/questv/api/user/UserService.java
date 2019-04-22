@@ -47,6 +47,7 @@ public class UserService implements UserDetailsService {
         .stream()
         .map(this::getNewRankable)
         .distinct()
+        .sorted()
         .collect(Collectors.toList());
   }
 
