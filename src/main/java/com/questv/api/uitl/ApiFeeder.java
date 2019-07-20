@@ -16,9 +16,9 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class ApiFeeder {
 
-  private static final String TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnZXJzb25zYWxlcyIsImlkIjoiZmY4MDgxODE2OWU1ZDRlYTAxNjllNWQ1MGZkNjAwMDAiLCJleHAiOjE1NTY0MjM1Njd9.WjqgSwmljyWcL8XVwz8wPSxmNbHkBANkgE5YK56V5hKzO1TDMqkbYouE65OHC5ietDRjoqRoatfmEuOICSdmyw";
+  private static final String TOKEN = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJnZXJzb25zYWxlcyIsImlkIjoiMmM5MWZiYTY2YTJlOGY3ZTAxNmEyZTk5YTMyMDAwMDAiLCJleHAiOjE1NjIyOTk5MTR9.H1ZM5hFi_o4Vy3aWXTlfiTn_SGPtkgzKXpz9GTPRk2qviWa4ZVACwY69_fDmBZsn0Itf5hA2V2_ud9XznxKdAg";
   private static final String BASE_URL = "https://questv-api.herokuapp.com";
-//  private static final String BASE_URL = "http://localhost:5000";
+  //  private static final String BASE_URL = "http://localhost:5000";
   private static final String BASE_PATH = "/home/gersonsales/github/questv-api/artifacts/images";
   private final List<SeriesDTO> seriesDTOList;
   private final List<SeriesDTO> seriesDTOListResponse;
@@ -30,7 +30,7 @@ public class ApiFeeder {
 
   public static void main(String[] args) throws Exception {
     ApiFeeder apiFeeder = new ApiFeeder();
-    apiFeeder.postSeries();
+//    apiFeeder.postSeries();
     apiFeeder.postSeriesImages();
   }
 
@@ -50,6 +50,8 @@ public class ApiFeeder {
   }
 
   private void postSeriesImages() {
+    this.seriesDTOListResponse.clear();
+    this.seriesDTOListResponse.addAll(getMockedSeries());
     for (final SeriesDTO seriesDTO : this.seriesDTOListResponse) {
       String seriesName = seriesDTO
           .getAbbreviation()
@@ -90,8 +92,13 @@ public class ApiFeeder {
           .replace(" ", "_")
           .toLowerCase();
 
-      final File imageFile
-          = FileUtil.readImage(BASE_PATH + "/" + type + "Image/" + imageName + "_" + type + "Image.jpg");
+      File imageFile = null;
+      try {
+        imageFile
+            = FileUtil.readImage(BASE_PATH + "/" + type + "Image/" + imageName + "_" + type + ".jpg");
+      } catch (Exception a) {
+        a.printStackTrace();
+      }
 
       switch (type) {
         case "promo":
@@ -224,6 +231,76 @@ public class ApiFeeder {
 
     //print result
     return response.toString();
+
+  }
+
+  private List<SeriesDTO> getMockedSeries() {
+    final List<SeriesDTO> result = new ArrayList<>();
+    SeriesDTO flash = new SeriesDTO("The Flash", "The Flash", "Action");
+    flash.setId(6L);
+    result.add(flash);
+
+    SeriesDTO veep = new SeriesDTO("Veep", "Veep", "Comedy");
+    veep.setId(13L);
+    result.add(veep);
+
+    SeriesDTO got = new SeriesDTO("Game of Thrones", "GOT", "Action");
+    got.setId(3L);
+    result.add(got);
+
+    SeriesDTO vikings = new SeriesDTO("Vikings", "Vikings", "Action");
+    vikings.setId(7L);
+    result.add(vikings);
+
+    SeriesDTO dn =  new SeriesDTO("Death Note", "Death Note", "Anime");
+    dn.setId(14L);
+    result.add(dn);
+
+    SeriesDTO himym =  new SeriesDTO("How I Met Your Mother", "himym", "Comedy");
+    himym.setId(8L);
+    result.add(himym);
+
+    SeriesDTO tbbt =  new SeriesDTO("The Big Bang Theory", "tbbt", "Comedy");
+    tbbt.setId(9L);
+    result.add(tbbt);
+
+    SeriesDTO bnh =  new SeriesDTO("Boku No Hero", "bnh", "Anime");
+    bnh.setId(15L);
+    result.add(bnh);
+
+    SeriesDTO st =  new SeriesDTO("Stranger Things", "Stranger Things", "Terror");
+    st.setId(16L);
+    result.add(st);
+
+    SeriesDTO taahm =  new SeriesDTO("Two And A Half Man", "taahm", "Comedy");
+    taahm.setId(10L);
+    result.add(taahm);
+
+    SeriesDTO dexter =  new SeriesDTO("Dexter", "dexter", "Action");
+    dexter.setId(2L);
+    result.add(dexter);
+
+    SeriesDTO twd =  new SeriesDTO("The Waling Dead", "twd", "Action");
+    twd.setId(1L);
+    result.add(twd);
+
+    SeriesDTO mf =  new SeriesDTO("Modern Family", "Modern Family", "Comedy");
+    mf.setId(11L);
+    result.add(mf);
+
+    SeriesDTO bm =  new SeriesDTO("Black Mirror", "bm", "Action");
+    bm.setId(17L);
+    result.add(bm);
+
+    SeriesDTO arrow =  new SeriesDTO("Arrow", "Arrow", "Action");
+    arrow.setId(5L);
+    result.add(arrow);
+
+    SeriesDTO ts =  new SeriesDTO("The Simpsons", "ts", "Comedy");
+    ts.setId(12L);
+    result.add(ts);
+
+    return result;
 
   }
 
