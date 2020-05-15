@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Bean;
 import static com.questv.api.security.SecurityConstants.*;
 import static org.springframework.http.HttpMethod.GET;
 
-@EnableWebSecurity
-public class WebSecurity extends WebSecurityConfigurerAdapter {
+//@EnableWebSecurity
+public class WebSecurity/* extends WebSecurityConfigurerAdapter */{
   private final UserService userService;
   private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -29,7 +29,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     assert bCryptPasswordEncoder != null;
   }
 
-  @Override
+//  @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.cors().and().csrf().disable().authorizeRequests()
         .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
@@ -40,18 +40,18 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         .antMatchers(GET, QUESTIONS_URL).permitAll()
         .anyRequest().authenticated()
         .and()
-        .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-        .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+//        .addFilter(new JWTAuthenticationFilter(authenticationManager()))
+//        .addFilter(new JWTAuthorizationFilter(authenticationManager()))
         // this disables session creation on Spring Security
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
   }
 
-  @Override
+//  @Override
   public void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
   }
 
-  @Bean
+//  @Bean
   CorsConfigurationSource corsConfigurationSource() {
     final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());

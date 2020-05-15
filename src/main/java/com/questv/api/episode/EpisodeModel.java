@@ -4,8 +4,6 @@ import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Questionable;
 import com.questv.api.contracts.Updatable;
 import com.questv.api.question.QuestionModel;
-import org.aspectj.weaver.patterns.TypePatternQuestions;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -16,9 +14,9 @@ import java.util.stream.Collectors;
 
 
 @Entity
-@Embeddable
-@Table(name = "episode_table")
-public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeModel>, Questionable {
+@Table(name = "episodes")
+public class EpisodeModel implements Convertible<EpisodeDTO>,
+    Updatable<EpisodeModel>, Questionable {
 
   @Id
   @NotNull
@@ -26,7 +24,8 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
   private Long id;
 
   @NotNull
-  private Long ownerId;
+  @Column(name = "FK_season")
+  private Long seasonId;
 
   @NotNull
   @NotEmpty
@@ -35,21 +34,21 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
   @NotNull
   private Integer number;
 
-  @Embedded
-  @ElementCollection
-  @OneToMany(cascade = CascadeType.ALL)
-  private Set<QuestionModel> questions;
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "FK_questionable")
+  private final Set<QuestionModel> questions;
 
-  /*default*/ EpisodeModel() {
+  protected EpisodeModel() {
     this.questions = new HashSet<>();
   }
 
   /*default*/ EpisodeModel(final Long id,
-                           final Long ownerId,
+                           final Long seasonId,
                            final String name,
                            final Integer number) {
+    this();
     this.id = id;
-    this.ownerId = ownerId;
+    this.seasonId = seasonId;
     this.name = name;
     this.number = number;
   }
@@ -62,12 +61,12 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
     this.id = id;
   }
 
-  public Long getOwnerId() {
-    return ownerId;
+  public Long getSeasonId() {
+    return seasonId;
   }
 
-  public void setOwnerId(Long ownerId) {
-    this.ownerId = ownerId;
+  public void setSeasonId(Long ownerId) {
+    this.seasonId = ownerId;
   }
 
   public String getName() {
@@ -88,12 +87,14 @@ public class EpisodeModel implements Convertible<EpisodeDTO>, Updatable<EpisodeM
 
   @Override
   public EpisodeDTO convert() {
-    final Set<Long> questionsIds = questions == null ? new HashSet<>() : questions//TODO
+    final Set<Long> questionsIds = questions == null ? new HashSet<>() :
+        questions//TODO
         .stream()
         .map(QuestionModel::getId)
         .collect(Collectors.toSet());
 
-    return new EpisodeDTO(getId(), getOwnerId(),  getName(), getNumber(), questionsIds);
+    return new EpisodeDTO(getId(), getSeasonId(), getName(), getNumber(),
+        questionsIds);
   }
 
   @Override

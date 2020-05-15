@@ -1,27 +1,29 @@
 package com.questv.api.user;
 
 import com.questv.api.contracts.Convertible;
-import com.questv.api.contracts.Rankable;
 import com.questv.api.contracts.Updatable;
-import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.user.properties.Name;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.ManyToAny;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
-import javax.management.relation.Role;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "user_table")
-public class UserModel implements Convertible<UserDTO>, Updatable<UserModel>, Rankable {
+public class UserModel
+    implements Convertible<UserDTO>,
+    Updatable<UserModel>,
+    UserDetails {
+
+  private static final long serialVersionUID = 5738099810802742867L;
 
   @Id
   @NotNull
@@ -36,6 +38,7 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel>, Ra
 
   @NotNull
   @NotEmpty
+  @Column(name = "username", nullable = false, unique = true)
   private String username;
 
   @NotEmpty
@@ -45,22 +48,39 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel>, Ra
   private String email;
 
   @NotEmpty
-  @Size(min = 3, max = 256, message = "Password must have 3 characters at least.")
+  @Size(min = 3, max = 256, message = "Password must have 3 characters at " +
+      "least.")
   @Column(name = "password", nullable = false)
   private String password;
 
-  private Integer points;
 
-  @ManyToMany
+  @Column(name = "account_non_expired")
+  private final boolean isAccountNonExpired;
+
+  @Column(name = "account_non_locked")
+  private final boolean isAccountNonLocked;
+
+  @Column(name = "credentials_non_expired")
+  private final boolean isCredentialsNonExpired;
+
+  @Column(name = "enabled")
+  private final boolean isEnabled;
+
+
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(
-      name = "user_has_answered_question",
-      joinColumns = {@JoinColumn(name = "user_id")},
-      inverseJoinColumns = {@JoinColumn(name = "answered_question_id")})
-  private Set<AnsweredQuestionModel> answeredQuestionModels;
+      name = "user_permission",
+      joinColumns = {@JoinColumn(name = "id_user")},
+      inverseJoinColumns = {@JoinColumn(name = "id_permission")}
+  )
+  private List<Permission> permissions;
+
 
   public UserModel() {
-    this.points = 0;
-    this.answeredQuestionModels = new HashSet<>();
+    this.isAccountNonExpired = true;
+    this.isAccountNonLocked = true;
+    this.isCredentialsNonExpired = true;
+    this.isEnabled = true;
   }
 
   public UserModel(final Name name,
@@ -107,6 +127,11 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel>, Ra
     this.email = email;
   }
 
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return null;
+  }
+
   public String getPassword() {
     return password;
   }
@@ -119,33 +144,49 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel>, Ra
     return username;
   }
 
+  @Override
+  public boolean isAccountNonExpired() {
+    return this.isAccountNonExpired;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    return this.isAccountNonLocked;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    return this.isCredentialsNonExpired;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    return this.isEnabled;
+  }
+
+  public List<String> getRoles() {
+    final List<String> roles = new ArrayList<>();
+    for (final Permission permission : this.permissions) {
+      roles.add(permission.getAuthority());
+    }
+
+    return roles;
+  }
+
   public void setUsername(String username) {
     this.username = username;
   }
 
-  public Set<AnsweredQuestionModel> getAnsweredQuestionModels() {
-    return answeredQuestionModels;
-  }
-
-  public void setAnsweredQuestionModels(Set<AnsweredQuestionModel> answeredQuestionModels) {
-    this.answeredQuestionModels = answeredQuestionModels;
-  }
 
   @Override
   public UserDTO convert() {
-    final Map<Long, Long> answeredQuestions = new HashMap<>();
-    for (final AnsweredQuestionModel answeredQuestionModel : this.answeredQuestionModels) {
-      answeredQuestions.put(answeredQuestionModel.getQuestionId(), answeredQuestionModel.getAnswerId());
-    }
-
     return new UserDTO(
         getId(),
         getFirstName(),
         getLastName(),
         getUsername(),
         getEmail(),
-        getPassword(),
-        answeredQuestions);
+        getPassword());
   }
 
   @Override
@@ -155,26 +196,5 @@ public class UserModel implements Convertible<UserDTO>, Updatable<UserModel>, Ra
     setUsername(model.getUsername());
     setEmail(model.getEmail());
     setPassword(model.getPassword());
-  }
-
-
-  /*default*/ void attachAnsweredQuestion(final AnsweredQuestionModel answeredQuestionModel) {
-    for (final AnsweredQuestionModel answeredQuestion : getAnsweredQuestionModels()) {
-      if (answeredQuestion.getQuestionId().equals(answeredQuestionModel.getQuestionId())) {
-        answeredQuestion.setAnswerId(answeredQuestionModel.getAnswerId());
-        return;
-      }
-    }
-    this.answeredQuestionModels.add(answeredQuestionModel);
- }
-
-
-  public void detachAnsweredQuestion(final AnsweredQuestionModel answeredQuestion) {
-    this.answeredQuestionModels.remove(answeredQuestion);
-  }
-
-  @Override
-  public Integer getPoints() {
-    return this.points;
   }
 }

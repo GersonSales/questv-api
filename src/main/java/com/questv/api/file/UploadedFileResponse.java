@@ -1,12 +1,15 @@
 package com.questv.api.file;
 
 public class UploadedFileResponse {
-  private String fileName;
-  private String fileDownloadUri;
-  private String fileType;
+  private final String fileName;
+  private final String fileDownloadUri;
+  private final String fileType;
   private long size;
 
-  public UploadedFileResponse(final String fileName, final String fileDownloadUri, final String fileType, final long size) {
+  public UploadedFileResponse(final String fileName,
+                              final String fileDownloadUri,
+                              final String fileType,
+                              final long size) {
     this.fileName = fileName;
     this.fileDownloadUri = fileDownloadUri;
     this.fileType = fileType;
@@ -17,24 +20,13 @@ public class UploadedFileResponse {
     return fileName;
   }
 
-  public void setFileName(String fileName) {
-    this.fileName = fileName;
-  }
 
   public String getFileDownloadUri() {
     return fileDownloadUri;
   }
 
-  public void setFileDownloadUri(String fileDownloadUri) {
-    this.fileDownloadUri = fileDownloadUri;
-  }
-
   public String getFileType() {
     return fileType;
-  }
-
-  public void setFileType(String fileType) {
-    this.fileType = fileType;
   }
 
   public long getSize() {

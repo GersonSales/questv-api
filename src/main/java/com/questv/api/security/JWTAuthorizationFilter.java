@@ -2,7 +2,6 @@ package com.questv.api.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -16,13 +15,13 @@ import java.util.ArrayList;
 
 import static com.questv.api.security.SecurityConstants.*;
 
-public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
+public class JWTAuthorizationFilter /*extends BasicAuthenticationFilter*/ {
 
-  public JWTAuthorizationFilter(AuthenticationManager authManager) {
-    super(authManager);
+  public JWTAuthorizationFilter(/*AuthenticationManager authManager*/) {
+//    super(authManager);
   }
 
-  @Override
+//  @Override
   protected void doFilterInternal(final HttpServletRequest req,
                                   final HttpServletResponse res,
                                   final FilterChain chain) throws IOException, ServletException {

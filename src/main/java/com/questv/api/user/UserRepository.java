@@ -11,4 +11,5 @@ public interface UserRepository extends CrudRepository<UserModel, Long> {
     UserModel findByUsername(final String username);
     void deleteById(final String id);
 
+  Optional<UserModel> findByEmail(final String email);
 }

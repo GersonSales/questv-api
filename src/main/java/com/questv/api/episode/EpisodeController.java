@@ -1,6 +1,6 @@
 package com.questv.api.episode;
 
-import com.questv.api.contracts.Restable;
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -8,14 +8,20 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.questv.api.uitl.Strings.*;
 
+@Api(
+    value = EPISODE_API_NAME,
+    description = EPISODE_API_DESCRIPTION,
+    tags = {EPISODE_API_NAME})
 @RestController
-@RequestMapping("/series/{seriesId}/seasons/{seasonNumber}/episodes")
-public class EpisodeRest  {
+@RequestMapping(API_ENDPOINT + "/series/{seriesId}/seasons/{seasonNumber" +
+    "}/episodes")
+public class EpisodeController {
 
   private final EpisodeService episodeService;
 
-  public EpisodeRest(final EpisodeService episodeService) {
+  public EpisodeController(final EpisodeService episodeService) {
     this.episodeService = episodeService;
     assert this.episodeService != null;
   }

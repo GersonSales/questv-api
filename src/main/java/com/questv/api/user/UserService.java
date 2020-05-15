@@ -1,12 +1,11 @@
 package com.questv.api.user;
 
-import com.questv.api.answered.question.AnsweredQuestionDTO;
-import com.questv.api.answered.question.AnsweredQuestionModel;
 import com.questv.api.answered.question.AnsweredQuestionService;
-import com.questv.api.contracts.ObjectService;
-import com.questv.api.contracts.Rankable;
 import com.questv.api.exception.IdNotFoundException;
-import com.questv.api.exception.UserNotFoundException;
+import com.questv.api.exception.user.UserEmailAlreadyInUseException;
+import com.questv.api.exception.user.UserEmailNotFoundException;
+import com.questv.api.exception.user.UserNotFoundException;
+import com.questv.api.exception.user.UsernameAlreadyInUserException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,54 +21,53 @@ import java.util.stream.Collectors;
 public class UserService implements UserDetailsService {
 
   private final UserRepository userRepository;
-  private final AnsweredQuestionService answeredQuestionService;
-  private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
   public UserService(final UserRepository userRepository,
-                     final AnsweredQuestionService answeredQuestionService,
-                     final BCryptPasswordEncoder bCryptPasswordEncoder) {
+                     final AnsweredQuestionService answeredQuestionService) {
     this.userRepository = userRepository;
-    this.answeredQuestionService = answeredQuestionService;
-    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     assert this.userRepository != null;
-    assert this.answeredQuestionService != null;
-    assert this.bCryptPasswordEncoder != null;
   }
 
-  public UserDTO create(final UserDTO model) {
-    model.setPassword(bCryptPasswordEncoder.encode(model.getPassword()));
-    return save(model.convert()).convert();
+  public UserDTO create(final UserDTO userDTO) {
+    if (isEmailAlreadyUsed(userDTO.getEmail())) {
+      throw new UserEmailAlreadyInUseException();
+    }
+
+    if (isUsernameAlreadyUsed(userDTO.getUsername())) {
+      throw new UsernameAlreadyInUserException();
+    }
+
+    userDTO.setPassword(new BCryptPasswordEncoder().encode(userDTO.getPassword()));
+    return save(userDTO.convert()).convert();
+  }
+
+  private UserModel findByEmail(final String email) {
+    final Optional<UserModel> byEmail = this.userRepository.findByEmail(email);
+    if (byEmail.isPresent()) {
+      return byEmail.get();
+    }
+    throw new UserEmailNotFoundException();
   }
 
 
-  public List<Rankable> findAllRanked() {
-    return findAllModels()
-        .stream()
-        .map(this::getNewRankable)
-        .distinct()
-        .sorted()
-        .collect(Collectors.toList());
+  private boolean isUsernameAlreadyUsed(final String username) {
+    try {
+      loadUserByUsername(username);
+      return true;
+    } catch (final UserNotFoundException exception) {
+      return false;
+    }
   }
 
-  private Rankable getNewRankable(final UserModel userModel) {
-    return new Rankable() {
-      @Override
-      public String getUsername() {
-        return userModel.getUsername();
-      }
 
-      @Override
-      public Integer getPoints() {
-        return answeredQuestionService.calculatePoints(userModel.getAnsweredQuestionModels());
-      }
-
-      @Override
-      public String getId() {
-        return userModel.getId();
-      }
-    };
+  private boolean isEmailAlreadyUsed(final String email) {
+    try {
+      findByEmail(email);
+      return true;
+    } catch (final UserEmailNotFoundException exception) {
+      return false;
+    }
   }
-
 
   public List<UserDTO> findAll() {
     final List<UserModel> result = new ArrayList<>();
@@ -124,37 +122,15 @@ public class UserService implements UserDetailsService {
     return new ArrayList<>();
   }
 
-  /*default*/ void attachAnsweredQuestion(final String userId,
-                                          final AnsweredQuestionDTO answeredQuestionDTO) {
-    final AnsweredQuestionModel foundAnsweredQuestionModel
-        = this.answeredQuestionService.find(answeredQuestionDTO.convert());
-    final UserModel foundUser = findModelById(userId);
-    if (foundAnsweredQuestionModel != null) {
-      foundUser.attachAnsweredQuestion(foundAnsweredQuestionModel);
-      this.userRepository.save(foundUser);
-
-    } else {
-      final AnsweredQuestionModel savedAnsweredQuestionModel
-          = this.answeredQuestionService.create(answeredQuestionDTO.convert());
-      foundUser.attachAnsweredQuestion(savedAnsweredQuestionModel);
-      this.userRepository.save(foundUser);
-    }
-  }
 
   @Override
   public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-    UserModel byUsername = this.userRepository.findByUsername(username);
-    if (byUsername != null) {
-      return new UserPayload(byUsername.getId(), byUsername.getUsername(), byUsername.getPassword(), new ArrayList<>());
+    final UserModel byUsername = this.userRepository.findByUsername(username);
+    if (byUsername == null) {
+      throw new UserNotFoundException();
     }
-    throw new UserNotFoundException();
+    return byUsername;
   }
 
-  public void detachAnsweredQuestion(final String userId,
-                                     final AnsweredQuestionDTO answeredQuestionModel) {
 
-    final UserModel userModel = findModelById(userId);
-    userModel.detachAnsweredQuestion(answeredQuestionModel.convert());
-    this.userRepository.save(userModel);
-  }
 }

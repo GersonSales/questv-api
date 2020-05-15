@@ -54,13 +54,13 @@ public class AnalyticsService {
     result.setAnsweredSeries(getAnsweredMap(userDTO, NAME));
     result.setAnsweredCategories(getAnsweredMap(userDTO, CATEGORY));
 
-    final Integer totalOfAnsweredQuestions = userDTO.getAnsweredQuestionsCount();
-    result.setTotalOfAnsweredQuestions(totalOfAnsweredQuestions);
+//    final Integer totalOfAnsweredQuestions = userDTO.getAnsweredQuestionsCount();
+//    result.setTotalOfAnsweredQuestions(totalOfAnsweredQuestions);
 
     final Integer correctAnsweredQuestionsCount = getCorrectAnsweredQuestionsCount(userDTO);
     result.setCorrectAnsweredQuestions(correctAnsweredQuestionsCount);
 
-    result.setWrongAnsweredQuestions(totalOfAnsweredQuestions - correctAnsweredQuestionsCount);
+//    result.setWrongAnsweredQuestions(totalOfAnsweredQuestions - correctAnsweredQuestionsCount);
 
 
     return result;
@@ -70,13 +70,13 @@ public class AnalyticsService {
   private Integer getCorrectAnsweredQuestionsCount(final UserDTO userDTO) {
     Integer result = 0;
 
-    final Map<Long, Long> answeredQuestions = userDTO.getAnsweredQuestions();
-    for (final Long questionId : answeredQuestions.keySet()) {
-      final QuestionDTO questionDTO = questionService.findById(questionId);
-      if (questionDTO.getCorrectAnswerId().equals(answeredQuestions.get(questionId))) {
-        result++;
-      }
-    }
+//    final Map<Long, Long> answeredQuestions = userDTO.getAnsweredQuestions();
+//    for (final Long questionId : answeredQuestions.keySet()) {
+//      final QuestionDTO questionDTO = questionService.findById(questionId);
+//      if (questionDTO.getCorrectAnswerId().equals(answeredQuestions.get(questionId))) {
+//        result++;
+//      }
+//    }
 
     return result;
   }
@@ -84,31 +84,31 @@ public class AnalyticsService {
 
   private List<AnsweredItem> getAnsweredMap(UserDTO userDTO, final ITEM_TYPE type) {
     final Map<String, AnsweredItem> answeredSeriesMap = new HashMap<>();
-    final Map<Long, Long> answeredQuestions = userDTO.getAnsweredQuestions();
-    for (final Long questionId : answeredQuestions.keySet()) {
-      final QuestionDTO questionModel = this.questionService.findById(questionId);
-      final SeriesModel seriesModel = getSeriesModel(questionModel);
-      final String key;
+//    final Map<Long, Long> answeredQuestions = userDTO.getAnsweredQuestions();
+//    for (final Long questionId : answeredQuestions.keySet()) {
+//      final QuestionDTO questionModel = this.questionService.findById(questionId);
+//      final SeriesModel seriesModel = getSeriesModel(questionModel);
+//      final String key;
+//
+//      switch (type) {
+//        case NAME:
+//          key = seriesModel.getName();
+//          break;
+//        case CATEGORY:
+//          key = seriesModel.getCategory();
+//          break;
+//        default:
+//          return new ArrayList<>();
+//      }
+//
+//
+//      Long userAnswer = answeredQuestions.get(questionId);
 
-      switch (type) {
-        case NAME:
-          key = seriesModel.getName();
-          break;
-        case CATEGORY:
-          key = seriesModel.getCategory();
-          break;
-        default:
-          return new ArrayList<>();
-      }
-
-
-      Long userAnswer = answeredQuestions.get(questionId);
-
-      updateAnsweredMap(answeredSeriesMap,
-          userAnswer,
-          questionModel,
-          key);
-    }
+//      updateAnsweredMap(answeredSeriesMap,
+//          userAnswer,
+//          questionModel,
+//          key);
+//    }
     return new ArrayList<>(answeredSeriesMap.values());
   }
 
@@ -139,10 +139,13 @@ public class AnalyticsService {
   private SeriesModel getSeriesModel(final QuestionDTO questionModel) {
     Questionable questionable = this.questionService.findQuestionableById(questionModel.getQuestionableId());
     if (questionable instanceof EpisodeModel) {
-      final SeasonDTO seasonModel = this.seasonService.findById(((EpisodeModel) questionable).getOwnerId());
-      questionable = this.seriesService.findModelById(seasonModel.getOwnerId());
+      final SeasonDTO seasonModel = this.seasonService.findById(((EpisodeModel) questionable).getSeasonId());
+      questionable =
+          null; //this.seriesService.findModelById(seasonModel.getOwnerId());
     } else if (questionable instanceof SeasonModel) {
-      questionable = this.seriesService.findModelById(((SeasonModel) questionable).getOwnerId());
+      questionable =
+          null ; //this.seriesService.findModelById(((SeasonModel)
+      // questionable).getSeriesId());
     }
     return (SeriesModel) questionable;
   }

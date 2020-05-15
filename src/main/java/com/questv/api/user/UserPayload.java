@@ -1,13 +1,9 @@
 package com.questv.api.user;
 
-import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
 
 public class UserPayload extends User {
 

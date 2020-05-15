@@ -1,4 +1,4 @@
-package com.questv.api.exception;
+package com.questv.api.exception.user;
 
 public class UserNotFoundException extends RuntimeException {
 

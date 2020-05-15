@@ -5,6 +5,7 @@ import com.questv.api.contracts.Modelable;
 import com.questv.api.contracts.Questionable;
 import com.questv.api.exception.SeasonNotFoundException;
 import com.questv.api.question.QuestionModel;
+import com.questv.api.rate.RateModel;
 import com.questv.api.season.SeasonModel;
 import com.questv.api.contracts.Updatable;
 import org.hibernate.annotations.GenericGenerator;
@@ -16,8 +17,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "series_table")
-public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesModel>, Questionable, Modelable {
+@Table(name = "series")
+public class SeriesModel implements Convertible<SeriesDTO>,
+    Updatable<SeriesModel>, Questionable, Modelable {
 
   @Id
   @NotNull
@@ -34,9 +36,14 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   private String category;
 
   @NotNull
+  @Column(name = "release")
   private Boolean isRelease;
 
   private Double rate;
+
+
+//  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+//  private RateModel rateModel;
 
   private String coverImage;
   private String coverImageUrl;
@@ -44,19 +51,16 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   private String promoImage;
   private String promoImageUrl;
 
-  @Embedded
-  @ElementCollection
-  @OneToMany(cascade = CascadeType.ALL)
-  private Set<SeasonModel> seasons;
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "FK_series")
+  private final Set<SeasonModel> seasons;
 
-  @OneToMany
-  @JoinTable(name = "questionable_has_question",
-      joinColumns = {@JoinColumn(name = "questionable_id")},
-      inverseJoinColumns = {@JoinColumn(name = "question_id")})
-  private Set<QuestionModel> questions;
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "FK_questionable")
+  private final Set<QuestionModel> questions;
 
 
-  /*default*/ SeriesModel() {
+  protected SeriesModel() {
     setName("");
     setAbbreviation("");
     setCategory("");
@@ -66,8 +70,8 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     setCoverImageUrl("");
     setPromoImage("");
     setPromoImageUrl("");
-    setSeasons(new HashSet<>());
-    setQuestions(new HashSet<>());
+    this.seasons = new HashSet<>();
+    this.questions = new HashSet<>();
   }
 
   /*default*/ SeriesModel(final Long id,
@@ -152,10 +156,6 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
     return seasons;
   }
 
-  public void setSeasons(Set<SeasonModel> seasons) {
-    this.seasons = seasons;
-  }
-
   public String getAbbreviation() {
     return abbreviation;
   }
@@ -217,16 +217,9 @@ public class SeriesModel implements Convertible<SeriesDTO>, Updatable<SeriesMode
   }
 
   public void removeSeasonById(final Long seasonId) {
-    for (final SeasonModel seasonModel : this.seasons) {
-      if (seasonModel.getId().equals(seasonId)) {
-        this.seasons.remove(seasonModel);
-      }
-    }
+    this.seasons.removeIf(seasonModel -> seasonModel.getId().equals(seasonId));
   }
 
-  public void setQuestions(Set<QuestionModel> questions) {
-    this.questions = questions;
-  }
 
   @Override
   public void attachQuestion(final QuestionModel questionModel) {

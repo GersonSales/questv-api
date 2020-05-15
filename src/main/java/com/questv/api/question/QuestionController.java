@@ -3,6 +3,7 @@ package com.questv.api.question;
 import com.questv.api.contracts.Restable;
 import com.questv.api.exception.IdNotFoundException;
 import com.questv.api.exception.IllegalAssociationException;
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +12,19 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.questv.api.uitl.Strings.*;
+
+@Api(
+    value = QUESTION_API_NAME,
+    description = QUESTION_API_DESCRIPTION,
+    tags = {QUESTION_API_NAME})
 @RestController
 @RequestMapping("/questionable/{questionableId}/questions")
-public class QuestionRest {
+public class QuestionController {
 
   private final QuestionService questionService;
 
-  public QuestionRest(final QuestionService questionService) {
+  public QuestionController(final QuestionService questionService) {
     this.questionService = questionService;
     assert this.questionService != null;
   }

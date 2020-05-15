@@ -1,9 +1,8 @@
 package com.questv.api.series;
 
-import com.questv.api.contracts.ObjectService;
-import com.questv.api.contracts.Restable;
 import com.questv.api.exception.IdNotFoundException;
 import com.questv.api.file.UploadedFileResponse;
+import io.swagger.annotations.Api;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,44 +14,58 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
+import static com.questv.api.uitl.Strings.*;
+
+@Api(
+    value = SERIES_API_NAME,
+    description = SERIES_API_DESCRIPTION,
+    tags = {SERIES_API_NAME})
 @RestController
-@RequestMapping("/series")
-public class SeriesRest  {
+@RequestMapping(API_ENDPOINT + "/series")
+public class SeriesController {
   private final SeriesService seriesService;
 
-  public SeriesRest(final SeriesService seriesService) {
+  public SeriesController(final SeriesService seriesService) {
     this.seriesService = seriesService;
   }
 
   @PostMapping()
-  public ResponseEntity<SeriesDTO> post(@Valid @RequestBody final SeriesDTO seriesDTO) {
+  public ResponseEntity<SeriesDTO>
+  post(@Valid @RequestBody final SeriesDTO seriesDTO) {
     return ResponseEntity.ok(this.seriesService.create(seriesDTO));
   }
 
   @PostMapping("/{seriesId}/cover")
-  public UploadedFileResponse postSeriesCover(@PathVariable("seriesId") final Long seriesId,
-                                              @RequestParam("file") final MultipartFile file) {
-    return ((SeriesService) this.seriesService).attachSeriesCover(seriesId, file);
+  public UploadedFileResponse
+  postSeriesCover(@PathVariable("seriesId") final Long seriesId,
+                  @RequestParam("file") final MultipartFile file) {
+    return this.seriesService.attachSeriesCover(seriesId,
+        file);
   }
 
 
   @GetMapping("/{seriesId}/cover")
-  public ResponseEntity<Resource> getSeriesCover(@PathVariable("seriesId") final Long seriesId,
-                                                 HttpServletRequest request) {
-    final Resource resource = ((SeriesService) this.seriesService).findSeriesCover(seriesId);
+  public ResponseEntity<Resource>
+  getSeriesCover(@PathVariable("seriesId") final Long seriesId,
+                 HttpServletRequest request) {
+    final Resource resource =
+        this.seriesService.findSeriesCover(seriesId);
     return getPreparedResponseEntity(request, resource);
   }
 
   @PostMapping("/{seriesId}/promoImage")
-  public UploadedFileResponse postSeriesPromoImage(@PathVariable("seriesId") final Long seriesId,
-                                                   @RequestParam("file") final MultipartFile file) {
-    return ((SeriesService) this.seriesService).attachSeriesPromoImage(seriesId, file);
+  public UploadedFileResponse
+  postSeriesPromoImage(@PathVariable("seriesId") final Long seriesId,
+                       @RequestParam("file") final MultipartFile file) {
+    return this.seriesService.attachSeriesPromoImage(seriesId, file);
   }
 
   @GetMapping("/{seriesId}/promoImage")
-  public ResponseEntity<Resource> getSeriesPromoImage(@PathVariable("seriesId") final Long seriesId,
-                                                      HttpServletRequest request) {
-    final Resource resource = ((SeriesService) this.seriesService).findSeriesPromoImage(seriesId);
+  public ResponseEntity<Resource>
+  getSeriesPromoImage(@PathVariable("seriesId") final Long seriesId,
+                      final HttpServletRequest request) {
+    final Resource resource =
+        this.seriesService.findSeriesPromoImage(seriesId);
     return getPreparedResponseEntity(request, resource);
   }
 
@@ -70,9 +83,10 @@ public class SeriesRest  {
     }
   }
 
-  
+
   @PutMapping("/{seriesId}")
-  public void put(@PathVariable Long seriesId, @RequestBody final SeriesDTO seriesDTO) {
+  public void put(@PathVariable Long seriesId,
+                  @RequestBody final SeriesDTO seriesDTO) {
     seriesDTO.setId(seriesId);
     this.seriesService.update(seriesDTO);
   }
@@ -82,19 +96,25 @@ public class SeriesRest  {
     this.seriesService.delete(seriesId);
   }
 
-  private ResponseEntity<Resource> getPreparedResponseEntity(final HttpServletRequest request,
-                                                             final Resource resource) {
+  private ResponseEntity<Resource>
+  getPreparedResponseEntity(final HttpServletRequest request,
+                            final Resource resource) {
     String filename = resource.getFilename();
     return ResponseEntity.ok()
-        .contentType(MediaType.parseMediaType(getFileContent(request, resource)))
+        .contentType(MediaType.parseMediaType(getFileContent(request,
+            resource)))
         .header("Content-Name", filename)
         .body(resource);
   }
 
-  private String getFileContent(final HttpServletRequest request, final Resource resource) {
+  private String getFileContent(final HttpServletRequest request,
+                                final Resource resource) {
     String contentType;
     try {
-      contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+      contentType =
+          request
+              .getServletContext()
+              .getMimeType(resource.getFile().getAbsolutePath());
     } catch (IOException ex) {
       throw new RuntimeException(ex);
     }

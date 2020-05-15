@@ -1,7 +1,6 @@
 package com.questv.api.season;
 
-import com.questv.api.contracts.ObjectService;
-import com.questv.api.contracts.Restable;
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,12 +8,19 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.questv.api.uitl.Strings.*;
+
+
+@Api(
+    value = SEASON_API_NAME,
+    description = SEASON_API_DESCRIPTION,
+    tags = {SEASON_API_NAME})
 @RestController
-@RequestMapping("/series/{seriesId}/seasons")
-public class SeasonRest {
+@RequestMapping(API_ENDPOINT + "/series/{seriesId}/seasons")
+public class SeasonController {
   private final SeasonService seasonService;
 
-  public SeasonRest(final SeasonService seasonService) {
+  public SeasonController(final SeasonService seasonService) {
     this.seasonService = seasonService;
     assert this.seasonService != null;
   }

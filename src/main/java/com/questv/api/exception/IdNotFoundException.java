@@ -1,6 +1,10 @@
 package com.questv.api.exception;
 
-public class IdNotFoundException extends RuntimeException {
+import com.questv.api.exception.user.UserNotFoundException;
+
+public class IdNotFoundException extends UserNotFoundException {
+  private static final long serialVersionUID = 4958532319472541055L;
+
   public IdNotFoundException() {
     super("Cannot find a model with given id.");
   }

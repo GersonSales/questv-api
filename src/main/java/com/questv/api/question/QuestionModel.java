@@ -1,24 +1,21 @@
 package com.questv.api.question;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.questv.api.contracts.Convertible;
-import com.questv.api.contracts.Questionable;
 import com.questv.api.contracts.Updatable;
 import com.questv.api.question.difficult.Difficult;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.ManyToAny;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-@Embeddable
 @Entity
-@Table(name = "question_table")
-public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<QuestionModel> {
+@Table(name = "questions")
+public final class QuestionModel
+    implements Convertible<QuestionDTO>, Updatable<QuestionModel> {
 
 
   @Id
@@ -34,17 +31,18 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
   private Difficult difficult;
 
   @NotNull
+  @Column(name = "FK_questionable")
   private Long questionableId;
 
   private Double rate;
 
   @NotNull
-  @Embedded
-  @ElementCollection
-  @OneToMany(cascade = CascadeType.ALL)
-  private Set<Answer> answerSet;
+  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "FK_question")
+  private final Set<Answer> answerSet;
 
-  /*default*/ QuestionModel() {
+  protected QuestionModel() {
+    this.answerSet = new HashSet<>();
   }
 
   /*default*/ QuestionModel(final Long id,
@@ -91,10 +89,6 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
     return answerSet;
   }
 
-  public void setAnswerSet(Set<Answer> answerSet) {
-    this.answerSet = answerSet;
-  }
-
 
   public void setQuestionableId(Long questionableId) {
     this.questionableId = questionableId;
@@ -136,7 +130,8 @@ public final class QuestionModel implements Convertible<QuestionDTO>, Updatable<
   @Override
   public void update(final QuestionModel update) {
     setDescription(update.getDescription());
-    setAnswerSet(update.getAnswerSet());
+    getAnswerSet().clear();
+    getAnswerSet().addAll(update.getAnswerSet());
     setRate((getRate() + update.getRate()) / 2.0);
     difficult.evaluate(update.getDifficult().getDifficult());
   }

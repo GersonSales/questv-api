@@ -7,8 +7,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Embeddable
-@Table(name = "answer_table")
+@Table(name = "answers")
 public class Answer {
 
   @Id
@@ -20,9 +19,13 @@ public class Answer {
   private String value;
 
   @NotNull
+  @Column(name = "question_id")
+  private Long questionId;
+
+  @NotNull
   private boolean isCorrect;
 
-  /*default*/ Answer() { }
+  protected Answer() { }
 
 
   /*default*/ Answer(final String value, final boolean isCorrect) {
@@ -32,6 +35,14 @@ public class Answer {
 
   public String getValue() {
     return value;
+  }
+
+  public Long getQuestionId() {
+    return questionId;
+  }
+
+  public void setQuestionId(Long questionId) {
+    this.questionId = questionId;
   }
 
   public boolean isCorrect() {
