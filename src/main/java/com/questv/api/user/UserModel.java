@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "user_table")
+@Table(name = "users")
 public class UserModel
     implements Convertible<UserDTO>,
     Updatable<UserModel>,

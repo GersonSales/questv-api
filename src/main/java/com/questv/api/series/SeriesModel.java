@@ -3,12 +3,10 @@ package com.questv.api.series;
 import com.questv.api.contracts.Convertible;
 import com.questv.api.contracts.Modelable;
 import com.questv.api.contracts.Questionable;
+import com.questv.api.contracts.Updatable;
 import com.questv.api.exception.SeasonNotFoundException;
 import com.questv.api.question.QuestionModel;
-import com.questv.api.rate.RateModel;
 import com.questv.api.season.SeasonModel;
-import com.questv.api.contracts.Updatable;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -40,10 +38,6 @@ public class SeriesModel implements Convertible<SeriesDTO>,
   private Boolean isRelease;
 
   private Double rate;
-
-
-//  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-//  private RateModel rateModel;
 
   private String coverImage;
   private String coverImageUrl;
@@ -114,7 +108,7 @@ public class SeriesModel implements Convertible<SeriesDTO>,
         getAbbreviation(),
         getCategory(),
         getIsRelease(),
-        getRate(),
+        (double) getRate(),
         getCoverImage(),
         getCoverImageUrl(),
         getPromoImage(),
@@ -197,7 +191,7 @@ public class SeriesModel implements Convertible<SeriesDTO>,
   }
 
   public Double getRate() {
-    return rate == null ? 0.0 : rate;
+    return this.rate;
   }
 
   public void setRate(Double rate) {
